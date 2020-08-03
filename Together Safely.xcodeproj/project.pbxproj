@@ -32,6 +32,7 @@
 		46DE5E5024D64AE2005912CD /* CreatePodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E4F24D64AE2005912CD /* CreatePodsView.swift */; };
 		46DE5E5424D76EF2005912CD /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E5324D76EF2005912CD /* AddFriendView.swift */; };
 		46DE5E5624D7907D005912CD /* InviationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E5524D7907D005912CD /* InviationsView.swift */; };
+		46DE5E5824D881E2005912CD /* Together Safely.xcworkspace in Resources */ = {isa = PBXBuildFile; fileRef = 46DE5E5724D881E2005912CD /* Together Safely.xcworkspace */; };
 		46F7E64424CCE9B5004EAF24 /* PlacesTest.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 46F7E64224CCE9B5004EAF24 /* PlacesTest.xcdatamodeld */; };
 		46F7E64624CCEC1E004EAF24 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F7E64524CCEC1E004EAF24 /* LocationManager.swift */; };
 		46F7E64824CCEC8F004EAF24 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F7E64724CCEC8F004EAF24 /* CoreDataManager.swift */; };
@@ -73,6 +74,7 @@
 		46DE5E4F24D64AE2005912CD /* CreatePodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePodsView.swift; sourceTree = "<group>"; };
 		46DE5E5324D76EF2005912CD /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
 		46DE5E5524D7907D005912CD /* InviationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviationsView.swift; sourceTree = "<group>"; };
+		46DE5E5724D881E2005912CD /* Together Safely.xcworkspace */ = {isa = PBXFileReference; lastKnownFileType = wrapper.workspace; path = "Together Safely.xcworkspace"; sourceTree = "<group>"; };
 		46F7E64324CCE9B5004EAF24 /* PlacesTest.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PlacesTest.xcdatamodel; sourceTree = "<group>"; };
 		46F7E64524CCEC1E004EAF24 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		46F7E64724CCEC8F004EAF24 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 		46ACD57124C510800083F308 = {
 			isa = PBXGroup;
 			children = (
+				46DE5E5724D881E2005912CD /* Together Safely.xcworkspace */,
 				46ACD57C24C510800083F308 /* Together Safely */,
 				46ACD57B24C510800083F308 /* Products */,
 				8484AD2D3FC30157F08A3D12 /* Pods */,
@@ -266,6 +269,7 @@
 				46252C2E24C62517005B592F /* GoogleService-Info.plist in Resources */,
 				46ACD58724C510810083F308 /* Preview Assets.xcassets in Resources */,
 				46ACD58424C510810083F308 /* Assets.xcassets in Resources */,
+				46DE5E5824D881E2005912CD /* Together Safely.xcworkspace in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
