@@ -127,7 +127,7 @@ struct AllContactsCardView: View {
                     }
                 }
             }
-                .frame(width: UIScreen.main.bounds.size.width - 15)
+                .frame(width: UIScreen.main.bounds.size.width - 40)
                 .background(Color.white)
                 .cornerRadius(20)
                 .shadow(color: .gray, radius: 2, x: 0, y: 2)

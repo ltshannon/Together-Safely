@@ -39,13 +39,12 @@ struct InviationsView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     ForEach(firebaseService.invites, id: \.self) { invite in
                         VStack {
-                        HStack {
+                            HStack {
                             MemberProfileView(
                                 groupId: invite.groupId,
                                 riskScore: invite.riskScore,
                                 riskRanges: self.firebaseService.riskRanges)
                             VStack(alignment: .leading) {
-//                                Text(invite.adminName)
                                 Text("Name")
                                     .foregroundColor(Color("Colorblack"))
                                     .font(Font.custom("Avenir Next Medium", size: 25))
@@ -81,12 +80,11 @@ struct InviationsView: View {
                             .frame(height: 1)
                             .padding(10)
                         }
-
                     }
                 }
             }
         }
-//            .frame(width: UIScreen.main.bounds.size.width - 15)
+//            .frame(width: UIScreen.main.bounds.size.width - 40)
             .background(Color.white)
             .cornerRadius(20)
             .shadow(color: .gray, radius: 2, x: 0, y: 2)

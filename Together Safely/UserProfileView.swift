@@ -14,7 +14,7 @@ struct UserProfileView: View {
     @EnvironmentObject var firebaseService: FirebaseService
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack {
             ZStack {
                 VStack(alignment: .center, spacing: 0) {
                     Text(firebaseService.user.name)
@@ -24,7 +24,7 @@ struct UserProfileView: View {
                         .font(Font.custom("Avenir Next Medium", size: 25))
                         .foregroundColor(getColor(riskScore: firebaseService.user.riskScore))
                 }
-                .frame(width: UIScreen.main.bounds.size.width - 15, height: 200)
+                .frame(width: UIScreen.main.bounds.size.width - 40, height: 200)
                     .background(Color.white)
                     .cornerRadius(20)
                     .shadow(color: .gray, radius: 2, x: 0, y: 2)
@@ -57,16 +57,19 @@ struct UserProfileView: View {
                     .offset(x: 0, y: -100)
             }
             Spacer()
-            Text("Risk factors")
-                .font(Font.custom("Avenir-Heavy", size: 40))
-                .padding(.leading, 5)
-                .padding(.trailing, 5)
-                .foregroundColor(Color.white)
-            Text("Your risk factors are not visible to your contacts.")
-                .font(Font.custom("Avenir-Heavy", size: 18))
-                .padding(.leading, 5)
-                .padding(.trailing, 5)
-                .foregroundColor(Color.white)
+            VStack(alignment: .leading, spacing: 0) {
+                Text("Risk factors")
+                    .font(Font.custom("Avenir-Heavy", size: 40))
+//                    .padding(.leading, 5)
+//                    .padding(.trailing, 5)
+                    .foregroundColor(Color.white)
+                Text("Your risk factors are not visible to your contacts.")
+                    .font(Font.custom("Avenir-Heavy", size: 18))
+//                    .padding(.leading, 5)
+//                    .padding(.trailing, 5)
+                    .foregroundColor(Color.white)
+            }
+                .frame(width: UIScreen.main.bounds.size.width - 40)
             Spacer()
             VStack(alignment: .leading, spacing: 0) {
                 HStack {
@@ -117,7 +120,7 @@ struct UserProfileView: View {
                         .padding(.trailing, 20)
                 }
             }
-            .frame(width: UIScreen.main.bounds.size.width - 15, height: 300)
+            .frame(width: UIScreen.main.bounds.size.width - 40, height: 300)
                 .background(Color.white)
                 .cornerRadius(20)
                 .shadow(color: .gray, radius: 2, x: 0, y: 2)
@@ -133,7 +136,7 @@ struct UserProfileView: View {
                         .font(.title)
                         .foregroundColor(.white).opacity(81)
                 }
-                 .padding(.trailing, 35)
+                 .padding(.trailing, 20)
             }
             Spacer()
         }

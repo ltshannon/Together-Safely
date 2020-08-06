@@ -139,6 +139,8 @@ struct DisplayPodsView: View {
                             }
                     }
                 }
+            } else {
+                Spacer()
             }
         }
     }

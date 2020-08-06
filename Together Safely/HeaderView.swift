@@ -13,11 +13,13 @@ struct HeaderView: View {
         HStack {
             Image("appIcon")
                 .resizable()
-                .frame(width: 75, height: 75)
+                .frame(width: 50, height: 50)
             Text("together")
                 .font(Font.custom("Avenir-Heavy", size: 28))
                 .foregroundColor(.white)
+                .padding(.trailing, 20)
         }
+    .padding(0)
     }
 }
 

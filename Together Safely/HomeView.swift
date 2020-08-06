@@ -27,7 +27,7 @@ struct HomeView: View {
                             .foregroundColor(self.index == 0 ? .white : .black)
                             .fontWeight(.bold)
                             .padding(.vertical, 10)
-                            .padding(.horizontal, 25)
+                            .padding(.horizontal, 20)
                             .background(Color("Color3").opacity(self.index == 0 ? 1 : 0))
                             .clipShape(Capsule())
                             .onTapGesture {
@@ -42,7 +42,7 @@ struct HomeView: View {
                                 .foregroundColor(self.index == 1 ? .white : .black)
                                 .fontWeight(.bold)
                                 .padding(.vertical, 10)
-                                .padding(.horizontal, 25)
+                                .padding(.horizontal, 20)
                             ZStack {
                                 Circle()
                                     .fill(Color("Colorred"))
@@ -113,9 +113,9 @@ struct HomeView: View {
                                 .padding(5)
                         }
                     }
-                    
+                    Text("")
+                        .frame(width: 20, height: 10)
                     HeaderView()
-                    .padding(.horizontal, 50)
                 }
             )
             .background(Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all))
