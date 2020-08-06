@@ -7,20 +7,34 @@
 //
 
 import SwiftUI
-import Contacts
 
 struct MemberProfileView: View {
     
+    var image: Data?
+    var groupId: String
+    @EnvironmentObject var firebaseService: FirebaseService
     var riskScore: Int
     var riskRanges: [Dictionary<String,RiskHighLow>]
+//    var image: Data
     
     var body: some View {
         ZStack {
+            if image != nil {
+                Image(uiImage: UIImage(data: image!)!)
+                    .resizable()
+                    .renderingMode(.original)
+                    .frame(width: 75, height: 75)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.black, lineWidth: 1))
+                    .foregroundColor(Color.blue)
+                    .padding(5)
+
+            } else {
             Image(systemName: "person.fill")
                 .resizable()
                 .frame(width: 75, height: 75)
                 .clipShape(Circle())
-                .overlay(Circle().stroke(Color("Color-backgroud"), lineWidth: 7))
+                .overlay(Circle().stroke(Color("Colorgreen"), lineWidth: 7))
                 .foregroundColor(Color.blue)
                 .padding(5)
             Circle()
@@ -28,10 +42,11 @@ struct MemberProfileView: View {
                 .foregroundColor(getColor(riskScore: riskScore))
                 .overlay(Circle().stroke(Color.white, lineWidth: 3))
                 .offset(x: 25, y: 25)
+            }
         }
         .padding(.bottom, 5)
     }
-
+    
     func getColor(riskScore: Int) -> Color {
         
         for riskRange in riskRanges {
@@ -43,26 +58,26 @@ struct MemberProfileView: View {
                     for key in riskRange.keys {
                         switch key {
                         case "Low Risk":
-                            return Color.green
+                            return Color("riskLow")
                         case "Medium Risk":
-                            return Color.yellow
+                            return Color("riskMed")
                         case "High Risk":
-                            return Color.red
+                            return Color("riskHigh")
                         default:
-                            return Color.gray
+                            return Color("Colorgray")
                         }
                     }
                 }
             }
         }
-        return Color.gray
+        return Color("Colorgray")
     }
 }
 
 /*
 struct MemberProfileView_Previews: PreviewProvider {
     
-    var riskColor: Color = Color.red
+    var riskColor: Color = Color.Colorred
     
     static var previews: some View {
 

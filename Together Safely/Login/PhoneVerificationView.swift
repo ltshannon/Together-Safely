@@ -21,7 +21,7 @@ struct PhoneVerificationView: View {
     
     var body: some View {
         ZStack {
-            Color("Color-backgroud").edgesIgnoringSafeArea(.all)
+            Color("Colorgreen").edgesIgnoringSafeArea(.all)
             VStack {
                 Spacer()
                 HStack {

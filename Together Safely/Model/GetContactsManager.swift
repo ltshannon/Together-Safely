@@ -9,14 +9,13 @@
 import Foundation
 import Contacts
 import SwiftUI
-import os
 
 class ContactStore: ObservableObject {
     @Published var contacts: [CNContact] = []
     @Published var error: Error? = nil
 
     func fetch() {
-        os_log("Fetching contacts")
+        print("Fetching contacts")
         do {
             let store = CNContactStore()
             let keysToFetch = [CNContactGivenNameKey as CNKeyDescriptor,
@@ -28,11 +27,11 @@ class ContactStore: ObservableObject {
                                CNContactPhoneNumbersKey as CNKeyDescriptor,
                                CNContactPostalAddressesKey as CNKeyDescriptor
                                 ]
-            os_log("Fetching contacts: now")
+            print("Fetching contacts: now")
             let containerId = store.defaultContainerIdentifier()
             let predicate = CNContact.predicateForContactsInContainer(withIdentifier: containerId)
             let contacts = try store.unifiedContacts(matching: predicate, keysToFetch: keysToFetch)
-            os_log("Fetching contacts: succesfull with count = %d", contacts.count)
+            print("Fetching contacts: succesfull with count = \(contacts.count)")
 
             let webService = WebService()
             var phoneNumers: [String] = []
@@ -42,17 +41,15 @@ class ContactStore: ObservableObject {
                         if label == CNLabelPhoneNumberMobile {
                             var number = phone.value.stringValue
                             number = format(with: "+1XXXXXXXXXX", phone: number)
+                            print(number)
                             phoneNumers.append(number)
                         }
                     }
                 }
             }
             
-            webService.checkPhoneNumbers(phoneNumbers: phoneNumers) { retunredNumbers, error in
+            webService.checkPhoneNumbers(phoneNumbers: phoneNumers) { retunredNumbers in
                 
-                if let error = error {
-                    print(error.localizedDescription)
-                }
                 for number in retunredNumbers {
                     print(number)
                 }
@@ -63,7 +60,7 @@ class ContactStore: ObservableObject {
             }
             
         } catch {
-            os_log("Fetching contacts: failed with %@", error.localizedDescription)
+            print("Fetching contacts: failed with %@", error.localizedDescription)
             self.error = error
         }
     }

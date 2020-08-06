@@ -40,16 +40,19 @@ struct InviationsView: View {
                     ForEach(firebaseService.invites, id: \.self) { invite in
                         VStack {
                         HStack {
-                            MemberProfileView(riskScore: invite.riskScore, riskRanges: self.firebaseService.riskRanges)
+                            MemberProfileView(
+                                groupId: invite.groupId,
+                                riskScore: invite.riskScore,
+                                riskRanges: self.firebaseService.riskRanges)
                             VStack(alignment: .leading) {
 //                                Text(invite.adminName)
                                 Text("Name")
-                                    .foregroundColor(Color("Color15"))
+                                    .foregroundColor(Color("Colorblack"))
                                     .font(Font.custom("Avenir Next Medium", size: 25))
                                     .padding(.leading, 5)
                                 Text("invited you to:")
                                     .font(Font.custom("Avenir Next Medium Italic", size: 20))
-                                    .foregroundColor(Color("Color12"))
+                                    .foregroundColor(Color("Colorgray"))
                                 Text(invite.groupName)
                                     .foregroundColor(Color("Color13"))
                                     .font(Font.custom("Avenir Next Medium", size: 20))
@@ -74,7 +77,7 @@ struct InviationsView: View {
                             }
                         }
                         Capsule()
-                            .fill(Color("Color16"))
+                            .fill(Color("Colorgray"))
                             .frame(height: 1)
                             .padding(10)
                         }
@@ -83,7 +86,7 @@ struct InviationsView: View {
                 }
             }
         }
-            .frame(width: UIScreen.main.bounds.size.width - 15)
+//            .frame(width: UIScreen.main.bounds.size.width - 15)
             .background(Color.white)
             .cornerRadius(20)
             .shadow(color: .gray, radius: 2, x: 0, y: 2)

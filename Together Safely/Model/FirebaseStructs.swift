@@ -13,9 +13,12 @@ import SwiftUI
 
 struct User: Identifiable, Codable {
     @DocumentID var id: String?
+    var name: String
+    var image: Data?
     var phoneNumber: String
     var groups: [String]
     var riskScore: Int
+    var riskString: String
     var groupInvites: [String]
 }
 
@@ -41,6 +44,7 @@ struct Member: Identifiable, Codable, Hashable {
     var status: Status
     var riskString: String
     var riskIndex: Int
+    var memberName: String
 }
 
 struct Status: Codable, Hashable {
@@ -73,6 +77,11 @@ struct Invite: Hashable {
     var groupName: String
     var groupId: String
     var riskScore: Int
+}
+
+struct ContactInfo: Hashable {
+    var image: Data?
+    var name: String
 }
 
 extension Groups {
@@ -108,6 +117,7 @@ extension Member {
         self.status = stat
         self.riskString = ""
         self.riskIndex = 99999
+        self.memberName = ""
     }
 }
 
@@ -122,6 +132,8 @@ extension User {
         }
         groups = g
         riskScore = snapshot["riskScore"] as? Int ?? 99999
+        riskString = ""
+        name = ""
         var groupInvites: [String] = []
         let array2 = snapshot["groupInvites"] as? Array ?? []
         for groupInvite in array2 {

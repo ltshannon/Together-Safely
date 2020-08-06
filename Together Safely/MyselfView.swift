@@ -7,18 +7,16 @@
 //
 
 import SwiftUI
-import Contacts
-import Firebase
 
 struct MyselfView: View {
-    var contactStore: ContactStore
+//    var contactStore: ContactStore
     @EnvironmentObject var firebaseService: FirebaseService
     @State private var image = "\u{1F600}".image()
     @State var index = 0
     
     var body: some View {
         ZStack {
-            Color("Color-backgroud").edgesIgnoringSafeArea(.all)
+            Color("Colorgreen").edgesIgnoringSafeArea(.all)
             VStack {
                 HeaderView()
                 ZStack {
@@ -56,7 +54,7 @@ struct MyselfView: View {
                         Spacer()
                         ZStack {
                             Circle()
-                                .fill(Color("Color4"))
+                                .fill(Color("Colorred"))
                                 .frame(width: 45, height: 45)
                             Text("3")
                                 .font(.title)
@@ -80,7 +78,7 @@ struct MyselfView: View {
                 }
                  .padding(.trailing, 35)
                 Spacer()
-                DisplayPodsView(contactStore: contactStore).environmentObject(firebaseService)
+                DisplayPodsView().environmentObject(firebaseService)
             }
         }
         .navigationBarTitle("")

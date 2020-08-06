@@ -7,10 +7,10 @@
 //
 
 import SwiftUI
-import Firebase
 
 struct CreatePodsView: View {
     
+    @EnvironmentObject var firebaseService: FirebaseService
     var webService = WebService()
     @State private var name: String = ""
     @State private var showSuccess = false
@@ -31,40 +31,18 @@ struct CreatePodsView: View {
                     self.showingAlert = true
                     return
                 }
-                self.id =  UserDefaults.standard.value(forKey: "authVerificationID") as? String ?? ""
-                self.code =  UserDefaults.standard.value(forKey: "verificationCode") as? String ?? ""
-                let credential = PhoneAuthProvider.provider().credential(withVerificationID: self.id, verificationCode: self.code)
-                
-                Auth.auth().signIn(with: credential) { (res, error) in
-                    if let error = error {
-                        self.msg = error.localizedDescription
-                        self.alert.toggle()
-                        return
-                    }
-                    let currentUser = Auth.auth().currentUser
-                    currentUser?.getIDTokenForcingRefresh(true) { idToken, error in
-                        if let error = error {
-                            self.msg = error.localizedDescription
-                            self.alert.toggle()
-                            return;
-                        }
-                        if let str = idToken {
-                            UserDefaults.standard.set(str, forKey: "idToken")
-                            UserDefaults.standard.set(true, forKey: "status")
-                            self.webService.createNewGroup(name: self.name) { successful in
-                                if successful {
-                                    self.showSuccess.toggle()
-                                } else {
-                                    self.showFailure.toggle()
-                                }
-                            }
-                        }
+                self.webService.createNewGroup(name: self.name, members: []) { successful in
+                    if successful {
+                            self.showSuccess.toggle()
+                    } else {
+                        self.showFailure.toggle()
                     }
                 }
+
             }) {
                 Text("Create")
                     .padding()
-                    .background(Color.gray)
+                    .background(Color("Colorgray"))
                     .cornerRadius(25)
             }
             

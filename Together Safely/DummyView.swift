@@ -11,17 +11,15 @@ import Contacts
 
 struct DummyView: View {
     
-    @ObservedObject private var contactStore: ContactStore = ContactStore()
+//    @ObservedObject private var contactStore: ContactStore = ContactStore()
     @State var firebaseService:FirebaseService = FirebaseService()
     
     var body: some View {
         VStack {
-            HomeView(contactStore: contactStore).environmentObject(firebaseService)
-//            AllContactsView(contactStore: contactStore)
+            HomeView().environmentObject(firebaseService)
         }
         .onAppear {
-            self.contactStore.fetch()
-            self.firebaseService.getUserData(byPhoneNumber: UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? "")
+            self.firebaseService.getServerData(byPhoneNumber: UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? "")
         }
     }
 }

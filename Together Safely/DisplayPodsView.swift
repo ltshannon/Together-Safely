@@ -10,19 +10,15 @@ import SwiftUI
 import Contacts
 
 struct DisplayPodsView: View {
-    var contactStore: ContactStore
     @EnvironmentObject var firebaseService: FirebaseService
     @State private var membersArray: [Int] = []
-    @State var memberRiskColor: Color = Color.gray
+    @State var memberRiskColor: Color = Color("Colorgray")
     @State var selection: Int? = nil
-/*
-    init(){
-        UITableView.appearance().backgroundColor = .clear
-    }
-*/
+    @State var group: Groups = Groups(id: "", name: "", members: [], riskTotals: [:], riskCompiledSring: [], riskCompiledValue: [], averageRisk: "")
+
     var body: some View {
 
-        VStack(alignment: .leading, spacing: 0) {
+        VStack {
             if !firebaseService.groups.isEmpty {
                 ScrollView(.vertical, showsIndicators: false) {
                     ForEach(firebaseService.groups, id: \.self) { group in
@@ -38,7 +34,7 @@ struct DisplayPodsView: View {
                                         Image(systemName: "chevron.right")
                                             .font(Font.custom("Avenir-Heavy", size: 20))
                                             .padding(.trailing, 20)
-                                            .foregroundColor(Color.gray)
+                                            .foregroundColor(Color("Colorgray"))
                                     }
                                 }
                                     .frame(height:(75))
@@ -68,13 +64,17 @@ struct DisplayPodsView: View {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack {
                                         ForEach(0..<group.members.count) { index in
-                                            MemberProfileView(riskScore: group.members[index].riskScore, riskRanges: self.firebaseService.riskRanges)
+                                            MemberProfileView(
+                                                image: self.getImage(phoneName: group.members[index].phoneNumber, dict: self.firebaseService.contactInfo),
+                                                groupId: group.id,
+                                                riskScore: group.members[index].riskScore,
+                                                riskRanges: self.firebaseService.riskRanges)
                                         }
                                     }
                                 }
                                 Spacer()
                             }
-                                .frame(width: UIScreen.main.bounds.size.width - 15, height: 300)
+                                .frame(width: UIScreen.main.bounds.size.width - 40, height: 300)
                                 .background(Color.white)
                                 .cornerRadius(20)
                                 .shadow(color: .gray, radius: 2, x: 0, y: 2)
@@ -83,7 +83,7 @@ struct DisplayPodsView: View {
                     }
                     Spacer()
                     VStack {
-                        NavigationLink(destination: AllContactsView(contactStore: contactStore), tag: 2, selection: $selection) {
+                        NavigationLink(destination: AllContactsView(group: group).environmentObject(firebaseService), tag: 2, selection: $selection) {
                             Button(action: {
                                 self.selection = 2
                             }) {
@@ -98,7 +98,7 @@ struct DisplayPodsView: View {
                                             Image(systemName: "chevron.right")
                                                 .font(Font.custom("Avenir-Heavy", size: 20))
                                                 .padding(.trailing, 20)
-                                                .foregroundColor(Color.gray)
+                                                .foregroundColor(Color("Colorgray"))
                                         }
                                     }
                                         .frame(height:(75))
@@ -108,21 +108,31 @@ struct DisplayPodsView: View {
                                         .frame(height: 2)
                                         .padding(0)
                                     Spacer()
-                                    List(contactStore.contacts, id: \.self) { (contact: CNContact) in
+
+                                    List(firebaseService.userContacts, id: \.self) { (contact: CNContact) in
                                         if contact.imageDataAvailable {
                                             Image(uiImage: UIImage(data: contact.imageData!)!)
+                                                .renderingMode(.original)
                                                 .resizable()
                                                 .scaledToFit()
                                                 .clipShape(Circle())
                                                 .overlay(Circle().stroke(Color(.white), lineWidth: 1))
-                                                    .frame(width: 75.0, height: 75.0)
+                                                .frame(width: 75, height: 75)
+                                        } else {
+                                            Image(systemName: "person.fill")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .clipShape(Circle())
+                                                .overlay(Circle().stroke(Color.white, lineWidth: 1))
+                                                .frame(width: 60, height: 60)
+                                                .foregroundColor(Color.blue)
                                         }
                                         Text("\(contact.name)")
                                         Spacer()
                                     }
                                 }
                             }
-                            .frame(width: UIScreen.main.bounds.size.width - 15, height: 300)
+                            .frame(width: UIScreen.main.bounds.size.width - 40, height: 300)
                             .background(Color.white)
                             .cornerRadius(20)
                             .shadow(color: .gray, radius: 2, x: 0, y: 2)
@@ -132,6 +142,17 @@ struct DisplayPodsView: View {
             }
         }
     }
+    
+    func getImage(phoneName: String, dict: [[String:ContactInfo]]) -> Data? {
+        
+        for d in dict {
+            if d[phoneName] != nil {
+                return(d[phoneName]!.image)
+            }
+        }
+        return nil
+    }
+    
 }
 /*
 struct DisplayPodsView_Previews: PreviewProvider {

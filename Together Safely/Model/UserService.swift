@@ -8,6 +8,7 @@
 
 import Foundation
 import Firebase
+import Contacts
 
 class FirebaseService: ObservableObject {
     @Published var phoneNumber:String = "XXXXXXX"
@@ -16,10 +17,17 @@ class FirebaseService: ObservableObject {
     @Published var groups: [Groups] = []
     @Published var riskRanges: [[String:RiskHighLow]] = []
     @Published var invites: [Invite] = []
+    @Published var userContacts: [CNContact] = []
+    @Published var nonUserContacts: [CNContact] = []
+    @Published var contactGroups: [Groups] = []
+    @Published var contactInfo: [[String:ContactInfo]] = []
+    
 
     static let shared = FirebaseService()
     private var database = Firestore.firestore()
     private var groupsArray: [Groups] = []
+    private var userName: String = ""
+    private var userImage: Data?
 
     init() {}
     
@@ -37,9 +45,98 @@ class FirebaseService: ObservableObject {
             completion(0, nil)
         }
     }
+    
+    func getServerData(byPhoneNumber: String) {
+         do {
+            let store = CNContactStore()
+            let keysToFetch = [CNContactGivenNameKey as CNKeyDescriptor,
+                                CNContactMiddleNameKey as CNKeyDescriptor,
+                                CNContactFamilyNameKey as CNKeyDescriptor,
+                                CNContactImageDataAvailableKey as CNKeyDescriptor,
+                                CNContactThumbnailImageDataKey as CNKeyDescriptor,
+                                CNContactImageDataKey as CNKeyDescriptor,
+                                CNContactPhoneNumbersKey as CNKeyDescriptor,
+                                CNContactPostalAddressesKey as CNKeyDescriptor
+                                 ]
+            let containerId = store.defaultContainerIdentifier()
+            let predicate = CNContact.predicateForContactsInContainer(withIdentifier: containerId)
+            let contacts = try store.unifiedContacts(matching: predicate, keysToFetch: keysToFetch)
+            print("Fetching contacts: succesfull with count = %d", contacts.count)
+
+            let webService = WebService()
+            var phoneNumbers: [String] = []
+            print("Numbers returned for contacts call:")
+            let userPhoneNumber =  UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? ""
+            var cinfo: [[String:ContactInfo]] = []
+            for contact in contacts {
+                for phone in contact.phoneNumbers {
+                    if let label = phone.label {
+                        if label == CNLabelPhoneNumberMobile {
+                            var number = phone.value.stringValue
+                            number = format(with: "+1XXXXXXXXXX", phone: number)
+                            print(number)
+                            let c: ContactInfo = ContactInfo(
+                                image: contact.imageData,
+                                name: "\(contact.givenName) " + "\(contact.familyName)"
+                            )
+         
+                            cinfo.append([number:c])
+                            if number.contains(userPhoneNumber) {
+                                userName = "\(contact.givenName) " + "\(contact.familyName)"
+                                if let imageData = contact.imageData {
+                                    userImage = imageData
+                                }
+                            }
+                            phoneNumbers.append(number)
+                        }
+                    }
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.contactInfo = cinfo
+            }
+             
+            webService.checkPhoneNumbers(phoneNumbers: phoneNumbers) { returnedNumbers in
+                
+                print("number returned from invitablePhoneNumbers:")
+                for number in returnedNumbers {
+                    print(number)
+                }
+                
+                var nonUserContacts: [CNContact] = []
+                var userContacts: [CNContact] = []
+             
+                for contact in contacts {
+                    for phone in contact.phoneNumbers {
+                        if let label = phone.label {
+                            if label == CNLabelPhoneNumberMobile {
+                                var number = phone.value.stringValue
+                                number = format(with: "+1XXXXXXXXXX", phone: number)
+                                if returnedNumbers.contains(number) {
+                                    nonUserContacts.append(contact)
+                                } else {
+                                    userContacts.append(contact)
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                DispatchQueue.main.async {
+                    self.userContacts = userContacts
+                    self .nonUserContacts = nonUserContacts
+                }
+                self.getUserData(phoneNumber: byPhoneNumber)
+            }
+             
+        } catch {
+            print("Fetching contacts: failed with %@", error.localizedDescription)
+        }
+    }
 
 
-    func getUserData(byPhoneNumber phoneNumber: String) {
+    func getUserData(phoneNumber: String) {
         if riskRanges.count == 0 {
             getRiskRanges{ error in
                 guard error == nil else {
@@ -48,7 +145,7 @@ class FirebaseService: ObservableObject {
                     }
                     return
                 }
-                self.getUserData(byPhoneNumber: phoneNumber) { error in
+                self.getUserData(phoneNumber: phoneNumber) { error in
                         guard error == nil else {
                             if let error = error {
                                 print(error.localizedDescription)
@@ -60,7 +157,7 @@ class FirebaseService: ObservableObject {
             }
             return
         }
-        getUserData(byPhoneNumber: phoneNumber) { error in
+        getUserData(phoneNumber: phoneNumber) { error in
                 guard error == nil else {
                     if let error = error {
                         print(error.localizedDescription)
@@ -70,7 +167,7 @@ class FirebaseService: ObservableObject {
         }
     }
     
-    func getUserData(byPhoneNumber phoneNumber: String, completion: @escaping (Error?) -> Void) {
+    func getUserData(phoneNumber: String, completion: @escaping (Error?) -> Void) {
     
         self.database.collection("users").whereField("phoneNumber", isEqualTo: phoneNumber)
             .addSnapshotListener { querySnapshot, error in
@@ -81,7 +178,11 @@ class FirebaseService: ObservableObject {
                 }
                 if documents.count == 1 {
                     let doc = querySnapshot!.documents[0]
-                    let user = User(snapshot: doc.data())
+                    var user = User(snapshot: doc.data())
+                    user.riskString = self.getRiskString(value: user.riskScore)
+                    user.name = self.userName
+                    user.image = self.userImage
+
                     DispatchQueue.main.async {
                         self.user = user
                     }
@@ -92,7 +193,7 @@ class FirebaseService: ObservableObject {
                         docRef.getDocument { (document, error) in
                             if let document = document, document.exists {
                                 let group = Groups(snapshot: document.data() ?? [:])
-                                var invite:Invite = Invite(adminName: "", groupName: group.name, groupId: group.id, riskScore: 99999)
+                                var invite:Invite = Invite(adminName: "", groupName: group.name, groupId: invite, riskScore: 99999)
                                 let docRef2 = self.database.collection("users").document(group.id)
                                     docRef2.getDocument { (document, error) in
                                         if let document = document, document.exists {
@@ -205,4 +306,6 @@ class FirebaseService: ObservableObject {
         
         return "N/A"
     }
+    
+
 }

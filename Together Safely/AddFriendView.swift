@@ -10,58 +10,37 @@ import SwiftUI
 import Firebase
 
 struct AddFriendView: View {
+    
     var group: Groups
-    var webService = WebService()
-    @State private var phoneNumber: String = ""
-    @State private var showSuccess = false
-    @State private var showFailure = false
-    @State private var showingAlert = false
-    @State private var code: String = ""
-    @State private var id: String = ""
-    @State private var alert = false
-    @State private var msg = ""
-
+    @State var name:String = ""
+    @EnvironmentObject var firebaseService: FirebaseService
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
     var body: some View {
         VStack {
-            TextField("Enter phone number of friend", text: $phoneNumber)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(50)
-            Button(action: {
-                if self.phoneNumber.count < 1 {
-                    self.showingAlert = true
-                    return
-                }
-                self.webService.inviteUserToGroup(groupId: self.group.id, phoneNumber: self.phoneNumber)
-                    { successful in
-                        if successful {
-                            self.showSuccess.toggle()
-                        } else {
-                            self.showFailure.toggle()
-                        }
-                    }
+            AllContactsCardView(pageType: .addFriends, name: self.$name, group: group).environmentObject(self.firebaseService)
+        }
+            .navigationBarBackButtonHidden(true)
+            .navigationBarItems(leading: btnBack)
+            .background(Image("backgroudImage").edgesIgnoringSafeArea(.all))
+        }
+        
+    var btnBack : some View { Button(action: {
+            self.presentationMode.wrappedValue.dismiss()
             }) {
-                Text("Create")
-                    .padding()
-                    .background(Color.gray)
-                    .cornerRadius(25)
+                HStack {
+                Image(systemName: "chevron.left")
+                    .aspectRatio(contentMode: .fit)
+                    .font(Font.custom("Avenir Next Medium", size: 30))
+                    .foregroundColor(.white)
+                Text("Back")
+                    .font(Font.custom("Avenir Next Medium", size: 30))
+                    .foregroundColor(.white)
+                }
             }
-            
-            if showSuccess {
-                Text("Success")
-            } else if showFailure {
-                Text("Failure")
-            }
-        }
-        .navigationBarTitle("")
-        .background(Image("backgroudImage").edgesIgnoringSafeArea(.all))
-        .alert(isPresented: $showingAlert) {
-            Alert(title: Text("Error"), message: Text("Pod name must have at least 1 character"), dismissButton: .default(Text("Continue")))
-        }
-        .alert(isPresented: $alert) {
-            Alert(title: Text("Error"), message: Text(self.msg), dismissButton: .default(Text("ok")))
-        }
     }
 }
+
 
 /*
 struct AddFriendView_Previews: PreviewProvider {

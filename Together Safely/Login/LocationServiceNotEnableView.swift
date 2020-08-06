@@ -11,11 +11,10 @@ import SwiftUI
 struct LocationServiceNotEnableView: View {
     
     @State private var textSize:CGFloat = 35
-    @State private var green = UIColor(hex: "#5AC481ff")
     
     var body: some View {
         ZStack {
-            Color(green!).edgesIgnoringSafeArea(.all)
+            Color("Colorgreen").edgesIgnoringSafeArea(.all)
             VStack {
                 Spacer()
                 HStack {

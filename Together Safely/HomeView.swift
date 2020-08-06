@@ -8,19 +8,19 @@
 import SwiftUI
 
 struct HomeView: View {
-    var contactStore: ContactStore
     @EnvironmentObject var firebaseService: FirebaseService
-    @State private var image = "\u{1F600}".image()
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State var index = 0
+    @State private var action: Int? = 0
+    @State private var group: Groups = Groups(id: "", name: "", members: [], riskTotals: [:], riskCompiledSring: [], riskCompiledValue: [], averageRisk: "")
     
     var body: some View {
         VStack {
             VStack {
-                HeaderView()
                 ZStack {
                     Capsule()
                         .fill((Color("Color1").opacity(49)))
-                        .frame(width: UIScreen.main.bounds.size.width - 15, height: 75)
+                        .frame(width: UIScreen.main.bounds.size.width - 40, height: 75)
                     HStack {
                          Text("Pods")
                             .font(Font.custom("Avenir-Heavy", size: 25))
@@ -35,7 +35,7 @@ struct HomeView: View {
                                      self.index = 0
                                  }
                              }
-                            .padding(.leading, 5)
+//                            .padding(.leading, 20)
                         HStack {
                              Text("Invitations")
                                 .font(Font.custom("Avenir-Heavy", size: 25))
@@ -45,7 +45,7 @@ struct HomeView: View {
                                 .padding(.horizontal, 25)
                             ZStack {
                                 Circle()
-                                    .fill(Color("Color4"))
+                                    .fill(Color("Colorred"))
                                     .frame(width: 45, height: 45)
                                 Text("\(firebaseService.invites.count)")
                                     .font(.title)
@@ -58,12 +58,15 @@ struct HomeView: View {
                             .clipShape(Capsule())
                             .onTapGesture { withAnimation(.default){ self.index = 1 } }
                     }
+                        .frame(width: UIScreen.main.bounds.size.width - 40)
                 }
-                    .padding(.horizontal)
-                    .padding(.top,25)
+//                    .padding(.horizontal)
+//                    .padding(.top,25)
+//                    .padding(.leading, 50)
+//                    .padding(.trailing, 50)
                 Spacer()
                 if index == 0 {
-                    NavigationLink(destination: CreatePodsView()) {
+                    NavigationLink(destination: CreatePodView().environmentObject(self.firebaseService)) {
                         HStack {
                             Spacer()
                             Text("Create Pod")
@@ -73,19 +76,49 @@ struct HomeView: View {
                                 .font(.title)
                                 .foregroundColor(.white).opacity(81)
                         }
-                         .padding(.trailing, 35)
+                         .padding(.trailing, 20)
                     }
                     Spacer()
-                    DisplayPodsView(contactStore: contactStore).environmentObject(firebaseService)
+                    DisplayPodsView().environmentObject(firebaseService)
                 } else {
                     InviationsView().environmentObject(firebaseService)
                 }
             }
+            NavigationLink(destination: UserProfileView().environmentObject(firebaseService), tag: 1, selection: $action) {
+                EmptyView()
+            }
         }
-        .navigationBarTitle("")
-        .navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
-        .background(Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all))
+            .navigationBarTitle("")
+            .navigationBarBackButtonHidden(true)
+            .navigationBarItems(leading:
+                HStack {
+                    Button(action: {
+                        self.action = 1
+                    }) {
+                        if firebaseService.user.image != nil {
+                            Image(uiImage: UIImage(data:firebaseService.user.image!)!)
+                                .renderingMode(.original)
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.white, lineWidth: 1))
+                                .padding(5)
+                        } else {
+                            Image(systemName: "person.fill")
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                                .foregroundColor(Color.blue)
+                                .padding(5)
+                        }
+                    }
+                    
+                    HeaderView()
+                    .padding(.horizontal, 50)
+                }
+            )
+            .background(Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all))
     }
     
     func makeuiImage(str: String) -> UIImage {

@@ -30,7 +30,7 @@ struct PhoneLoginView: View {
     
     var body: some View {
         ZStack {
-            Color("Color-backgroud").edgesIgnoringSafeArea(.all)
+            Color("Colorgreen").edgesIgnoringSafeArea(.all)
             VStack(spacing: 20) {
                 Spacer()
                 HStack {

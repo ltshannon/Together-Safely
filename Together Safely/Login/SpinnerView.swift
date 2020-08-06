@@ -14,7 +14,7 @@ struct SpinnerView: View {
     
     var body: some View {
         ZStack {
-            Color("Color-backgroud").edgesIgnoringSafeArea(.all)
+            Color("Colorgreen").edgesIgnoringSafeArea(.all)
             VStack {
                 Spacer()
                 HStack {
@@ -46,7 +46,7 @@ struct SpinnerView: View {
                     .animation(Animation.linear(duration: 0.7).repeatForever(autoreverses: false))
                 }
                 .padding(20)
-                .background(Color("Color-backgroud"))
+                .background(Color("Colorgreen"))
                 .cornerRadius(15)
                 .onAppear {
                     self.animate.toggle()

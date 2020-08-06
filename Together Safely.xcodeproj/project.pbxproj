@@ -16,6 +16,7 @@
 		4635F3A424D5129E00A4A7E2 /* AllContactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4635F3A324D5129E00A4A7E2 /* AllContactsView.swift */; };
 		4635F3A624D5FE6A00A4A7E2 /* DetailPodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4635F3A524D5FE6A00A4A7E2 /* DetailPodView.swift */; };
 		4635F3A824D6104800A4A7E2 /* FullMemberProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4635F3A724D6104800A4A7E2 /* FullMemberProfileView.swift */; };
+		465BE90C24DB461B008DA1CD /* EditRiskProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465BE90B24DB461B008DA1CD /* EditRiskProfile.swift */; };
 		4660E6EE24D4B52C00C6B993 /* MemberProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4660E6ED24D4B52C00C6B993 /* MemberProfileView.swift */; };
 		4698A94824C51529005E884F /* GoogleService-Info-old.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4698A94724C51529005E884F /* GoogleService-Info-old.plist */; };
 		46ACD57E24C510800083F308 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ACD57D24C510800083F308 /* AppDelegate.swift */; };
@@ -33,6 +34,10 @@
 		46DE5E5424D76EF2005912CD /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E5324D76EF2005912CD /* AddFriendView.swift */; };
 		46DE5E5624D7907D005912CD /* InviationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E5524D7907D005912CD /* InviationsView.swift */; };
 		46DE5E5824D881E2005912CD /* Together Safely.xcworkspace in Resources */ = {isa = PBXBuildFile; fileRef = 46DE5E5724D881E2005912CD /* Together Safely.xcworkspace */; };
+		46DE5E5A24D88F7C005912CD /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E5924D88F7C005912CD /* UserProfileView.swift */; };
+		46DE5E5C24D9E226005912CD /* CreatePodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E5B24D9E226005912CD /* CreatePodView.swift */; };
+		46DE5E5E24D9E32F005912CD /* AllContactsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E5D24D9E32F005912CD /* AllContactsCardView.swift */; };
+		46DE5E8024D9FED9005912CD /* CheckboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E7F24D9FED9005912CD /* CheckboxView.swift */; };
 		46F7E64424CCE9B5004EAF24 /* PlacesTest.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 46F7E64224CCE9B5004EAF24 /* PlacesTest.xcdatamodeld */; };
 		46F7E64624CCEC1E004EAF24 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F7E64524CCEC1E004EAF24 /* LocationManager.swift */; };
 		46F7E64824CCEC8F004EAF24 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F7E64724CCEC8F004EAF24 /* CoreDataManager.swift */; };
@@ -56,6 +61,7 @@
 		4635F3A324D5129E00A4A7E2 /* AllContactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllContactsView.swift; sourceTree = "<group>"; };
 		4635F3A524D5FE6A00A4A7E2 /* DetailPodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPodView.swift; sourceTree = "<group>"; };
 		4635F3A724D6104800A4A7E2 /* FullMemberProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullMemberProfileView.swift; sourceTree = "<group>"; };
+		465BE90B24DB461B008DA1CD /* EditRiskProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRiskProfile.swift; sourceTree = "<group>"; };
 		4660E6ED24D4B52C00C6B993 /* MemberProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberProfileView.swift; sourceTree = "<group>"; };
 		4698A94724C51529005E884F /* GoogleService-Info-old.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-old.plist"; sourceTree = "<group>"; };
 		46ACD57A24C510800083F308 /* Together Safely.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Together Safely.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,6 +81,10 @@
 		46DE5E5324D76EF2005912CD /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
 		46DE5E5524D7907D005912CD /* InviationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviationsView.swift; sourceTree = "<group>"; };
 		46DE5E5724D881E2005912CD /* Together Safely.xcworkspace */ = {isa = PBXFileReference; lastKnownFileType = wrapper.workspace; path = "Together Safely.xcworkspace"; sourceTree = "<group>"; };
+		46DE5E5924D88F7C005912CD /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
+		46DE5E5B24D9E226005912CD /* CreatePodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePodView.swift; sourceTree = "<group>"; };
+		46DE5E5D24D9E32F005912CD /* AllContactsCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllContactsCardView.swift; sourceTree = "<group>"; };
+		46DE5E7F24D9FED9005912CD /* CheckboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxView.swift; sourceTree = "<group>"; };
 		46F7E64324CCE9B5004EAF24 /* PlacesTest.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PlacesTest.xcdatamodel; sourceTree = "<group>"; };
 		46F7E64524CCEC1E004EAF24 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		46F7E64724CCEC8F004EAF24 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
@@ -155,13 +165,18 @@
 				46ACD59124C5124A0083F308 /* HomeView.swift */,
 				46F7E69724D30C5D004EAF24 /* DisplayPodsView.swift */,
 				46DE5E5524D7907D005912CD /* InviationsView.swift */,
+				46DE5E5D24D9E32F005912CD /* AllContactsCardView.swift */,
 				4635F3A324D5129E00A4A7E2 /* AllContactsView.swift */,
+				46DE5E5B24D9E226005912CD /* CreatePodView.swift */,
+				46DE5E5324D76EF2005912CD /* AddFriendView.swift */,
 				4635F3A524D5FE6A00A4A7E2 /* DetailPodView.swift */,
 				46DE5E4F24D64AE2005912CD /* CreatePodsView.swift */,
-				46DE5E5324D76EF2005912CD /* AddFriendView.swift */,
+				46DE5E5924D88F7C005912CD /* UserProfileView.swift */,
+				465BE90B24DB461B008DA1CD /* EditRiskProfile.swift */,
 				4635F3A124D510E900A4A7E2 /* HeaderView.swift */,
 				4660E6ED24D4B52C00C6B993 /* MemberProfileView.swift */,
 				4635F3A724D6104800A4A7E2 /* FullMemberProfileView.swift */,
+				46DE5E7F24D9FED9005912CD /* CheckboxView.swift */,
 				46F7E64524CCEC1E004EAF24 /* LocationManager.swift */,
 				46252C5324C787F8005B592F /* MyselfView.swift */,
 				46F7E64224CCE9B5004EAF24 /* PlacesTest.xcdatamodeld */,
@@ -323,7 +338,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4635F3A624D5FE6A00A4A7E2 /* DetailPodView.swift in Sources */,
+				46DE5E5E24D9E32F005912CD /* AllContactsCardView.swift in Sources */,
 				46F7E64424CCE9B5004EAF24 /* PlacesTest.xcdatamodeld in Sources */,
+				46DE5E8024D9FED9005912CD /* CheckboxView.swift in Sources */,
 				46F7E64E24CE80CC004EAF24 /* GetContactsManager.swift in Sources */,
 				4660E6EE24D4B52C00C6B993 /* MemberProfileView.swift in Sources */,
 				46252C3024C63882005B592F /* StartLoginView.swift in Sources */,
@@ -343,10 +360,13 @@
 				46DE5E5424D76EF2005912CD /* AddFriendView.swift in Sources */,
 				46F7E65224CF6E3D004EAF24 /* UserService.swift in Sources */,
 				46DE5E5624D7907D005912CD /* InviationsView.swift in Sources */,
+				46DE5E5C24D9E226005912CD /* CreatePodView.swift in Sources */,
 				46252C5424C787F8005B592F /* MyselfView.swift in Sources */,
 				46DE5E5024D64AE2005912CD /* CreatePodsView.swift in Sources */,
 				46F7E64624CCEC1E004EAF24 /* LocationManager.swift in Sources */,
 				4635F3A424D5129E00A4A7E2 /* AllContactsView.swift in Sources */,
+				465BE90C24DB461B008DA1CD /* EditRiskProfile.swift in Sources */,
+				46DE5E5A24D88F7C005912CD /* UserProfileView.swift in Sources */,
 				46ACD59A24C512590083F308 /* PhoneVerificationView.swift in Sources */,
 				46252C3224C67CE3005B592F /* WebService.swift in Sources */,
 				4635F3A224D510E900A4A7E2 /* HeaderView.swift in Sources */,
@@ -489,7 +509,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Together Safely/Together Safely.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"Together Safely/Preview Content\"";
 				DEVELOPMENT_TEAM = DDDAQ32TPA;
 				ENABLE_PREVIEWS = YES;
@@ -512,7 +532,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Together Safely/Together Safely.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"Together Safely/Preview Content\"";
 				DEVELOPMENT_TEAM = DDDAQ32TPA;
 				ENABLE_PREVIEWS = YES;

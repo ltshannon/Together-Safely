@@ -9,35 +9,82 @@
 import SwiftUI
 
 struct FullMemberProfileView: View {
-    
-    var riskScore: Int
-    var riskString: String
-    var statusText: String
-    var emoji: String
-    var riskRanges: [Dictionary<String,RiskHighLow>]
+
+    var groupId: String
+    var member: Member
+    @EnvironmentObject var firebaseService: FirebaseService
     
     var body: some View {
         HStack {
-            MemberProfileView(riskScore: riskScore, riskRanges: riskRanges)
+            MemberProfileView(
+                image: getImage(phoneName: self.member.phoneNumber, dict: self.firebaseService.contactInfo),
+                groupId: groupId,
+                riskScore: member.riskScore,
+                riskRanges: firebaseService.riskRanges).environmentObject(self.firebaseService)
                 .padding(.trailing, 10)
             VStack(alignment: .leading, spacing: 5) {
-                Text("Name")
-                    .font(Font.custom("Avenir Next Medium", size: 25))
-                    .foregroundColor(Color("Color8"))
-                Text(statusText)
+                Text(self.getName(phoneName: self.member.phoneNumber, dict: self.firebaseService.contactInfo))
+                Text(member.status.text)
                     .font(Font.custom("Avenir Next Medium Italic", size: 20))
-                    .foregroundColor(Color("Color6"))
-                Text(riskString)
+                    .foregroundColor(Color("Colorgray"))
+                Text(member.riskString)
                     .font(Font.custom("Avenir Next Medium", size: 20))
-                    .foregroundColor(Color("Color7"))
+                    .foregroundColor(getColor(riskScore: member.riskScore))
             }
                 .padding(.top, 20)
                 .padding(.bottom, 20)
             Spacer()
-            Text(emoji)
+            Text(member.status.emoji)
+            .font(Font.custom("Avenir Next Medium", size: 50))
         }
             .padding(.leading, 10)
             .padding(.trailing, 10)
+    }
+    
+    func getName(phoneName: String, dict: [[String:ContactInfo]]) -> String {
+        
+        for d in dict {
+            if d[phoneName] != nil {
+                return(d[phoneName]!.name)
+            }
+        }
+        return phoneName
+    }
+    
+    func getImage(phoneName: String, dict: [[String:ContactInfo]]) -> Data? {
+        
+        for d in dict {
+            if d[phoneName] != nil {
+                return(d[phoneName]!.image)
+            }
+        }
+        return nil
+    }
+    
+    func getColor(riskScore: Int) -> Color {
+        
+        for riskRange in firebaseService.riskRanges {
+            let element = riskRange.values
+            for range in element {
+                let min = range.min
+                let max = range.max
+                if riskScore >= min && riskScore <= max {
+                    for key in riskRange.keys {
+                        switch key {
+                        case "Low Risk":
+                            return Color("riskLow")
+                        case "Medium Risk":
+                            return Color("riskMed")
+                        case "High Risk":
+                            return Color("riskHigh")
+                        default:
+                            return Color("Colorgray")
+                        }
+                    }
+                }
+            }
+        }
+        return Color("Colorgray")
     }
 }
 
