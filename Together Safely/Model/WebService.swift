@@ -101,6 +101,9 @@ public enum HTTPMethod: String {
 }
 
 class WebService {
+    struct GenericMessageResponse: Decodable {
+        var message: String
+    }
     
     func acceptInviteToGroup(groupId: String, completion: @escaping (Bool) -> Void)  {
         
@@ -163,6 +166,14 @@ class WebService {
     }
     
     func inviteUserToGroup(groupId: String, phoneNumber: String, completion: @escaping (Bool) -> Void)  {
+        //TODO: replace this method body with the following once we set up response message parsing to determine if an error ocurred or not
+        /**
+         let requestBody = ["newMember" : phoneNumber] as [String : AnyObject]
+         networkRequest(.addUserToPod(groupId: groupId), responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
+         completion(error == nil)
+         }
+         */
+        
         
         let url = URL(string: "https://us-central1-together-c537f.cloudfunctions.net/api/groups/\(groupId)/inviteUser")!
         var request = URLRequest(url: url)
@@ -492,7 +503,7 @@ class WebService {
 }
 
 private extension WebService {
-    func networkRequest<T: Codable>(_ endpoint: Endpoint, requestBody: [String : AnyObject]?, completion: @escaping (T?, NetworkingError?) -> Void) {
+    func networkRequest<T: Decodable>(_ endpoint: Endpoint, responseType: T.Type, requestBody: [String : AnyObject]?, completion: @escaping (T?, NetworkingError?) -> Void) {
         Auth.auth().currentUser?.getIDTokenForcingRefresh(true) { token, error in
             if let error = error {
                 print(error.localizedDescription)
