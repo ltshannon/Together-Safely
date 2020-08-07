@@ -14,7 +14,7 @@ struct CreatePodView: View {
     @EnvironmentObject var firebaseService: FirebaseService
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var podName: String = ""
-    @State private var group: Groups = Groups(id: "", name: "", members: [], riskTotals: [:], riskCompiledSring: [], riskCompiledValue: [], averageRisk: "")
+    @State private var group: Groups = Groups(id: "", name: "", members: [], riskTotals: [:], riskCompiledSring: [], riskCompiledValue: [], averageRisk: "", averageRiskValue: 0)
     
     var body: some View {
         VStack {

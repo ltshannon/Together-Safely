@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4609C91924DCBB3C004BC76C /* BuildRiskBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4609C91824DCBB3C004BC76C /* BuildRiskBar.swift */; };
+		4609C91D24DCDDFD004BC76C /* DisplayPodsContactPod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4609C91C24DCDDFD004BC76C /* DisplayPodsContactPod.swift */; };
 		46252C2E24C62517005B592F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 46252C2D24C62517005B592F /* GoogleService-Info.plist */; };
 		46252C3024C63882005B592F /* StartLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46252C2F24C63882005B592F /* StartLoginView.swift */; };
 		46252C3224C67CE3005B592F /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46252C3124C67CE3005B592F /* WebService.swift */; };
@@ -51,6 +53,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4609C91824DCBB3C004BC76C /* BuildRiskBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildRiskBar.swift; sourceTree = "<group>"; };
+		4609C91C24DCDDFD004BC76C /* DisplayPodsContactPod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPodsContactPod.swift; sourceTree = "<group>"; };
 		46252C2C24C54F7F005B592F /* Together Safely.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Together Safely.entitlements"; sourceTree = "<group>"; };
 		46252C2D24C62517005B592F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		46252C2F24C63882005B592F /* StartLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartLoginView.swift; sourceTree = "<group>"; };
@@ -165,6 +169,8 @@
 				46ACD59124C5124A0083F308 /* HomeView.swift */,
 				4635F3A124D510E900A4A7E2 /* HeaderView.swift */,
 				46F7E69724D30C5D004EAF24 /* DisplayPodsView.swift */,
+				4609C91C24DCDDFD004BC76C /* DisplayPodsContactPod.swift */,
+				4609C91824DCBB3C004BC76C /* BuildRiskBar.swift */,
 				46DE5E5524D7907D005912CD /* InviationsView.swift */,
 				46DE5E5D24D9E32F005912CD /* AllContactsCardView.swift */,
 				4635F3A324D5129E00A4A7E2 /* AllContactsView.swift */,
@@ -348,11 +354,13 @@
 				46F7E64A24CE1EA2004EAF24 /* LocationServiceNotEnableView.swift in Sources */,
 				46ACD59924C512590083F308 /* PhoneLoginView.swift in Sources */,
 				46F7E64824CCEC8F004EAF24 /* CoreDataManager.swift in Sources */,
+				4609C91D24DCDDFD004BC76C /* DisplayPodsContactPod.swift in Sources */,
 				46ACD59824C512590083F308 /* SetNameView.swift in Sources */,
 				46ACD57E24C510800083F308 /* AppDelegate.swift in Sources */,
 				46ACD59724C512590083F308 /* SpinnerView.swift in Sources */,
 				46ACD59224C5124A0083F308 /* HomeView.swift in Sources */,
 				46F7E65024CF3D67004EAF24 /* DummyView.swift in Sources */,
+				4609C91924DCBB3C004BC76C /* BuildRiskBar.swift in Sources */,
 				46ACD58024C510800083F308 /* SceneDelegate.swift in Sources */,
 				46F7E69824D30C5D004EAF24 /* DisplayPodsView.swift in Sources */,
 				46252C5724C78888005B592F /* Extensions.swift in Sources */,

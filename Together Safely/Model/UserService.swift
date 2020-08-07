@@ -238,6 +238,7 @@ class FirebaseService: ObservableObject {
                             if groups.members.count > 0 {
                                 let average = groupAverageRisk / groups.members.count
                                 groups.averageRisk = self.getRiskString(value: average)
+                                groups.averageRiskValue = average
                             }
                                 
                             groups.riskTotals = dict

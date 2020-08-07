@@ -13,8 +13,7 @@ struct DisplayPodsView: View {
     @EnvironmentObject var firebaseService: FirebaseService
     @State private var membersArray: [Int] = []
     @State var memberRiskColor: Color = Color("Colorgray")
-    @State var selection: Int? = nil
-    @State var group: Groups = Groups(id: "", name: "", members: [], riskTotals: [:], riskCompiledSring: [], riskCompiledValue: [], averageRisk: "")
+    @State var group: Groups = Groups(id: "", name: "", members: [], riskTotals: [:], riskCompiledSring: [], riskCompiledValue: [], averageRisk: "", averageRiskValue: 0)
 
     var body: some View {
 
@@ -44,21 +43,11 @@ struct DisplayPodsView: View {
                                     .frame(height: 2)
                                     .padding(0)
                                 Spacer()
-                                HStack {
-                                    ForEach(0..<group.riskCompiledSring.count) { index in
-                                        VStack {
-                                            Text("\(group.riskCompiledSring[index])")
-                                                .font(Font.custom("Avenir-Heavy", size: 20))
-                                                .padding(.leading, 10)
-                                            Text("\(group.riskCompiledValue[index])")
-                                                .font(Font.custom("Avenir-Heavy", size: 20))
-                                                .padding(.leading, 10)
-                                        }
-                                    }
-                                }
+                                BuildRiskBar(array: self.getWidths(group: group, width: 200))
                                 Spacer()
                                 Text(group.averageRisk)
                                     .font(Font.custom("Avenir-Heavy", size: 20))
+                                    .foregroundColor(self.getColor(riskScore: group.averageRiskValue))
                                     .padding(.leading, 10)
                                 Spacer()
                                 ScrollView(.horizontal, showsIndicators: false) {
@@ -83,66 +72,48 @@ struct DisplayPodsView: View {
                     }
                     Spacer()
                     VStack {
-                        NavigationLink(destination: AllContactsView(group: group).environmentObject(firebaseService), tag: 2, selection: $selection) {
-                            Button(action: {
-                                self.selection = 2
-                            }) {
-                                VStack(alignment: .leading, spacing: 0) {
-                                    VStack {
-                                        HStack {
-                                            Text("All Contacts")
-                                                .font(Font.custom("Avenir-Heavy", size: 25))
-                                                .padding(.leading, 20)
-                                                .foregroundColor(.white)
-                                            Spacer()
-                                            Image(systemName: "chevron.right")
-                                                .font(Font.custom("Avenir-Heavy", size: 20))
-                                                .padding(.trailing, 20)
-                                                .foregroundColor(Color("Colorgray"))
-                                        }
-                                    }
-                                        .frame(height:(75))
-                                        .background(Color("Color3")).edgesIgnoringSafeArea(.all)
-                                    Capsule()
-                                        .fill(Color(.blue))
-                                        .frame(height: 2)
-                                        .padding(0)
-                                    Spacer()
-
-                                    List(firebaseService.userContacts, id: \.self) { (contact: CNContact) in
-                                        if contact.imageDataAvailable {
-                                            Image(uiImage: UIImage(data: contact.imageData!)!)
-                                                .renderingMode(.original)
-                                                .resizable()
-                                                .scaledToFit()
-                                                .clipShape(Circle())
-                                                .overlay(Circle().stroke(Color(.white), lineWidth: 1))
-                                                .frame(width: 75, height: 75)
-                                        } else {
-                                            Image(systemName: "person.fill")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .clipShape(Circle())
-                                                .overlay(Circle().stroke(Color.white, lineWidth: 1))
-                                                .frame(width: 60, height: 60)
-                                                .foregroundColor(Color.blue)
-                                        }
-                                        Text("\(contact.name)")
-                                        Spacer()
-                                    }
-                                }
-                            }
-                            .frame(width: UIScreen.main.bounds.size.width - 40, height: 300)
-                            .background(Color.white)
-                            .cornerRadius(20)
-                            .shadow(color: .gray, radius: 2, x: 0, y: 2)
-                            }
+                        DisplayPodsContactPod(group: group).environmentObject(self.firebaseService)
                     }
                 }
             } else {
                 Spacer()
             }
         }
+    }
+
+    func getWidths(group: Groups, width: CGFloat) -> [CGFloat] {
+//    func getWidth(forColor: String, listOfRisks: [String], totalRisk: [String : Int], width: CGFloat) -> CGFloat {
+        
+        var total: Int = 0
+        var array: [CGFloat] = [0, 0, 0]
+        
+        for element in group.riskCompiledSring
+        {
+            total += Int(group.riskTotals[element]!)
+        }
+        
+        for (_, str) in group.riskCompiledSring.enumerated() {
+            
+            if total > 0 {
+                if let colorValue = group.riskTotals[str] {
+
+                    let v = CGFloat((Int(width) / total) * colorValue)
+                    
+                    switch str {
+                    case "High Risk":
+                        array[0] = v
+                    case "Medium Risk":
+                        array[1] = v
+                    case "Low Risk":
+                        array[2] = v
+                    default:
+                        print("error")
+                    }
+                }
+            }
+        }
+        
+        return array
     }
     
     func getImage(phoneName: String, dict: [[String:ContactInfo]]) -> Data? {
@@ -155,6 +126,59 @@ struct DisplayPodsView: View {
         return nil
     }
     
+    func getColor(riskScore: Int) -> Color {
+        
+        for riskRange in firebaseService.riskRanges {
+            let element = riskRange.values
+            for range in element {
+                let min = range.min
+                let max = range.max
+                if riskScore >= min && riskScore <= max {
+                    for key in riskRange.keys {
+                        switch key {
+                        case "Low Risk":
+                            return Color("riskLow")
+                        case "Medium Risk":
+                            return Color("riskMed")
+                        case "High Risk":
+                            return Color("riskHigh")
+                        default:
+                            return Color("Colorgray")
+                        }
+                    }
+                }
+            }
+        }
+        return Color("Colorgray")
+    }
+    
+}
+
+struct CornerRadiusStyle: ViewModifier {
+    var radius: CGFloat
+    var corners: UIRectCorner
+
+    struct CornerRadiusShape: Shape {
+
+        var radius = CGFloat.infinity
+        var corners = UIRectCorner.allCorners
+
+        func path(in rect: CGRect) -> Path {
+            let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+            return Path(path.cgPath)
+        }
+    }
+
+    func body(content: Content) -> some View {
+        content
+            .clipShape(CornerRadiusShape(radius: radius, corners: corners))
+    }
+}
+
+extension View {
+    func cornerRadius(radius: CGFloat, corners: UIRectCorner) -> some View {
+        ModifiedContent(content: self, modifier: CornerRadiusStyle(radius: radius, corners: corners))
+    }
 }
 /*
 struct DisplayPodsView_Previews: PreviewProvider {

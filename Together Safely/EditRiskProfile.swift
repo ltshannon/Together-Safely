@@ -29,7 +29,8 @@ struct EditRiskProfile: View {
                     Spacer()
                     Image("selectButton")
                         .resizable()
-                        .frame(width: 75, height: 40)
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 75)
                     
                 }
                     .padding(20)
@@ -40,7 +41,8 @@ struct EditRiskProfile: View {
                     Spacer()
                     Image("selectButton")
                         .resizable()
-                        .frame(width: 75, height: 40)
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 75)
                 }
                     .padding(20)
                 HStack {
@@ -50,7 +52,8 @@ struct EditRiskProfile: View {
                     Spacer()
                     Image("yesButton")
                         .resizable()
-                        .frame(width: 75, height: 40)
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 75)
                 }
                     .padding(20)
                 HStack {
@@ -60,7 +63,8 @@ struct EditRiskProfile: View {
                     Spacer()
                     Image("noButton")
                         .resizable()
-                        .frame(width: 75, height: 40)
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 75)
                 }
                     .padding(20)
             }

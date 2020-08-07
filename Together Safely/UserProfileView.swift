@@ -77,15 +77,9 @@ struct UserProfileView: View {
                         .font(Font.custom("Avenir-Heavy", size: 30))
                         .padding(.leading, 20)
                     Spacer()
-                    VStack {
-                        Text("HIGH")
-                            .font(Font.custom("Avenir Next Bold", size: 30))
-                            .foregroundColor(Color.white)
-                    }
-                        .frame(width: 150, height: 60)
-                        .background(Color("Colorred"))
-                        .cornerRadius(20)
-                        .shadow(color: .gray, radius: 2, x: 0, y: 2)
+                    Image("statusHigh")
+                        .resizable()
+                        .frame(width: 103, height: 50)
                         .padding(.trailing, 20)
                 }
                 Capsule()
@@ -97,15 +91,9 @@ struct UserProfileView: View {
                         .font(Font.custom("Avenir-Heavy", size: 30))
                         .padding(.leading, 20)
                     Spacer()
-                    VStack {
-                        Text("MED")
-                            .font(Font.custom("Avenir Next Bold", size: 30))
-                            .foregroundColor(Color.white)
-                    }
-                        .frame(width: 150, height: 60)
-                        .background(Color("Colormed"))
-                        .cornerRadius(20)
-                        .shadow(color: .gray, radius: 2, x: 0, y: 2)
+                    Image("statusMed")
+                        .resizable()
+                        .frame(width: 103, height: 50)
                         .padding(.trailing, 20)
                 }
                 Capsule()
@@ -116,7 +104,8 @@ struct UserProfileView: View {
                     Spacer()
                     Image("shareMyRisk")
                         .resizable()
-                        .frame(width: 200, height: 50)
+//                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 200, height: 40)
                         .padding(.trailing, 20)
                 }
             }

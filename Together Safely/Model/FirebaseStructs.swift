@@ -34,6 +34,7 @@ struct Groups: Identifiable, Codable, Hashable {
     var riskCompiledSring: [String]
     var riskCompiledValue: [Int]
     var averageRisk: String
+    var averageRiskValue: Int
 }
 
 struct Member: Identifiable, Codable, Hashable {
@@ -94,6 +95,7 @@ extension Groups {
         riskCompiledValue = []
         let members = snapshot["members"] as? Array ?? []
         averageRisk = "N/A"
+        averageRiskValue = 0
         
         for element in members {
             let m = element as? [String : Any] ?? [:]
