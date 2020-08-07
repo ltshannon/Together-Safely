@@ -13,11 +13,13 @@ struct FullMemberProfileView: View {
     var groupId: String
     var member: Member
     @EnvironmentObject var firebaseService: FirebaseService
+    @State private var getRiskColor: Color = Color.white
+    @State private var getImageForPhone: Data = Data()
     
     var body: some View {
         HStack {
             MemberProfileView(
-                image: getImage(phoneName: self.member.phoneNumber, dict: self.firebaseService.contactInfo),
+                image: getImageForPhone.getImage(phoneName: self.member.phoneNumber, dict: self.firebaseService.contactInfo),
                 groupId: groupId,
                 riskScore: member.riskScore,
                 riskRanges: firebaseService.riskRanges).environmentObject(self.firebaseService)
@@ -29,7 +31,7 @@ struct FullMemberProfileView: View {
                     .foregroundColor(Color("Colorgray"))
                 Text(member.riskString)
                     .font(Font.custom("Avenir Next Medium", size: 20))
-                    .foregroundColor(getColor(riskScore: member.riskScore))
+                    .foregroundColor(getRiskColor.getRiskColor(riskScore: member.riskScore, riskRanges: self.firebaseService.riskRanges))
             }
                 .padding(.top, 20)
                 .padding(.bottom, 20)
@@ -51,41 +53,6 @@ struct FullMemberProfileView: View {
         return phoneName
     }
     
-    func getImage(phoneName: String, dict: [[String:ContactInfo]]) -> Data? {
-        
-        for d in dict {
-            if d[phoneName] != nil {
-                return(d[phoneName]!.image)
-            }
-        }
-        return nil
-    }
-    
-    func getColor(riskScore: Int) -> Color {
-        
-        for riskRange in firebaseService.riskRanges {
-            let element = riskRange.values
-            for range in element {
-                let min = range.min
-                let max = range.max
-                if riskScore >= min && riskScore <= max {
-                    for key in riskRange.keys {
-                        switch key {
-                        case "Low Risk":
-                            return Color("riskLow")
-                        case "Medium Risk":
-                            return Color("riskMed")
-                        case "High Risk":
-                            return Color("riskHigh")
-                        default:
-                            return Color("Colorgray")
-                        }
-                    }
-                }
-            }
-        }
-        return Color("Colorgray")
-    }
 }
 
 /*

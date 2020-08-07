@@ -10,33 +10,43 @@ import SwiftUI
 
 struct BuildRiskBar: View {
 
+    var group: Groups
     var array: [CGFloat]
-//    var redValue: CGFloat
-//    var yellowValue: CGFloat
-//    var greenValue: CGFloat
+    @EnvironmentObject var firebaseService: FirebaseService
     
     var body: some View {
     
         VStack(spacing: 0) {
             HStack {
-                Rectangle()
-                    .fill(Color("riskHigh"))
-                    .frame(width: array.count == 1 ? array[0] : 0, height: 50)
-                    .padding(.trailing, -4)
-                    .cornerRadius(radius: 6, corners: array.count == 1 ? [.topRight, .bottomRight, .topLeft, .bottomLeft] : [.topRight, .bottomRight])
-                Rectangle()
-                    .fill(Color("riskMed"))
-                    .frame(width: array.count == 2 ? array[1] : 0, height: 50)
-                    .padding(.leading, -4)
-                    .padding(.trailing, -4)
-                    .cornerRadius(radius: 6, corners: array.count == 1 ? [.topRight, .bottomRight, .topLeft, .bottomLeft] : [.topRight, .bottomRight])
-                Rectangle()
-                    .fill(Color("riskLow"))
-                    .frame(width: array.count == 3 ? array[2] : 0, height: 50)
-                    .padding(.leading, -3)
-                    .cornerRadius(radius: 6, corners: array.count == 1 ? [.topRight, .bottomRight, .topLeft, .bottomLeft] : [.topRight, .bottomRight])
+                ZStack {
+                    Rectangle()
+                        .fill(Color("riskHigh"))
+                        .frame(width: array[0] > 0 ? array[0] : 0, height: 50)
+                        .cornerRadius(radius: 6, corners: array[1] == 0 && array[2] == 0  ? [.topRight, .bottomRight, .topLeft, .bottomLeft] : [.topLeft, .bottomLeft])
+                        Text("\(array[0] > 0 ? String(Int(array[3])) : "")")
+                            .font(Font.custom("Avenir-Heavy", size: 20))
+                            .foregroundColor(Color("Colorblack"))
+                }
+                ZStack {
+                    Rectangle()
+                        .fill(Color("riskMed"))
+                        .frame(width: array[1] > 0 ? array[1] : 0, height: 50)
+                        .cornerRadius(radius: 6, corners: array[0] == 0 && array[2] == 0 ? [.topRight, .bottomRight, .topLeft, .bottomLeft] : [])
+                        Text("\(array[1] > 0 ? String(Int(array[4])) : "")")
+                            .font(Font.custom("Avenir-Heavy", size: 20))
+                            .foregroundColor(Color("Colorblack"))
+                }
+                ZStack {
+                    Rectangle()
+                        .fill(Color("riskLow"))
+                        .frame(width: array[2] > 0 ? array[2] : 0, height: 50)
+                        .cornerRadius(radius: 6, corners: array[0] == 0 ? [.topRight, .bottomRight, .topLeft, .bottomLeft] : [.topRight, .bottomRight])
+                        Text("\(array[2] > 0 ? String(Int(array[5])) : "")")
+                            .font(Font.custom("Avenir-Heavy", size: 20))
+                            .foregroundColor(Color("Colorblack"))
+                }
             }
-            .padding(0)
+            .padding(10)
         }
     }
 }

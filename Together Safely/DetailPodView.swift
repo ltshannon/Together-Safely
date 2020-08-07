@@ -15,7 +15,9 @@ struct DetailPodView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var inputStr: String = ""
     @State private var emojiText: String = ""
+    @State private var widthArray: Array = []
     var webService = WebService()
+    @State private var getRiskColor: Color = Color.white
     
     var body: some View {
         VStack {
@@ -108,21 +110,11 @@ struct DetailPodView: View {
                         .frame(height: 2)
                         .padding(0)
                     Spacer()
-                    HStack {
-                        ForEach(0..<group.riskCompiledSring.count) { index in
-                            VStack {
-                                Text("\(self.group.riskCompiledSring[index])")
-                                    .font(Font.custom("Avenir-Heavy", size: 20))
-                                    .padding(.leading, 10)
-                                Text("\(self.group.riskCompiledValue[index])")
-                                    .font(Font.custom("Avenir-Heavy", size: 20))
-                                    .padding(.leading, 10)
-                            }
-                        }
-                    }
+                    BuildRiskBar(group: group, array: widthArray.getWidths(group: group, width: 300)).environmentObject(self.firebaseService)
                     Spacer()
                     Text(group.averageRisk)
                         .font(Font.custom("Avenir-Heavy", size: 20))
+                        .foregroundColor(getRiskColor.getRiskColor(riskScore: group.averageRiskValue, riskRanges: firebaseService.riskRanges))
                         .padding(.leading, 10)
                     Spacer()
                     ScrollView(.vertical, showsIndicators: false) {
@@ -193,7 +185,6 @@ struct TextFieldWrapperView: UIViewRepresentable {
 }
 
 extension TextFieldWrapperView {
-
 
     func makeUIView(context: UIViewRepresentableContext<TextFieldWrapperView>) -> UITextField {
         let textField = EmojiTextField()

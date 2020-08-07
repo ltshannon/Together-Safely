@@ -91,3 +91,88 @@ extension CNContact: Identifiable {
     }
 }
 
+extension Data {
+    
+    func getImage(phoneName: String, dict: [[String:ContactInfo]]) -> Data? {
+        
+        for d in dict {
+            if d[phoneName] != nil {
+                return(d[phoneName]!.image)
+            }
+        }
+        return nil
+    }
+    
+}
+
+extension Color {
+    
+    func getRiskColor(riskScore: Int, riskRanges: [[String:RiskHighLow]]) -> Color {
+        
+        for riskRange in riskRanges {
+            let element = riskRange.values
+            for range in element {
+                let min = range.min
+                let max = range.max
+                if riskScore >= min && riskScore <= max {
+                    for key in riskRange.keys {
+                        switch key {
+                        case "Low Risk":
+                            return Color("riskLow")
+                        case "Medium Risk":
+                            return Color("riskMed")
+                        case "High Risk":
+                            return Color("riskHigh")
+                        default:
+                            return Color("Colorgray")
+                        }
+                    }
+                }
+            }
+        }
+        return Color("Colorgray")
+    }
+    
+}
+
+extension Array {
+    
+    func getWidths(group: Groups, width: CGFloat) -> [CGFloat] {
+
+        var total: Int = 0
+        var array: [CGFloat] = [0, 0, 0, 0, 0, 0]
+        
+        for element in group.riskCompiledSring
+        {
+            total += Int(group.riskTotals[element]!)
+        }
+        
+        for (_, str) in group.riskCompiledSring.enumerated() {
+            
+            if total > 0 {
+                if let colorValue = group.riskTotals[str] {
+
+                    let v = CGFloat((Int(width) / total) * colorValue)
+                    
+                    switch str {
+                    case "High Risk":
+                        array[0] = v
+                        array[3] = CGFloat(colorValue)
+                    case "Medium Risk":
+                        array[1] = v
+                        array[4] = CGFloat(colorValue)
+                    case "Low Risk":
+                        array[2] = v
+                        array[5] = CGFloat(colorValue)
+                    default:
+                        print("error")
+                    }
+                }
+            }
+        }
+        
+        return array
+    }
+    
+}
+

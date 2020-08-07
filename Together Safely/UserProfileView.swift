@@ -12,6 +12,7 @@ struct UserProfileView: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var firebaseService: FirebaseService
+    @State private var getRiskColor: Color = Color.white
     
     var body: some View {
         VStack {
@@ -22,7 +23,7 @@ struct UserProfileView: View {
                         .foregroundColor(Color("Colordarkgreen"))
                     Text(firebaseService.user.riskString)
                         .font(Font.custom("Avenir Next Medium", size: 25))
-                        .foregroundColor(getColor(riskScore: firebaseService.user.riskScore))
+                        .foregroundColor(getRiskColor.getRiskColor(riskScore: firebaseService.user.riskScore, riskRanges: self.firebaseService.riskRanges))
                 }
                 .frame(width: UIScreen.main.bounds.size.width - 40, height: 200)
                     .background(Color.white)
@@ -50,7 +51,7 @@ struct UserProfileView: View {
                     }
                     Circle()
                         .frame(width: 30, height: 30)
-                        .foregroundColor(getColor(riskScore: firebaseService.user.riskScore))
+                        .foregroundColor(getRiskColor.getRiskColor(riskScore: firebaseService.user.riskScore, riskRanges: self.firebaseService.riskRanges))
                         .overlay(Circle().stroke(Color.white, lineWidth: 3))
                         .offset(x: 30, y: 30)
                 }
@@ -149,31 +150,6 @@ struct UserProfileView: View {
             }
     }
     
-    func getColor(riskScore: Int) -> Color {
-        
-        for riskRange in firebaseService.riskRanges {
-            let element = riskRange.values
-            for range in element {
-                let min = range.min
-                let max = range.max
-                if riskScore >= min && riskScore <= max {
-                    for key in riskRange.keys {
-                        switch key {
-                        case "Low Risk":
-                            return Color("riskLow")
-                        case "Medium Risk":
-                            return Color("riskMed")
-                        case "High Risk":
-                            return Color("riskHigh")
-                        default:
-                            return Color("Colorgray")
-                        }
-                    }
-                }
-            }
-        }
-        return Color("Colorgray")
-    }
 }
 
 struct UserProfileView_Previews: PreviewProvider {

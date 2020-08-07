@@ -14,7 +14,10 @@ struct DisplayPodsView: View {
     @State private var membersArray: [Int] = []
     @State var memberRiskColor: Color = Color("Colorgray")
     @State var group: Groups = Groups(id: "", name: "", members: [], riskTotals: [:], riskCompiledSring: [], riskCompiledValue: [], averageRisk: "", averageRiskValue: 0)
-
+    @State private var widthArray: Array = []
+    @State private var getRiskColor: Color = Color.white
+    @State private var getImageForPhone: Data = Data()
+    
     var body: some View {
 
         VStack {
@@ -43,18 +46,18 @@ struct DisplayPodsView: View {
                                     .frame(height: 2)
                                     .padding(0)
                                 Spacer()
-                                BuildRiskBar(array: self.getWidths(group: group, width: 200))
+                                BuildRiskBar(group: group, array: self.widthArray.getWidths(group: group, width: 300)).environmentObject(self.firebaseService)
                                 Spacer()
                                 Text(group.averageRisk)
                                     .font(Font.custom("Avenir-Heavy", size: 20))
-                                    .foregroundColor(self.getColor(riskScore: group.averageRiskValue))
+                                    .foregroundColor(self.getRiskColor.getRiskColor(riskScore: group.averageRiskValue, riskRanges: self.firebaseService.riskRanges))
                                     .padding(.leading, 10)
                                 Spacer()
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack {
                                         ForEach(0..<group.members.count) { index in
                                             MemberProfileView(
-                                                image: self.getImage(phoneName: group.members[index].phoneNumber, dict: self.firebaseService.contactInfo),
+                                                image: self.getImageForPhone.getImage(phoneName: group.members[index].phoneNumber, dict: self.firebaseService.contactInfo),
                                                 groupId: group.id,
                                                 riskScore: group.members[index].riskScore,
                                                 riskRanges: self.firebaseService.riskRanges)
@@ -79,77 +82,6 @@ struct DisplayPodsView: View {
                 Spacer()
             }
         }
-    }
-
-    func getWidths(group: Groups, width: CGFloat) -> [CGFloat] {
-//    func getWidth(forColor: String, listOfRisks: [String], totalRisk: [String : Int], width: CGFloat) -> CGFloat {
-        
-        var total: Int = 0
-        var array: [CGFloat] = [0, 0, 0]
-        
-        for element in group.riskCompiledSring
-        {
-            total += Int(group.riskTotals[element]!)
-        }
-        
-        for (_, str) in group.riskCompiledSring.enumerated() {
-            
-            if total > 0 {
-                if let colorValue = group.riskTotals[str] {
-
-                    let v = CGFloat((Int(width) / total) * colorValue)
-                    
-                    switch str {
-                    case "High Risk":
-                        array[0] = v
-                    case "Medium Risk":
-                        array[1] = v
-                    case "Low Risk":
-                        array[2] = v
-                    default:
-                        print("error")
-                    }
-                }
-            }
-        }
-        
-        return array
-    }
-    
-    func getImage(phoneName: String, dict: [[String:ContactInfo]]) -> Data? {
-        
-        for d in dict {
-            if d[phoneName] != nil {
-                return(d[phoneName]!.image)
-            }
-        }
-        return nil
-    }
-    
-    func getColor(riskScore: Int) -> Color {
-        
-        for riskRange in firebaseService.riskRanges {
-            let element = riskRange.values
-            for range in element {
-                let min = range.min
-                let max = range.max
-                if riskScore >= min && riskScore <= max {
-                    for key in riskRange.keys {
-                        switch key {
-                        case "Low Risk":
-                            return Color("riskLow")
-                        case "Medium Risk":
-                            return Color("riskMed")
-                        case "High Risk":
-                            return Color("riskHigh")
-                        default:
-                            return Color("Colorgray")
-                        }
-                    }
-                }
-            }
-        }
-        return Color("Colorgray")
     }
     
 }

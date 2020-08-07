@@ -15,7 +15,7 @@ struct MemberProfileView: View {
     @EnvironmentObject var firebaseService: FirebaseService
     var riskScore: Int
     var riskRanges: [Dictionary<String,RiskHighLow>]
-//    var image: Data
+    @State private var getRiskColor: Color = Color.white
     
     var body: some View {
         ZStack {
@@ -39,7 +39,7 @@ struct MemberProfileView: View {
                 .padding(5)
             Circle()
                 .frame(width: 25, height: 25)
-                .foregroundColor(getColor(riskScore: riskScore))
+                .foregroundColor(getRiskColor.getRiskColor(riskScore: riskScore, riskRanges: self.firebaseService.riskRanges))
                 .overlay(Circle().stroke(Color.white, lineWidth: 3))
                 .offset(x: 25, y: 25)
             }
@@ -47,31 +47,6 @@ struct MemberProfileView: View {
         .padding(.bottom, 5)
     }
     
-    func getColor(riskScore: Int) -> Color {
-        
-        for riskRange in riskRanges {
-            let element = riskRange.values
-            for range in element {
-                let min = range.min
-                let max = range.max
-                if riskScore >= min && riskScore <= max {
-                    for key in riskRange.keys {
-                        switch key {
-                        case "Low Risk":
-                            return Color("riskLow")
-                        case "Medium Risk":
-                            return Color("riskMed")
-                        case "High Risk":
-                            return Color("riskHigh")
-                        default:
-                            return Color("Colorgray")
-                        }
-                    }
-                }
-            }
-        }
-        return Color("Colorgray")
-    }
 }
 
 /*
