@@ -35,7 +35,6 @@
 		46DE5E5024D64AE2005912CD /* CreatePodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E4F24D64AE2005912CD /* CreatePodsView.swift */; };
 		46DE5E5424D76EF2005912CD /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E5324D76EF2005912CD /* AddFriendView.swift */; };
 		46DE5E5624D7907D005912CD /* InviationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E5524D7907D005912CD /* InviationsView.swift */; };
-		46DE5E5824D881E2005912CD /* Together Safely.xcworkspace in Resources */ = {isa = PBXBuildFile; fileRef = 46DE5E5724D881E2005912CD /* Together Safely.xcworkspace */; };
 		46DE5E5A24D88F7C005912CD /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E5924D88F7C005912CD /* UserProfileView.swift */; };
 		46DE5E5C24D9E226005912CD /* CreatePodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E5B24D9E226005912CD /* CreatePodView.swift */; };
 		46DE5E5E24D9E32F005912CD /* AllContactsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E5D24D9E32F005912CD /* AllContactsCardView.swift */; };
@@ -84,7 +83,6 @@
 		46DE5E4F24D64AE2005912CD /* CreatePodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePodsView.swift; sourceTree = "<group>"; };
 		46DE5E5324D76EF2005912CD /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
 		46DE5E5524D7907D005912CD /* InviationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviationsView.swift; sourceTree = "<group>"; };
-		46DE5E5724D881E2005912CD /* Together Safely.xcworkspace */ = {isa = PBXFileReference; lastKnownFileType = wrapper.workspace; path = "Together Safely.xcworkspace"; sourceTree = "<group>"; };
 		46DE5E5924D88F7C005912CD /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		46DE5E5B24D9E226005912CD /* CreatePodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePodView.swift; sourceTree = "<group>"; };
 		46DE5E5D24D9E32F005912CD /* AllContactsCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllContactsCardView.swift; sourceTree = "<group>"; };
@@ -139,7 +137,6 @@
 		46ACD57124C510800083F308 = {
 			isa = PBXGroup;
 			children = (
-				46DE5E5724D881E2005912CD /* Together Safely.xcworkspace */,
 				46ACD57C24C510800083F308 /* Together Safely */,
 				46ACD57B24C510800083F308 /* Products */,
 				8484AD2D3FC30157F08A3D12 /* Pods */,
@@ -290,7 +287,6 @@
 				46252C2E24C62517005B592F /* GoogleService-Info.plist in Resources */,
 				46ACD58724C510810083F308 /* Preview Assets.xcassets in Resources */,
 				46ACD58424C510810083F308 /* Assets.xcassets in Resources */,
-				46DE5E5824D881E2005912CD /* Together Safely.xcworkspace in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
