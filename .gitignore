@@ -110,3 +110,5 @@ iOSInjectionProject/
 
 # Localization
 **/Base.lproj/*.strings
+keys
+Podfile.lock
