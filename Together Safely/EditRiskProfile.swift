@@ -32,7 +32,8 @@ struct EditRiskProfile: View {
                 .shadow(color: .gray, radius: 2, x: 0, y: 2)
                 .padding(20)
             Button(action: {
-            
+//                get answers from data source
+//                WebService.postQuestionAnswers(answers: <#T##[UserAnswer]#>, completion: <#T##(Bool) -> Void#>)
             }) {
                 HStack {
                     Spacer()
@@ -53,6 +54,7 @@ struct EditRiskProfile: View {
         .onAppear() {
             self.firebaseService.getRiskFactorQuestions() { results in
                 self.questions = results
+                
             }
         }
     }
@@ -84,7 +86,7 @@ struct RiskQuestionItem: View {
                 Text("Yes").tag(0)
                 Text(" - ").tag(1)
                 Text("No").tag(2)
-            }.pickerStyle(SegmentedPickerStyle())
+                }.pickerStyle(SegmentedPickerStyle())
         }.onAppear() {
             switch self.question.userResponse {
             case nil:

@@ -197,6 +197,13 @@ class WebService {
             completion(error == nil)
         }
     }
+    
+    static func postQuestionAnswers(answers: [UserAnswer], completion: @escaping (Bool) -> Void) {
+        let requestBody = ["answers" : answers] as [String : AnyObject]
+        networkRequest(.postQuestionAnswers, responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
+            completion(error == nil)
+        }
+    }
 }
 
 private extension WebService {
