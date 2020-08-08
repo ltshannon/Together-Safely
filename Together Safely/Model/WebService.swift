@@ -199,7 +199,10 @@ class WebService {
     }
     
     static func postQuestionAnswers(answers: [UserAnswer], completion: @escaping (Bool) -> Void) {
-        let requestBody = ["answers" : answers] as [String : AnyObject]
+        let mappedAnswers = answers.map { (answer) -> [String : AnyObject?] in
+            return ["userQuestion" : answer.userQuestion as AnyObject, "answer" : answer.answer as AnyObject?]
+        }
+        let requestBody = ["answers" : mappedAnswers] as [String : AnyObject]
         networkRequest(.postQuestionAnswers, responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
             completion(error == nil)
         }
