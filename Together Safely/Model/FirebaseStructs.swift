@@ -20,10 +20,26 @@ struct User: Identifiable, Codable {
     var riskScore: Int
     var riskString: String
     var groupInvites: [String]
+    var userAnswers: [UserAnswer]
 }
 
 struct RiskScores: Equatable {
     let date: Int
+}
+
+struct UserQuestion: Identifiable, Codable {
+    @DocumentID var id: String?
+    let order: Int
+    let primary: Bool
+    let text: String
+    let type: String
+    //this value is not part of the data set coming from firebase, but we can use it to track the user's selection locally when we prepare to submit the response
+    var userResponse: Bool?
+}
+
+struct UserAnswer: Codable, Hashable {
+    let answer: Bool?
+    let userQuestion: String
 }
 
 struct Groups: Identifiable, Codable, Hashable {
@@ -142,6 +158,14 @@ extension User {
             groupInvites.append(groupInvite as? String ?? "")
         }
         self.groupInvites = groupInvites
+        let answersCollection = snapshot["userAnswers"] as? [[String : AnyObject]] ?? []
+        var userAnswers = [UserAnswer]()
+        for answer in answersCollection {
+            let userAnswer = answer["answer"] as? Bool
+            let questionId = answer["userQuestion"] as? String ?? ""
+            userAnswers.append(UserAnswer(answer: userAnswer, userQuestion: questionId))
+        }
+        self.userAnswers = userAnswers
     }
 }
 
