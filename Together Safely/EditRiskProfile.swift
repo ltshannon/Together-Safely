@@ -92,7 +92,12 @@ struct EditRiskProfile: View {
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: btnBack)
             .background(Image("backgroudImage").edgesIgnoringSafeArea(.all))
+        .onAppear() {
+            self.firebaseService.getRiskFactorQuestions() { results in
+                print(results)
+            }
         }
+    }
             
         var btnBack : some View { Button(action: {
                 self.presentationMode.wrappedValue.dismiss()
