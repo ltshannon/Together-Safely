@@ -42,15 +42,15 @@ struct DetailPodView: View {
                             .padding(5)
                     }
                     HStack {
+//                        Capsule()
+//                            .fill(Color(.black))
+//                            .frame(width: 1, height: 60)
+//                            .padding(0)
                         TextFieldWrapperView(text: self.$emojiText)
                             .background(Color.white)
-                            .frame(width: 40, height: 40)
+                            .frame(width: 30, height: 30)
                             .font(Font.custom("Avenir Next Medium Italic", size: 40))
-//                        .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.gray, lineWidth: 1))
-                        Capsule()
-                            .fill(Color(.black))
-                            .frame(width: 1, height: 60)
-                            .padding(0)
+//                            .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.gray, lineWidth: 1))
                         TextField("I want to..", text: $inputStr)
                             .font(Font.custom("Avenir Next Medium Italic", size: 30))
                             .foregroundColor(Color("Colorblack"))
@@ -130,16 +130,6 @@ struct DetailPodView: View {
                                     FullMemberProfileView(
                                         groupId: self.group.id,
                                         member: self.group.members[index]).environmentObject(self.firebaseService)
-                                        
-/*
-                                        phoneNumber: self.group.members[index].phoneNumber,
-                                        riskScore: self.group.members[index].riskScore,
-                                        riskString: self.group.members[index].riskString,
-                                        statusText: self.group.members[index].status.text,
-                                        emoji: self.group.members[index].status.emoji,
-                                        riskRanges: self.firebaseService.riskRanges).environmentObject(self.firebaseService)
-*/
- 
                                 }
                             }
                         }
@@ -189,6 +179,7 @@ extension TextFieldWrapperView {
     func makeUIView(context: UIViewRepresentableContext<TextFieldWrapperView>) -> UITextField {
         let textField = EmojiTextField()
         textField.delegate = context.coordinator
+        textField.placeholder = "🙂"
         return textField
     }
 
@@ -205,14 +196,17 @@ class TFCoordinator: NSObject, UITextFieldDelegate {
         self.parent = textField
     }
 
-    //        func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-    //            if let value = textField.text {
-    //                parent.text = value
-    //                parent.onChange?(value)
-    //            }
-    //
-    //            return true
-    //        }
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let value = textField.text {
+            if value.count > 0 {
+                textField.text = ""
+            }
+            parent.text = string
+//            parent.onChange?(value)
+        }
+        return true
+    }
+
 }
 
 
