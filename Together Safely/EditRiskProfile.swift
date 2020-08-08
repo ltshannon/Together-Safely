@@ -24,10 +24,9 @@ struct EditRiskProfile: View {
 
             List {
                 ForEach (questions, id: \.id) { question in
-                    Text(question.text)
+                    RiskQuestionItem(question: question)
                 }
             }
-            .frame(width: UIScreen.main.bounds.size.width - 40, height: 300)
                 .background(Color.white)
                 .cornerRadius(20)
                 .shadow(color: .gray, radius: 2, x: 0, y: 2)
@@ -72,6 +71,33 @@ struct EditRiskProfile: View {
                     }
                 }
         }
+}
+
+struct RiskQuestionItem: View {
+    let question: UserQuestion
+    @State var selectedIndex: Int = 1
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text(question.text).multilineTextAlignment(.leading).padding([.top, .bottom], 15.0)
+            Picker(selection: $selectedIndex, label: Text(question.text)) {
+                Text("Yes").tag(0)
+                Text(" - ").tag(1)
+                Text("No").tag(2)
+            }.pickerStyle(SegmentedPickerStyle())
+        }.onAppear() {
+            switch self.question.userResponse {
+            case nil:
+                self.selectedIndex = 1
+            case true:
+                self.selectedIndex = 0
+            case false:
+                self.selectedIndex = 2
+            case .some(_):
+                self.selectedIndex = 1
+            }
+        }
+    }
 }
 
 struct EditRiskProfile_Previews: PreviewProvider {
