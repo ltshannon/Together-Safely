@@ -13,6 +13,7 @@ struct UserProfileView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var firebaseService: FirebaseService
     @State private var getRiskColor: Color = Color.white
+    @State private var image: Image = Image("")
     
     var body: some View {
         VStack {
@@ -78,7 +79,7 @@ struct UserProfileView: View {
                         .font(Font.custom("Avenir-Heavy", size: 30))
                         .padding(.leading, 20)
                     Spacer()
-                    Image("statusHigh")
+                    image.getRiskImage(riskScore: firebaseService.user.riskScore, riskRanges: self.firebaseService.riskRanges)
                         .resizable()
                         .frame(width: 103, height: 50)
                         .padding(.trailing, 20)
@@ -92,11 +93,12 @@ struct UserProfileView: View {
                         .font(Font.custom("Avenir-Heavy", size: 30))
                         .padding(.leading, 20)
                     Spacer()
-                    Image("statusMed")
+                    image.getRiskImage(riskScore: firebaseService.user.riskScore, riskRanges: self.firebaseService.riskRanges)
                         .resizable()
                         .frame(width: 103, height: 50)
                         .padding(.trailing, 20)
                 }
+/*
                 Capsule()
                     .fill(Color("Colorblack"))
                     .frame(height: 1)
@@ -109,8 +111,9 @@ struct UserProfileView: View {
                         .frame(width: 200, height: 40)
                         .padding(.trailing, 20)
                 }
+*/
             }
-            .frame(width: UIScreen.main.bounds.size.width - 40, height: 300)
+            .frame(width: UIScreen.main.bounds.size.width - 40, height: 250)
                 .background(Color.white)
                 .cornerRadius(20)
                 .shadow(color: .gray, radius: 2, x: 0, y: 2)

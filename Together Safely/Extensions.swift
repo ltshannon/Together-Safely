@@ -135,6 +135,35 @@ extension Color {
     
 }
 
+extension Image {
+    
+    func getRiskImage(riskScore: Int, riskRanges: [[String:RiskHighLow]]) -> Image {
+    
+        for riskRange in riskRanges {
+            let element = riskRange.values
+            for range in element {
+                let min = range.min
+                let max = range.max
+                if riskScore >= min && riskScore <= max {
+                    for key in riskRange.keys {
+                        switch key {
+                        case "Low Risk":
+                            return Image("statusLow")
+                        case "Medium Risk":
+                            return Image("statusMed")
+                        case "High Risk":
+                            return Image("statusHigh")
+                        default:
+                            return Image("statusLow")
+                        }
+                    }
+                }
+            }
+        }
+        return Image("statusLow")
+    }
+}
+
 extension Array {
     
     func getWidths(group: Groups, width: CGFloat) -> [CGFloat] {
