@@ -8,6 +8,7 @@
 
 import Foundation
 import Firebase
+import FirebaseAuth
 import Contacts
 
 class FirebaseService: ObservableObject {
@@ -163,6 +164,38 @@ class FirebaseService: ObservableObject {
                     }
                     return
                 }
+        }
+    }
+    
+    func getRiskFactorQuestions(_ completion: @escaping ([UserQuestion]) -> Void) {
+        guard let currentUser = Auth.auth().currentUser else {
+            completion([UserQuestion]())
+            return
+        }
+        database.collection("users").document(currentUser.uid).getDocument { [weak self] (userSnapshot, error) in
+            guard let self = self, let userSnapshot = userSnapshot, error == nil else {
+                completion([UserQuestion]())
+                return
+            }
+            let user = try? userSnapshot.data(as: User.self)
+            self.database.collection("userQuestions").getDocuments { (questionsSnapshot, error) in
+                guard let user = user, let questionsSnapshot = questionsSnapshot?.documents, error == nil else {
+                    completion([UserQuestion]())
+                    return
+                }
+                let questions = questionsSnapshot.compactMap { questionSnapshot -> UserQuestion? in
+                    var retval = try? questionSnapshot.data(as: UserQuestion.self)
+                    retval?.userResponse = user.userAnswers.first(where: { (userAnswer) -> Bool in
+                        return userAnswer.userQuestion == questionSnapshot.documentID
+                        })?.answer
+                    
+                    return retval
+                }
+                let orderedQuestions = questions.sorted { (q1, q2) -> Bool in
+                    return q1.order < q2.order
+                }
+                completion(orderedQuestions)
+            }
         }
     }
     
