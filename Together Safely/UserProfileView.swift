@@ -119,7 +119,7 @@ struct UserProfileView: View {
                 .shadow(color: .gray, radius: 2, x: 0, y: 2)
                 .padding(5)
             Spacer()
-            NavigationLink(destination: EditRiskProfile()) {
+            NavigationLink(destination: EditRiskProfile().environmentObject(firebaseService)) {
                 HStack {
                     Spacer()
                     Text("Edit risk profile")
