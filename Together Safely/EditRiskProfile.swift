@@ -11,6 +11,7 @@ import SwiftUI
 struct EditRiskProfile: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var firebaseService: FirebaseService
+    @State var questions = [UserQuestion]()
         
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -21,52 +22,10 @@ struct EditRiskProfile: View {
                 .foregroundColor(Color.white)
                 .padding(.leading, 30)
 
-            VStack(alignment: .leading, spacing: 0) {
-                HStack {
-                    Text("Do you wear a mask?")
-                        .font(Font.custom("Avenir-Heavy", size: 20))
-                        .padding(.leading, 5)
-                    Spacer()
-                    Image("selectButton")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 75)
-                    
+            List {
+                ForEach (questions, id: \.id) { question in
+                    Text(question.text)
                 }
-                    .padding(20)
-                HStack {
-                    Text("Will you take a vaccine?")
-                        .font(Font.custom("Avenir-Heavy", size: 20))
-                        .padding(.leading, 5)
-                    Spacer()
-                    Image("selectButton")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 75)
-                }
-                    .padding(20)
-                HStack {
-                    Text("Does Covid19 scare you?")
-                        .font(Font.custom("Avenir-Heavy", size: 20))
-                        .padding(.leading, 5)
-                    Spacer()
-                    Image("yesButton")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 75)
-                }
-                    .padding(20)
-                HStack {
-                    Text("Does Covid19 scare you?")
-                        .font(Font.custom("Avenir-Heavy", size: 20))
-                        .padding(.leading, 5)
-                    Spacer()
-                    Image("noButton")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 75)
-                }
-                    .padding(20)
             }
             .frame(width: UIScreen.main.bounds.size.width - 40, height: 300)
                 .background(Color.white)
@@ -94,7 +53,7 @@ struct EditRiskProfile: View {
             .background(Image("backgroudImage").edgesIgnoringSafeArea(.all))
         .onAppear() {
             self.firebaseService.getRiskFactorQuestions() { results in
-                print(results)
+                self.questions = results
             }
         }
     }
