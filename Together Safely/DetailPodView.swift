@@ -16,7 +16,6 @@ struct DetailPodView: View {
     @State private var inputStr: String = ""
     @State private var emojiText: String = ""
     @State private var widthArray: Array = []
-    var webService = WebService()
     @State private var getRiskColor: Color = Color.white
     
     var body: some View {
@@ -58,7 +57,7 @@ struct DetailPodView: View {
                             if self.inputStr.count == 0 {
                                 return
                             }
-                            self.webService.setStatus(text: self.inputStr, emoji: self.emojiText, groupId: self.group.id){ successful in
+                            WebService.setStatus(text: self.inputStr, emoji: self.emojiText, groupId: self.group.id){ successful in
                                 if !successful {
                                     print("Set status failed for groupId : \(self.group.id))")
                                 } else {

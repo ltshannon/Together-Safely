@@ -23,7 +23,6 @@ struct AllContactsCardView: View {
     @State var showingAlert = false
     @EnvironmentObject var firebaseService: FirebaseService
     @Environment(\.presentationMode) var presentation
-    var webService = WebService()
     @State private var arrayIndexs: [Int] = []
     @State private var members:[String] = []
     
@@ -94,7 +93,7 @@ struct AllContactsCardView: View {
                                     Spacer()
                                     if self.pageType == .addContacts {
                                         Button(action: {
-                                            self.webService.createInvite(contact: self.firebaseService.userContacts[index]) { successful in
+                                            WebService.createInvite(contact: self.firebaseService.userContacts[index]) { successful in
                                                 if !successful {
                                                     print("createInvite failed for: \(self.firebaseService.userContacts[index].givenName)")
                                                 }
@@ -140,7 +139,7 @@ struct AllContactsCardView: View {
                             self.showingAlert = true
                             return
                         }
-                        self.webService.createNewGroup(name: self.name, members: self.members) { successful in
+                        WebService.createNewGroup(name: self.name, members: self.members) { successful in
                             if !successful {
                                 print("createNewGroup failed for: \(self.name)")
                             }
@@ -160,7 +159,7 @@ struct AllContactsCardView: View {
             } else if pageType == .addFriends {
                 Button(action: {
                     for member in self.members {
-                        self.webService.inviteUserToGroup(groupId: self.group.id, phoneNumber: member) { successful in
+                        WebService.inviteUserToGroup(groupId: self.group.id, phoneNumber: member) { successful in
                             if !successful {
                                 print("inviteUserToGroup failed for: \(member)")
                             }

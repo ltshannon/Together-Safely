@@ -11,7 +11,7 @@ import SwiftUI
 struct CreatePodsView: View {
     
     @EnvironmentObject var firebaseService: FirebaseService
-    var webService = WebService()
+    
     @State private var name: String = ""
     @State private var showSuccess = false
     @State private var showFailure = false
@@ -31,7 +31,7 @@ struct CreatePodsView: View {
                     self.showingAlert = true
                     return
                 }
-                self.webService.createNewGroup(name: self.name, members: []) { successful in
+                WebService.createNewGroup(name: self.name, members: []) { successful in
                     if successful {
                             self.showSuccess.toggle()
                     } else {

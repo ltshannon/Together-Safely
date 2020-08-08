@@ -11,7 +11,6 @@ import SwiftUI
 struct InviationsView: View {
     
     @EnvironmentObject var firebaseService: FirebaseService
-    var webService: WebService = WebService()
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -59,7 +58,7 @@ struct InviationsView: View {
                             }
                             Spacer()
                             Button(action: {
-                                self.webService.acceptInviteToGroup(groupId: invite.groupId) { successful in
+                                WebService.acceptInviteToGroup(groupId: invite.groupId) { successful in
                                     if successful {
                                         
                                     } else {

@@ -63,7 +63,6 @@ class FirebaseService: ObservableObject {
             let contacts = try store.unifiedContacts(matching: predicate, keysToFetch: keysToFetch)
             print("Fetching contacts: succesfull with count = %d", contacts.count)
 
-            let webService = WebService()
             var phoneNumbers: [String] = []
             print("Numbers returned for contacts call:")
             let userPhoneNumber =  UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? ""
@@ -97,7 +96,7 @@ class FirebaseService: ObservableObject {
                 self.contactInfo = cinfo
             }
              
-            webService.checkPhoneNumbers(phoneNumbers: phoneNumbers) { returnedNumbers in
+            WebService.checkPhoneNumbers(phoneNumbers: phoneNumbers) { returnedNumbers in
                 
                 print("number returned from invitablePhoneNumbers:")
                 for number in returnedNumbers {

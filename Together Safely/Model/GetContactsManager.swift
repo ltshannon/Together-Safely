@@ -33,7 +33,6 @@ class ContactStore: ObservableObject {
             let contacts = try store.unifiedContacts(matching: predicate, keysToFetch: keysToFetch)
             print("Fetching contacts: succesfull with count = \(contacts.count)")
 
-            let webService = WebService()
             var phoneNumers: [String] = []
             for contact in contacts {
                 for phone in contact.phoneNumbers {
@@ -48,7 +47,7 @@ class ContactStore: ObservableObject {
                 }
             }
             
-            webService.checkPhoneNumbers(phoneNumbers: phoneNumers) { retunredNumbers in
+            WebService.checkPhoneNumbers(phoneNumbers: phoneNumers) { retunredNumbers in
                 
                 for number in retunredNumbers {
                     print(number)

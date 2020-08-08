@@ -18,7 +18,6 @@ struct SetNameView: View {
     @State private var name: String = ""
     @State private var textSize:CGFloat = 35
     @State private var keyboardHeight: CGFloat = 0
-    @State private var service = WebService()
     
     var body: some View {
         ZStack {
@@ -62,7 +61,7 @@ struct SetNameView: View {
                             return
                         }
                         UserDefaults.standard.set(self.name, forKey: "username")
-                        self.service.createUser { (successful: Bool) in
+                        WebService.createUser { (successful: Bool) in
                             self.showIndicator.toggle()
                             if !successful {
                                 self.msg = "Creating user failed"
@@ -99,9 +98,7 @@ struct SetNameView: View {
     
     func createUser() {
         
-        let service = WebService()
-        
-        service.createUser { (competion: Bool) in
+        WebService.createUser { (competion: Bool) in
             
         }
         
