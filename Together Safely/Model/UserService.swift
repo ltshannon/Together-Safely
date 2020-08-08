@@ -173,23 +173,28 @@ class FirebaseService: ObservableObject {
             return
         }
         database.collection("users").document(currentUser.uid).getDocument { [weak self] (userSnapshot, error) in
-            guard let self = self, let userSnapshot = userSnapshot, error == nil else {
+            guard let self = self, let userData = userSnapshot?.data(), error == nil else {
                 completion([UserQuestion]())
                 return
             }
-            let user = try? userSnapshot.data(as: User.self)
+            let user = User(snapshot: userData)
             self.database.collection("userQuestions").getDocuments { (questionsSnapshot, error) in
-                guard let user = user, let questionsSnapshot = questionsSnapshot?.documents, error == nil else {
+                guard let questionsSnapshot = questionsSnapshot?.documents, error == nil else {
                     completion([UserQuestion]())
                     return
                 }
                 let questions = questionsSnapshot.compactMap { questionSnapshot -> UserQuestion? in
-                    var retval = try? questionSnapshot.data(as: UserQuestion.self)
-                    retval?.userResponse = user.userAnswers.first(where: { (userAnswer) -> Bool in
-                        return userAnswer.userQuestion == questionSnapshot.documentID
+                    do {
+                        var retval = try questionSnapshot.data(as: UserQuestion.self)
+                        retval?.userResponse = user.userAnswers.first(where: { (userAnswer) -> Bool in
+                            return userAnswer.userQuestion == questionSnapshot.documentID
                         })?.answer
-                    
-                    return retval
+                        
+                        return retval
+                    } catch let err {
+                        print(err.localizedDescription)
+                        return nil
+                    }
                 }
                 let orderedQuestions = questions.sorted { (q1, q2) -> Bool in
                     return q1.order < q2.order
