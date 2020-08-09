@@ -61,9 +61,9 @@ struct InviationsView: View {
                                     Button(action: {
                                         WebService.acceptInviteToGroup(groupId: invite.groupId) { successful in
                                             if successful {
-                                                
+                                                print("success")
                                             } else {
-                                                
+                                                print("fail")
                                             }
                                         }
                                     }) {
@@ -77,7 +77,13 @@ struct InviationsView: View {
                                         .cornerRadius(8)
                                     }.padding(.trailing, 5)
                                     Button(action: {
-                                        //TODO: replace with decline webservice call
+                                        WebService.declineInviteToGroup(groupId: invite.groupId) { successful in
+                                            if successful {
+                                                
+                                            } else {
+                                                
+                                            }
+                                        }
                                     }) {
                                         HStack {
                                             Image(systemName: "xmark.circle")
