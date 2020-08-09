@@ -11,6 +11,7 @@ import SwiftUI
 struct InviationsView: View {
     
     @EnvironmentObject var firebaseService: FirebaseService
+    @State private var getImageForPhone: Data = Data()
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -40,6 +41,7 @@ struct InviationsView: View {
                         VStack {
                             HStack {
                             MemberProfileView(
+                                image: self.getImageForPhone.getImage(phoneName: invite.adminName, dict: self.firebaseService.contactInfo),
                                 groupId: invite.groupId,
                                 riskScore: invite.riskScore,
                                 riskRanges: self.firebaseService.riskRanges)
