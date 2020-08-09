@@ -16,26 +16,10 @@ struct SpinnerView: View {
         ZStack {
             Color("Colorgreen").edgesIgnoringSafeArea(.all)
             VStack {
-                Spacer()
-                HStack {
-                    Image("appIcon")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                    Text("together")
-                    .font(Font.custom("Avenir-Heavy", size: 50))
+                Image("start-login-logo")
+                    .renderingMode(.template)
                     .foregroundColor(.white)
-                }
-                Group {
-                    Text("One sec, we're")
-                        .font(Font.custom("Avenir-Black", size: textSize))
-                        .foregroundColor(.white)
-                    Text("creating your")
-                        .font(Font.custom("Avenir-Black", size: textSize))
-                        .foregroundColor(.white)
-                    Text("account!")
-                        .font(Font.custom("Avenir-Black", size: textSize))
-                        .foregroundColor(.white)
-                }
+                    .frame(width: 200, height: 50)
                 Spacer()
                 VStack {
                 Circle()

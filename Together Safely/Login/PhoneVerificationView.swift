@@ -16,29 +16,22 @@ struct PhoneVerificationView: View {
     @State private var code: String = ""
     @State private var msg = ""
     @State private var alert = false
-    @State private var textSize:CGFloat = 35
+    @State private var textSize:CGFloat = 22
     @State private var keyboardHeight: CGFloat = 0
     
     var body: some View {
         ZStack {
             Color("Colorgreen").edgesIgnoringSafeArea(.all)
             VStack {
-                Spacer()
-                HStack {
-                    Image("appIcon")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                    Text("together")
-                    .font(Font.custom("Avenir-Heavy", size: 50))
+                Image("start-login-logo")
+                    .renderingMode(.template)
                     .foregroundColor(.white)
-                }
+                    .frame(width: 200, height: 50)
                 Spacer()
                 Group {
-                    Text("Enter the verification")
-                        .font(Font.custom("Avenir-Black", size: textSize))
-                        .foregroundColor(.white)
-                    Text("code")
-                        .font(Font.custom("Avenir-Black", size: textSize))
+                    Text("Enter the verification code")
+                        .multilineTextAlignment(.center)
+                        .font(Font.custom("Avenir-Medium", size: textSize))
                         .foregroundColor(.white)
                 }
                 Spacer()
@@ -108,7 +101,7 @@ struct PhoneVerificationView: View {
                     .hidden()
                 }
 */
-            }
+                }.padding(15)
             .alert(isPresented: $alert) {
                 Alert(title: Text("Error"), message: Text(self.msg), dismissButton: .default(Text("ok")))
             }
