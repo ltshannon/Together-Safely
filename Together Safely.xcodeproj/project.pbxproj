@@ -29,7 +29,6 @@
 		46ACD58A24C510810083F308 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 46ACD58824C510810083F308 /* LaunchScreen.storyboard */; };
 		46ACD59224C5124A0083F308 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ACD59124C5124A0083F308 /* HomeView.swift */; };
 		46ACD59724C512590083F308 /* SpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ACD59324C512590083F308 /* SpinnerView.swift */; };
-		46ACD59824C512590083F308 /* SetNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ACD59424C512590083F308 /* SetNameView.swift */; };
 		46ACD59924C512590083F308 /* PhoneLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ACD59524C512590083F308 /* PhoneLoginView.swift */; };
 		46ACD59A24C512590083F308 /* PhoneVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ACD59624C512590083F308 /* PhoneVerificationView.swift */; };
 		46DE5E5024D64AE2005912CD /* CreatePodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E4F24D64AE2005912CD /* CreatePodsView.swift */; };
@@ -77,7 +76,6 @@
 		46ACD58B24C510810083F308 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		46ACD59124C5124A0083F308 /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		46ACD59324C512590083F308 /* SpinnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinnerView.swift; sourceTree = "<group>"; };
-		46ACD59424C512590083F308 /* SetNameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetNameView.swift; sourceTree = "<group>"; };
 		46ACD59524C512590083F308 /* PhoneLoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneLoginView.swift; sourceTree = "<group>"; };
 		46ACD59624C512590083F308 /* PhoneVerificationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneVerificationView.swift; sourceTree = "<group>"; };
 		46DE5E4F24D64AE2005912CD /* CreatePodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePodsView.swift; sourceTree = "<group>"; };
@@ -127,7 +125,6 @@
 				46252C2F24C63882005B592F /* StartLoginView.swift */,
 				46ACD59524C512590083F308 /* PhoneLoginView.swift */,
 				46ACD59624C512590083F308 /* PhoneVerificationView.swift */,
-				46ACD59424C512590083F308 /* SetNameView.swift */,
 				46ACD59324C512590083F308 /* SpinnerView.swift */,
 				46F7E64924CE1EA2004EAF24 /* LocationServiceNotEnableView.swift */,
 			);
@@ -351,7 +348,6 @@
 				46ACD59924C512590083F308 /* PhoneLoginView.swift in Sources */,
 				46F7E64824CCEC8F004EAF24 /* CoreDataManager.swift in Sources */,
 				4609C91D24DCDDFD004BC76C /* DisplayPodsContactPod.swift in Sources */,
-				46ACD59824C512590083F308 /* SetNameView.swift in Sources */,
 				46ACD57E24C510800083F308 /* AppDelegate.swift in Sources */,
 				46ACD59724C512590083F308 /* SpinnerView.swift in Sources */,
 				46ACD59224C5124A0083F308 /* HomeView.swift in Sources */,

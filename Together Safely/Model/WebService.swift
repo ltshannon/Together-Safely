@@ -131,6 +131,13 @@ class WebService {
         }
     }
     
+    static func declineInviteToGroup(groupId: String, completion: @escaping (Bool) -> Void)  {
+        let requestBody = try? JSONSerialization.data(withJSONObject: [String : Any](), options: [])
+        networkRequest(.declineInvite(groupId: groupId), responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
+            completion(error == nil)
+        }
+    }
+    
     static func inviteUserToGroup(groupId: String, phoneNumber: String, completion: @escaping (Bool) -> Void)  {
         let requestBody = try? JSONSerialization.data(withJSONObject: ["newMember" : phoneNumber], options: [])
         networkRequest(.addUserToPod(groupId: groupId), responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
@@ -174,9 +181,8 @@ class WebService {
     }
     
     static func createUser(successful: @escaping (Bool) -> Void)  {
-        let username = UserDefaults.standard.value(forKey: "username") as? String ?? ""
         let phoneNumber = UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? ""
-        let requestBody = try? JSONSerialization.data(withJSONObject: ["username" : username, "phoneNumber" : phoneNumber], options: [])
+        let requestBody = try? JSONSerialization.data(withJSONObject: ["phoneNumber" : phoneNumber], options: [])
         networkRequest(.createUser, responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
             successful(error == nil)
         }

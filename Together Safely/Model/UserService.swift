@@ -245,6 +245,16 @@ class FirebaseService: ObservableObject {
         }
     }
     
+    func getNameForPhone(_ phoneNumber: String, dict: [[String:ContactInfo]]) -> String {
+        
+        for d in dict {
+            if d[phoneNumber] != nil {
+                return(d[phoneNumber]!.name)
+            }
+        }
+        return phoneNumber
+    }
+    
     func getUserData(phoneNumber: String, completion: @escaping (Error?) -> Void) {
     
         self.database.collection("users").whereField("phoneNumber", isEqualTo: phoneNumber)
@@ -266,17 +276,22 @@ class FirebaseService: ObservableObject {
                     }
                     
                     var invites: [Invite] = []
+                    self.invites = invites //trigger a refresh if this is a response to the user snapshot listener
                     for invite in user.groupInvites {
                         let docRef = self.database.collection("groups").document(invite)
                         docRef.getDocument { (document, error) in
                             if let document = document, document.exists {
                                 let group = Groups(snapshot: document.data() ?? [:])
-                                var invite:Invite = Invite(adminName: "", groupName: group.name, groupId: invite, riskScore: 99999)
-                                let docRef2 = self.database.collection("users").document(group.id)
+                                
+                                var invite:Invite = Invite(adminName: "", adminPhone: "", groupName: group.name, groupId: invite, riskScore: 99999)
+                                
+                                let docRef2 = self.database.collection("users").document(group.id) //group.id is the ID of the admin, not the group
                                     docRef2.getDocument { (document, error) in
                                         if let document = document, document.exists {
                                             let user = User(snapshot: document.data() ?? [:])
                                             invite.riskScore = user.riskScore
+                                            invite.adminPhone = user.phoneNumber
+                                            invite.adminName = user.name
                                             invites.append(invite)
                                             DispatchQueue.main.async {
                                                 self.invites = invites

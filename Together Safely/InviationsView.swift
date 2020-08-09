@@ -11,6 +11,7 @@ import SwiftUI
 struct InviationsView: View {
     
     @EnvironmentObject var firebaseService: FirebaseService
+    @State private var getImageForPhone: Data = Data()
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -40,54 +41,78 @@ struct InviationsView: View {
                         VStack {
                             HStack {
                             MemberProfileView(
+                                image: self.getImageForPhone.getImage(phoneName: invite.adminPhone, dict: self.firebaseService.contactInfo),
                                 groupId: invite.groupId,
                                 riskScore: invite.riskScore,
                                 riskRanges: self.firebaseService.riskRanges)
                             VStack(alignment: .leading) {
-                                Text("Name")
+                                Text(self.firebaseService.getNameForPhone(invite.adminPhone, dict: self.firebaseService.contactInfo))
                                     .foregroundColor(Color("Colorblack"))
-                                    .font(Font.custom("Avenir Next Medium", size: 25))
-                                    .padding(.leading, 5)
+                                    .font(Font.custom("Avenir Next Medium", size: 18))
                                 Text("invited you to:")
-                                    .font(Font.custom("Avenir Next Medium Italic", size: 20))
+                                    .font(Font.custom("Avenir Next Medium Italic", size: 14))
                                     .foregroundColor(Color("Colorgray"))
                                 Text(invite.groupName)
                                     .foregroundColor(Color("Color13"))
-                                    .font(Font.custom("Avenir Next Medium", size: 20))
-                                    .padding(.trailing, 5)
-                            }
+                                    .font(Font.custom("Avenir Next Medium", size: 16))
+                            }.padding(.trailing, 10)
                             Spacer()
-                            Button(action: {
-                                WebService.acceptInviteToGroup(groupId: invite.groupId) { successful in
-                                    if successful {
-                                        
-                                    } else {
-                                        
+                                VStack {
+                                    Button(action: {
+                                        WebService.acceptInviteToGroup(groupId: invite.groupId) { successful in
+                                            if successful {
+                                                print("success")
+                                            } else {
+                                                print("fail")
+                                            }
+                                        }
+                                    }) {
+                                        HStack {
+                                            Image(systemName: "checkmark")
+                                            Text("Accept")
+                                        }
+                                        .padding([.top, .bottom], 10)
+                                        .padding([.leading, .trailing], 5)
+                                        .frame(minWidth: 0, maxWidth: .infinity)
+                                        .foregroundColor(.white)
+                                        .background(Color("Color3"))
+                                        .cornerRadius(8)
                                     }
-                                }
-                            }) {
-                                Image("accept")
-                                    .renderingMode(.original)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(height: 50)
-                                    .padding(.trailing, 20)
-                            }
+                                    Button(action: {
+                                        WebService.declineInviteToGroup(groupId: invite.groupId) { successful in
+                                            if successful {
+                                                
+                                            } else {
+                                                
+                                            }
+                                        }
+                                    }) {
+                                        HStack {
+                                            Image(systemName: "xmark.circle")
+                                            Text("Decline")
+                                        }
+                                        .padding([.top, .bottom], 10)
+                                        .padding([.leading, .trailing], 5)
+                                        .frame(minWidth: 0, maxWidth: .infinity)
+                                        .foregroundColor(.white)
+                                        .background(Color("Colorred"))
+                                        .cornerRadius(8)
+                                    }
+                                }.padding(.trailing, 5)
                         }
                         Capsule()
                             .fill(Color("Colorgray"))
                             .frame(height: 1)
-                            .padding(10)
-                        }
+                            .padding([.leading, .trailing], 5)
+                        }.padding([.top, .bottom], 10)
                     }
                 }
             }
         }
-//            .frame(width: UIScreen.main.bounds.size.width - 40)
             .background(Color.white)
             .cornerRadius(20)
             .shadow(color: .gray, radius: 2, x: 0, y: 2)
-            .padding(5)
+            .padding(15)
     }
 }
 
