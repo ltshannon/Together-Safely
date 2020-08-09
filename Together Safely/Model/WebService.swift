@@ -125,14 +125,14 @@ class WebService {
     
     //MARK:- Request Methods
     static func acceptInviteToGroup(groupId: String, completion: @escaping (Bool) -> Void)  {
-        let requestBody = [String : AnyObject]()
+        let requestBody = try? JSONSerialization.data(withJSONObject: [String : Any](), options: [])
         networkRequest(.acceptInvite(groupId: groupId), responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
             completion(error == nil)
         }
     }
     
     static func inviteUserToGroup(groupId: String, phoneNumber: String, completion: @escaping (Bool) -> Void)  {
-        let requestBody = ["newMember" : phoneNumber] as [String : AnyObject]
+        let requestBody = try? JSONSerialization.data(withJSONObject: ["newMember" : phoneNumber], options: [])
         networkRequest(.addUserToPod(groupId: groupId), responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
             completion(error == nil)
         }
@@ -156,14 +156,14 @@ class WebService {
             completion(false)
         }
         
-        let requestBody = ["phoneNumber" : phoneNumber] as [String : AnyObject]
+        let requestBody = try? JSONSerialization.data(withJSONObject: ["phoneNumber" : phoneNumber], options: [])
         networkRequest(.inviteUser, responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
             completion(error == nil)
         }
     }
     
     static func checkPhoneNumbers(phoneNumbers: [String], completion: @escaping ([String]) -> Void)  {
-        let requestBody = ["phoneNumbers" : phoneNumbers] as [String : AnyObject]
+        let requestBody = try? JSONSerialization.data(withJSONObject: ["phoneNumbers" : phoneNumbers], options: [])
         networkRequest(.inviteUser, responseType: CheckPhonenumberResponse.self, requestBody: requestBody) { (response, error) in
             if let response = response {
                 completion(response.invitablePhoneNumbers)
@@ -176,14 +176,14 @@ class WebService {
     static func createUser(successful: @escaping (Bool) -> Void)  {
         let username = UserDefaults.standard.value(forKey: "username") as? String ?? ""
         let phoneNumber = UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? ""
-        let requestBody = ["username" : username, "phoneNumber" : phoneNumber] as [String : AnyObject]
+        let requestBody = try? JSONSerialization.data(withJSONObject: ["username" : username, "phoneNumber" : phoneNumber], options: [])
         networkRequest(.inviteUser, responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
             successful(error == nil)
         }
     }
     
     static func createNewGroup(name: String, members: [String], successful: @escaping (Bool) -> Void)  {
-        let requestBody = ["name" : name, "members" : members] as [String : AnyObject]
+        let requestBody = try? JSONSerialization.data(withJSONObject: ["name" : name, "members" : members], options: [])
         networkRequest(.inviteUser, responseType: CreateNewGroupResponse.self, requestBody: requestBody) { (response, error) in
             successful(error == nil)
         }
@@ -192,17 +192,17 @@ class WebService {
     
     
     static func setStatus(text: String, emoji: String, groupId: String, completion: @escaping (Bool) -> Void)  {
-        let requestBody = ["emoji" : emoji, "text" : text] as [String : AnyObject]
-        networkRequest(.inviteUser, responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
+        let requestBody = try? JSONSerialization.data(withJSONObject: ["emoji" : emoji, "text" : text], options: [])
+        networkRequest(.postStatus(groupId: groupId), responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
             completion(error == nil)
         }
     }
     
     static func postQuestionAnswers(answers: [UserAnswer], completion: @escaping (Bool) -> Void) {
-        let mappedAnswers = answers.map { (answer) -> [String : AnyObject?] in
-            return ["userQuestion" : answer.userQuestion as AnyObject, "answer" : answer.answer as AnyObject?]
+        let mappedAnswers = answers.map { (answer) -> [String : Any?] in
+            return ["userQuestion" : answer.userQuestion, "answer" : answer.answer as Bool?]
         }
-        let requestBody = ["answers" : mappedAnswers] as [String : AnyObject]
+        let requestBody = try? JSONSerialization.data(withJSONObject: ["answers" : mappedAnswers], options: [])
         networkRequest(.postQuestionAnswers, responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
             completion(error == nil)
         }
@@ -210,7 +210,7 @@ class WebService {
 }
 
 private extension WebService {
-    static func networkRequest<T: WebServiceResponse>(_ endpoint: Endpoint, responseType: T.Type, requestBody: [String : AnyObject]?, completion: @escaping (T?, NetworkingError?) -> Void) {
+    static func networkRequest<T: WebServiceResponse>(_ endpoint: Endpoint, responseType: T.Type, requestBody: Data?, completion: @escaping (T?, NetworkingError?) -> Void) {
         Auth.auth().currentUser?.getIDTokenForcingRefresh(true) { token, error in
             if let error = error {
                 print(error.localizedDescription)
@@ -228,18 +228,10 @@ private extension WebService {
             }
             
             var request = URLRequest(url: url)
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             request.httpMethod = endpoint.method.rawValue
-            
-            if let requestBody = requestBody {
-                do {
-                    let bodyData = try JSONSerialization.data(withJSONObject: requestBody, options: [])
-                    request.httpBody = bodyData
-                } catch let error {
-                    completion(nil, .serializationError(message: error.localizedDescription))
-                    return
-                }
-            }
+            request.httpBody = requestBody
             
             URLSession.shared.dataTask(with: request) { (data, response, error) in
                 if let error = error {
