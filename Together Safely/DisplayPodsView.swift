@@ -62,20 +62,20 @@ struct DisplayPodsView: View {
                                                 riskRanges: self.firebaseService.riskRanges)
                                         }
                                     }
-                                }
-                                Spacer()
+                                }.padding(.leading, 5)
                             }
                                 .background(Color.white)
                                 .cornerRadius(20)
                                 .shadow(color: .gray, radius: 2, x: 0, y: 2)
-                            .padding([.leading, .trailing, .bottom], 15)
+                            .padding([.leading, .trailing], 15)
+                            .padding(.bottom, 5)
                         }
                     }
                     Spacer()
                     VStack {
                         DisplayPodsContactPod(group: group).environmentObject(self.firebaseService)
                     }
-                }
+                }.padding(.bottom, 15)
             } else {
                 Spacer()
             }

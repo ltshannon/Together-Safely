@@ -52,7 +52,7 @@ struct HomeView: View {
                                         .frame(width: 18, height: 18)
                                     Text("\(self.firebaseService.invites.count)")
                                         .font(.body)
-                                        .fontWeight(.heavy)
+                                        .fontWeight(.bold)
                                         .foregroundColor(.white)
                                 }.padding(.leading, 5).padding(.trailing, 10)
                             }
@@ -112,7 +112,6 @@ struct HomeView: View {
                             .foregroundColor(.white)
                             .frame(width: 40, height: 40)
                             .clipShape(Circle())
-                            .foregroundColor(Color.blue)
                             .padding([.top, .bottom], 5)
                     }
                 }
