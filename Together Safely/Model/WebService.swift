@@ -164,7 +164,7 @@ class WebService {
     
     static func checkPhoneNumbers(phoneNumbers: [String], completion: @escaping ([String]) -> Void)  {
         let requestBody = try? JSONSerialization.data(withJSONObject: ["phoneNumbers" : phoneNumbers], options: [])
-        networkRequest(.inviteUser, responseType: CheckPhonenumberResponse.self, requestBody: requestBody) { (response, error) in
+        networkRequest(.checkPhoneNumbers, responseType: CheckPhonenumberResponse.self, requestBody: requestBody) { (response, error) in
             if let response = response {
                 completion(response.invitablePhoneNumbers)
             } else {
@@ -177,14 +177,14 @@ class WebService {
         let username = UserDefaults.standard.value(forKey: "username") as? String ?? ""
         let phoneNumber = UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? ""
         let requestBody = try? JSONSerialization.data(withJSONObject: ["username" : username, "phoneNumber" : phoneNumber], options: [])
-        networkRequest(.inviteUser, responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
+        networkRequest(.createUser, responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
             successful(error == nil)
         }
     }
     
     static func createNewGroup(name: String, members: [String], successful: @escaping (Bool) -> Void)  {
         let requestBody = try? JSONSerialization.data(withJSONObject: ["name" : name, "members" : members], options: [])
-        networkRequest(.inviteUser, responseType: CreateNewGroupResponse.self, requestBody: requestBody) { (response, error) in
+        networkRequest(.createGroup, responseType: CreateNewGroupResponse.self, requestBody: requestBody) { (response, error) in
             successful(error == nil)
         }
     }
