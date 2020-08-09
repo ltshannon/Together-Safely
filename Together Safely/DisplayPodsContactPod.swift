@@ -62,6 +62,8 @@ struct DisplayPodsContactPod: View {
                                     .foregroundColor(Color.blue)
                             }
                             Text("\(contact.contactInfo.name)")
+                                .foregroundColor(Color("Colorblack"))
+                                .font(Font.custom("Avenir Next Medium", size: 28))
                             Spacer()
                         }
                     }
