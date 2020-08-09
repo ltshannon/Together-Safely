@@ -90,7 +90,7 @@ struct HomeView: View {
                 EmptyView()
             }
         }
-        .navigationBarTitle("")
+        .navigationBarTitle("", displayMode: .inline)
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading:
             HStack {
@@ -115,12 +115,11 @@ struct HomeView: View {
                             .padding(5)
                     }
                 }
-                Text("")
-                    .frame(width: 40, height: 10)
-                HeaderView()
+//                Text("")
+//                    .frame(width: 40, height: 10)
+//                HeaderView()
             }
         )
-            .background(Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all))
         }
     }
     

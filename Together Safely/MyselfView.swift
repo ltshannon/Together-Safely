@@ -81,7 +81,7 @@ struct MyselfView: View {
                 DisplayPodsView().environmentObject(firebaseService)
             }
         }
-        .navigationBarTitle("")
+        .navigationBarTitle("", displayMode: .inline)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
     }

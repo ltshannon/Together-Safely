@@ -16,11 +16,11 @@ struct DummyView: View {
     
     var body: some View {
         VStack {
-            HomeView().environmentObject(firebaseService)
+            HomeView().environmentObject(firebaseService).padding(.top, 10)
         }
         .onAppear {
             self.firebaseService.getServerData(byPhoneNumber: UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? "")
-        }
+        }.background(Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all))
     }
 }
 
