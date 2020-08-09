@@ -67,11 +67,11 @@ struct DisplayPodsView: View {
                                 }
                                 Spacer()
                             }
-                                .frame(width: UIScreen.main.bounds.size.width - 40, height: 300)
+                                .frame(height: 300)
                                 .background(Color.white)
                                 .cornerRadius(20)
                                 .shadow(color: .gray, radius: 2, x: 0, y: 2)
-                                .padding(5)
+                            .padding([.leading, .trailing, .bottom], 15)
                         }
                     }
                     Spacer()

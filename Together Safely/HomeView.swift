@@ -42,7 +42,7 @@ struct HomeView: View {
                             Spacer()
                             HStack {
                                 Text("Invitations")
-                                    .font(Font.custom("Avenir-Heavy", size: 18))
+                                    .font(Font.custom("Avenir-Medium", size: 18))
                                     .foregroundColor(self.index == 1 ? .white : .black)
                                     .fontWeight(.bold)
                                     .padding(.leading, 10)
@@ -65,20 +65,21 @@ struct HomeView: View {
                         .frame(minHeight: 30, maxHeight: 30)
                         .padding([.leading, .trailing], 20)
                     
-                }
+                }.padding(.top, 15)
                 Spacer()
                 if self.index == 0 {
                     NavigationLink(destination: CreatePodView().environmentObject(self.firebaseService)) {
                         HStack {
                             Spacer()
                             Text("Create Pod")
-                                .font(Font.custom("Avenir-Heavy", size: 35))
+                                .font(Font.custom("Avenir-Medium", size: 22))
                                 .foregroundColor(.white)
                             Image(systemName: "plus.circle")
-                                .font(.title)
-                                .foregroundColor(.white).opacity(81)
+                                .font(Font.system(size: 22))
+                                .foregroundColor(.white)
                         }
-                        .padding(.trailing, 20)
+                        .padding(.top, 20)
+                        .padding(.trailing, 15)
                     }
                     Spacer()
                     DisplayPodsView().environmentObject(self.firebaseService)
@@ -101,7 +102,7 @@ struct HomeView: View {
                         Image(uiImage: UIImage(data:self.firebaseService.user.image!)!)
                             .renderingMode(.original)
                             .resizable()
-                            .frame(width: 35, height: 35)
+                            .frame(width: 40, height: 40)
                             .clipShape(Circle())
                             .padding([.top, .bottom], 5)
                     } else {
@@ -109,7 +110,7 @@ struct HomeView: View {
                             .resizable()
                             .renderingMode(.template)
                             .foregroundColor(.white)
-                            .frame(width: 35, height: 35)
+                            .frame(width: 40, height: 40)
                             .clipShape(Circle())
                             .foregroundColor(Color.blue)
                             .padding([.top, .bottom], 5)
