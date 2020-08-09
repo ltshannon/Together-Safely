@@ -235,6 +235,7 @@ class FirebaseService: ObservableObject {
                     }
                     
                     var invites: [Invite] = []
+                    self.invites = invites //trigger a refresh if this is a response to the user snapshot listener
                     for invite in user.groupInvites {
                         let docRef = self.database.collection("groups").document(invite)
                         docRef.getDocument { (document, error) in
