@@ -181,9 +181,8 @@ class WebService {
     }
     
     static func createUser(successful: @escaping (Bool) -> Void)  {
-        let username = UserDefaults.standard.value(forKey: "username") as? String ?? ""
         let phoneNumber = UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? ""
-        let requestBody = try? JSONSerialization.data(withJSONObject: ["username" : username, "phoneNumber" : phoneNumber], options: [])
+        let requestBody = try? JSONSerialization.data(withJSONObject: ["phoneNumber" : phoneNumber], options: [])
         networkRequest(.createUser, responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
             successful(error == nil)
         }

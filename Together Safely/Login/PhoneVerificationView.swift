@@ -53,7 +53,7 @@ struct PhoneVerificationView: View {
                     .padding(.bottom, keyboardHeight)
                     .onReceive(Publishers.keyboardHeight) { self.keyboardHeight = $0 }
                 Spacer()
-                NavigationLink(destination: SetNameView(), isActive: $show) {
+                NavigationLink(destination: DummyView(), isActive: $show) {
                     Button(action: {
                         UserDefaults.standard.set(self.code, forKey: "verificationCode")
                         let credential = PhoneAuthProvider.provider().credential(withVerificationID: self.id, verificationCode: self.code)
