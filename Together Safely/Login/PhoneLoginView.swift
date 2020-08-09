@@ -16,7 +16,7 @@ struct PhoneLoginView: View {
     @State private var msg = ""
     @State private var alert = false
     @State private var returnId : String = ""
-    @State private var textSize:CGFloat = 35
+    @State private var textSize:CGFloat = 22
     @State private var showIndicator = false
     @State private var keyboardHeight: CGFloat = 0
     @EnvironmentObject var locationFetcher: LocationFetcher
@@ -31,28 +31,16 @@ struct PhoneLoginView: View {
     var body: some View {
         ZStack {
             Color("Colorgreen").edgesIgnoringSafeArea(.all)
-            VStack(spacing: 20) {
-                Spacer()
-                HStack {
-                    Image("appIcon")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                    Text("together")
-                    .font(Font.custom("Avenir-Heavy", size: 50))
+            VStack {
+                Image("start-login-logo")
+                    .renderingMode(.template)
                     .foregroundColor(.white)
-                }
+                    .frame(width: 200, height: 50)
                 Spacer()
-                Group {
-                    Text("Enter your phone")
-                        .font(Font.custom("Avenir-Black", size: textSize))
-                        .foregroundColor(.white)
-                    Text("number to create")
-                        .font(Font.custom("Avenir-Black", size: textSize))
-                        .foregroundColor(.white)
-                    Text("your account")
-                        .font(Font.custom("Avenir-Black", size: textSize))
-                        .foregroundColor(.white)
-                }
+                Text("Enter your phone number to create your account")
+                    .multilineTextAlignment(.center)
+                    .font(Font.custom("Avenir-Medium", size: textSize))
+                    .foregroundColor(.white)
                 Spacer()
                 CustomTextField("(XXX) XXX-XXXX", value: $phoneNumber, keyType: .numberPad)
                     .frame(width: 300, height: 25)
@@ -104,6 +92,7 @@ struct PhoneLoginView: View {
                 }
 
             }
+                .padding(15)
                 .navigationBarHidden(true)
                 .navigationBarBackButtonHidden(true)
             .alert(isPresented: $alert) {
@@ -147,7 +136,8 @@ struct CustomTextField: UIViewRepresentable {
         textfield.delegate = context.coordinator
         textfield.placeholder = placeholder
         textfield.text = value
-        textfield.textAlignment = .right
+        textfield.textAlignment = .center
+        textfield.addTarget(context.coordinator, action: #selector(Coordinator.test(_:)), for: .editingChanged)
 
         let toolBar = UIToolbar(frame: CGRect(x: 0,
                                               y: 0,
@@ -182,16 +172,19 @@ struct CustomTextField: UIViewRepresentable {
         func textField(_ textField: UITextField,
                        shouldChangeCharactersIn range: NSRange,
                        replacementString string: String) -> Bool {
-
-//            self.parent.value.append(string)
             
             return true
+        }
+        
+        @objc func test(_ sender: UITextField) {
+            if let str = sender.text {
+                self.parent.value = str
+            }
         }
 
         func textFieldDidEndEditing(_ textField: UITextField,
                                     reason: UITextField.DidEndEditingReason) {
             // Format value with formatter at End Editing
-            print(textField.text!)
             if let str = textField.text {
                 self.parent.value = str
             }
