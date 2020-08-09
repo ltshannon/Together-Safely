@@ -204,6 +204,16 @@ class FirebaseService: ObservableObject {
         }
     }
     
+    func getNameForPhone(_ phoneNumber: String, dict: [[String:ContactInfo]]) -> String {
+        
+        for d in dict {
+            if d[phoneNumber] != nil {
+                return(d[phoneNumber]!.name)
+            }
+        }
+        return phoneNumber
+    }
+    
     func getUserData(phoneNumber: String, completion: @escaping (Error?) -> Void) {
     
         self.database.collection("users").whereField("phoneNumber", isEqualTo: phoneNumber)
@@ -231,14 +241,15 @@ class FirebaseService: ObservableObject {
                             if let document = document, document.exists {
                                 let group = Groups(snapshot: document.data() ?? [:])
                                 
-                                var invite:Invite = Invite(adminName: "", groupName: group.name, groupId: invite, riskScore: 99999)
+                                var invite:Invite = Invite(adminName: "", adminPhone: "", groupName: group.name, groupId: invite, riskScore: 99999)
                                 
                                 let docRef2 = self.database.collection("users").document(group.id) //group.id is the ID of the admin, not the group
                                     docRef2.getDocument { (document, error) in
                                         if let document = document, document.exists {
                                             let user = User(snapshot: document.data() ?? [:])
                                             invite.riskScore = user.riskScore
-                                            invite.adminName = user.phoneNumber
+                                            invite.adminPhone = user.phoneNumber
+                                            invite.adminName = user.name
                                             invites.append(invite)
                                             DispatchQueue.main.async {
                                                 self.invites = invites

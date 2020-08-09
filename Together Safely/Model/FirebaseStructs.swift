@@ -90,7 +90,8 @@ struct GroupInvites {
 }
 
 struct Invite: Hashable {
-    var adminName: String
+    var adminName: String?
+    var adminPhone: String
     var groupName: String
     var groupId: String
     var riskScore: Int

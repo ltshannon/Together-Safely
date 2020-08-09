@@ -41,12 +41,12 @@ struct InviationsView: View {
                         VStack {
                             HStack {
                             MemberProfileView(
-                                image: self.getImageForPhone.getImage(phoneName: invite.adminName, dict: self.firebaseService.contactInfo),
+                                image: self.getImageForPhone.getImage(phoneName: invite.adminPhone, dict: self.firebaseService.contactInfo),
                                 groupId: invite.groupId,
                                 riskScore: invite.riskScore,
                                 riskRanges: self.firebaseService.riskRanges)
                             VStack(alignment: .leading) {
-                                Text(invite.adminName)
+                                Text(self.firebaseService.getNameForPhone(invite.adminPhone, dict: self.firebaseService.contactInfo))
                                     .foregroundColor(Color("Colorblack"))
                                     .font(Font.custom("Avenir Next Medium", size: 25))
                                     .padding(.leading, 5)
