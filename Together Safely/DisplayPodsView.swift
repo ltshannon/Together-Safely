@@ -45,13 +45,12 @@ struct DisplayPodsView: View {
                                     .fill(Color(.darkGray))
                                     .frame(height: 2)
                                     .padding(0)
-                                Spacer()
-                                BuildRiskBar(group: group, array: self.widthArray.getWidths(group: group, width: 300)).environmentObject(self.firebaseService)
+                                BuildRiskBar(highRiskCount: group.riskTotals["High Risk"] ?? 0, medRiskCount: group.riskTotals["Medium Risk"] ?? 0, lowRiskCount: group.riskTotals["Low Risk"] ?? 0, memberCount: group.members.count).environmentObject(self.firebaseService).padding(15)
                                 Spacer()
                                 Text(group.averageRisk)
-                                    .font(Font.custom("Avenir-Heavy", size: 20))
+                                    .font(Font.custom("Avenir-Medium", size: 16))
                                     .foregroundColor(self.getRiskColor.getRiskColor(riskScore: group.averageRiskValue, riskRanges: self.firebaseService.riskRanges))
-                                    .padding(.leading, 10)
+                                    .padding(.leading, 15)
                                 Spacer()
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack {
