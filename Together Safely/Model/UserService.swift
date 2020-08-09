@@ -18,8 +18,7 @@ class FirebaseService: ObservableObject {
     @Published var groups: [Groups] = []
     @Published var riskRanges: [[String:RiskHighLow]] = []
     @Published var invites: [Invite] = []
-    @Published var userContacts: [CNContact] = []
-    @Published var nonUserContacts: [CNContact] = []
+    @Published var userContacts: [TogetherContactType] = []
     @Published var contactGroups: [Groups] = []
     @Published var contactInfo: [[String:ContactInfo]] = []
     
@@ -99,13 +98,19 @@ class FirebaseService: ObservableObject {
              
             WebService.checkPhoneNumbers(phoneNumbers: phoneNumbers) { returnedNumbers in
                 
-                print("number returned from invitablePhoneNumbers:")
-                for number in returnedNumbers {
-                    print(number)
+                for number in returnedNumbers.invitablePhoneNumbers {
+                    print("invitablePhoneNumbers: \(number)")
                 }
                 
-                var nonUserContacts: [CNContact] = []
-                var userContacts: [CNContact] = []
+                for number in returnedNumbers.invitedPhoneNumbers {
+                    print("invitedPhoneNumbers: \(number)")
+                }
+                
+                for number in returnedNumbers.userPhoneNumbers {
+                    print("userPhoneNumbers: \(number)")
+                }
+                
+                var userContacts: [TogetherContactType] = []
              
                 for contact in contacts {
                     for phone in contact.phoneNumbers {
@@ -113,20 +118,41 @@ class FirebaseService: ObservableObject {
                             if label == CNLabelPhoneNumberMobile {
                                 var number = phone.value.stringValue
                                 number = format(with: "+1XXXXXXXXXX", phone: number)
-                                if returnedNumbers.contains(number) {
-                                    nonUserContacts.append(contact)
+                                if returnedNumbers.invitablePhoneNumbers.contains(number) {
+                                    let c = TogetherContactType(contactInfo: contact, type: .invitablePhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
+                                    userContacts.append(c)
+                                } else if returnedNumbers.invitedPhoneNumbers.contains(number) {
+                                    let c = TogetherContactType(contactInfo: contact, type: .invitedPhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
+                                    userContacts.append(c)
                                 } else {
-                                    userContacts.append(contact)
+                                    let c = TogetherContactType(contactInfo: contact, type: .userPhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
+                                    userContacts.append(c)
+                                }
+                            }
+                        }
+                    }
+                }
+                DispatchQueue.main.async {
+                    self.userContacts = userContacts
+                }
+                if self.riskRanges.count > 0 {
+                    for (index, contact) in self.userContacts.enumerated() {
+                        if contact.type == .userPhoneNumber {
+                            self.checkUser(byPhoneNumber: contact.phoneNumber) { (score, error) in
+                                if let error = error {
+                                    print("firebase couldn't find user: \(contact.phoneNumber) with error: \(error.localizedDescription)")
+                                } else {
+                                    self.userContacts[index].riskScore = score
+                                    self.userContacts[index].riskString = self.getRiskString(value: score)
+                                    DispatchQueue.main.async {
+                                        self.userContacts = self.userContacts
+                                    }
                                 }
                             }
                         }
                     }
                 }
                 
-                DispatchQueue.main.async {
-                    self.userContacts = userContacts
-                    self .nonUserContacts = nonUserContacts
-                }
                 self.getUserData(phoneNumber: byPhoneNumber)
             }
              
@@ -144,6 +170,21 @@ class FirebaseService: ObservableObject {
                         print(error.localizedDescription)
                     }
                     return
+                }
+                for (index, contact) in self.userContacts.enumerated() {
+                    if contact.type == .userPhoneNumber {
+                        self.checkUser(byPhoneNumber: contact.phoneNumber) { (score, error) in
+                            if let error = error {
+                                print("firebase couldn't find user: \(contact.phoneNumber) with error: \(error.localizedDescription)")
+                            } else {
+                                self.userContacts[index].riskScore = score
+                                self.userContacts[index].riskString = self.getRiskString(value: score)
+                                DispatchQueue.main.async {
+                                    self.userContacts = self.userContacts
+                                }
+                            }
+                        }
+                    }
                 }
                 self.getUserData(phoneNumber: phoneNumber) { error in
                         guard error == nil else {

@@ -43,9 +43,9 @@ struct DisplayPodsContactPod: View {
                             .padding(0)
                         Spacer()
 
-                        List(firebaseService.userContacts, id: \.self) { (contact: CNContact) in
-                            if contact.imageDataAvailable {
-                                Image(uiImage: UIImage(data: contact.imageData!)!)
+                        List(firebaseService.userContacts, id: \.self) { (contact: TogetherContactType) in
+                            if contact.contactInfo.imageDataAvailable {
+                                Image(uiImage: UIImage(data: contact.contactInfo.imageData!)!)
                                     .renderingMode(.original)
                                     .resizable()
                                     .scaledToFit()
@@ -61,7 +61,7 @@ struct DisplayPodsContactPod: View {
                                     .frame(width: 60, height: 60)
                                     .foregroundColor(Color.blue)
                             }
-                            Text("\(contact.name)")
+                            Text("\(contact.contactInfo.name)")
                             Spacer()
                         }
                     }

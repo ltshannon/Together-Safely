@@ -71,7 +71,7 @@ enum Endpoint {
         case .postQuestionAnswers:
             return "answers"
         case .checkPhoneNumbers:
-            return "invitablePhoneNumbers"
+            return "checkPhoneNumbers"
         case .inviteUser:
             return "invites/create"
         case .deleteGroup(groupId: let groupId):
@@ -162,13 +162,13 @@ class WebService {
         }
     }
     
-    static func checkPhoneNumbers(phoneNumbers: [String], completion: @escaping ([String]) -> Void)  {
+    static func checkPhoneNumbers(phoneNumbers: [String], completion: @escaping (CheckPhonenumberResponse) -> Void)  {
         let requestBody = try? JSONSerialization.data(withJSONObject: ["phoneNumbers" : phoneNumbers], options: [])
         networkRequest(.checkPhoneNumbers, responseType: CheckPhonenumberResponse.self, requestBody: requestBody) { (response, error) in
             if let response = response {
-                completion(response.invitablePhoneNumbers)
+                completion(response)
             } else {
-                completion([String]())
+                completion(CheckPhonenumberResponse(message: "", userPhoneNumbers: [], invitedPhoneNumbers: [], invitablePhoneNumbers: []))
             }
         }
     }

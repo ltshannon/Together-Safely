@@ -49,7 +49,7 @@ class ContactStore: ObservableObject {
             
             WebService.checkPhoneNumbers(phoneNumbers: phoneNumers) { retunredNumbers in
                 
-                for number in retunredNumbers {
+                for number in retunredNumbers.invitablePhoneNumbers {
                     print(number)
                 }
             

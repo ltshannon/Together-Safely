@@ -10,6 +10,21 @@ import Foundation
 import Firebase
 import FirebaseFirestoreSwift
 import SwiftUI
+import Contacts
+
+enum TogetherContactTypes {
+    case invitablePhoneNumber
+    case invitedPhoneNumber
+    case userPhoneNumber
+}
+
+struct TogetherContactType: Hashable {
+    var contactInfo: CNContact
+    var type: TogetherContactTypes
+    var phoneNumber: String
+    var riskScore: Int?
+    var riskString: String?
+}
 
 struct User: Identifiable, Codable {
     @DocumentID var id: String?

@@ -25,6 +25,7 @@ struct AllContactsCardView: View {
     @Environment(\.presentationMode) var presentation
     @State private var arrayIndexs: [Int] = []
     @State private var members:[String] = []
+    @State private var riskColor: Color = Color.white
     
     var body: some View {
         VStack {
@@ -55,8 +56,8 @@ struct AllContactsCardView: View {
                             VStack {
                                 HStack {
                                     ZStack {
-                                        if self.firebaseService.userContacts[index].imageData != nil {
-                                            Image(uiImage: UIImage(data: self.firebaseService.userContacts[index].imageData!)!)
+                                        if self.firebaseService.userContacts[index].contactInfo.imageData != nil {
+                                            Image(uiImage: UIImage(data: self.firebaseService.userContacts[index].contactInfo.imageData!)!)
                                                 .resizable()
                                                 .renderingMode(.original)
                                                 .frame(width: 75, height: 75)
@@ -65,47 +66,50 @@ struct AllContactsCardView: View {
                                                 .foregroundColor(Color.blue)
                                                 .padding(5)
                                         } else {
-                                        Image(systemName: "person.fill")
-                                            .resizable()
-                                            .frame(width: 75, height: 75)
-                                            .clipShape(Circle())
-                                            .overlay(Circle().stroke(Color("Color9"), lineWidth: 7))
-                                            .foregroundColor(Color.blue)
-                                            .padding(.leading, 10)
-                                        Circle()
-                                            .frame(width: 25, height: 25)
-                                            .foregroundColor(Color("Colorgray"))
-                                            .overlay(Circle().stroke(Color.white, lineWidth: 3))
-                                            .offset(x: 30, y: 30)
+                                            Image(systemName: "person.fill")
+                                                .resizable()
+                                                .frame(width: 75, height: 75)
+                                                .clipShape(Circle())
+                                                .overlay(Circle().stroke(Color("Color9"), lineWidth: 7))
+                                                .foregroundColor(Color.blue)
+                                                .padding(.leading, 10)
                                         }
+                                            Circle()
+                                                .frame(width: 25, height: 25)
+                                                .foregroundColor(self.firebaseService.userContacts[index].riskScore != nil ? self.riskColor.getRiskColor(riskScore: self.firebaseService.userContacts[index].riskScore!, riskRanges: self.firebaseService.riskRanges) : Color("Colorgray"))
+                                                .overlay(Circle().stroke(Color.white, lineWidth: 3))
+                                                .offset(x: 30, y: 30)
                                     }
                                     .padding(.bottom, 5)
                                     VStack(alignment: .leading) {
-                                        Text("\(self.firebaseService.userContacts[index].name)")
+                                        Text("\(self.firebaseService.userContacts[index].contactInfo.name)")
                                             .foregroundColor(Color("Colorblack"))
                                             .font(Font.custom("Avenir Next Medium", size: 28))
                                             .padding(.leading, 5)
-                                        Text("No risk status")
-                                            .foregroundColor(Color("Colorgray"))
+                                        Text(self.firebaseService.userContacts[index].riskString != nil ? self.firebaseService.userContacts[index].riskString! : "No risk status")
+                                                .foregroundColor(self.firebaseService.userContacts[index].riskScore != nil ? self.riskColor.getRiskColor(riskScore: self.firebaseService.userContacts[index].riskScore!, riskRanges: self.firebaseService.riskRanges) : Color("Colorgray"))
+//                                            .foregroundColor(Color("Colorgray"))
                                             .font(Font.custom("Avenir Next Medium", size: 20))
                                             .padding(.leading, 5)
                                     }
                                     Spacer()
                                     if self.pageType == .addContacts {
-                                        Button(action: {
-                                            WebService.createInvite(contact: self.firebaseService.userContacts[index]) { successful in
-                                                if !successful {
-                                                    print("createInvite failed for: \(self.firebaseService.userContacts[index].givenName)")
+                                        if self.firebaseService.userContacts[index].type == .invitablePhoneNumber {
+                                            Button(action: {
+                                                WebService.createInvite(contact: self.firebaseService.userContacts[index].contactInfo) { successful in
+                                                    if !successful {
+                                                        print("createInvite failed for: \(self.firebaseService.userContacts[index].contactInfo.givenName)")
+                                                    }
+                                                    self.presentation.wrappedValue.dismiss()
                                                 }
-                                                self.presentation.wrappedValue.dismiss()
+                                            }) {
+                                                Image("buttonInvite")
+                                                    .renderingMode(.original)
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(height: 50)
+                                                    .padding(.trailing, 20)
                                             }
-                                        }) {
-                                            Image("buttonInvite")
-                                                .renderingMode(.original)
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .frame(height: 50)
-                                                .padding(.trailing, 20)
                                         }
                                     } else {
                                         CheckboxView(
@@ -189,7 +193,7 @@ struct AllContactsCardView: View {
         members.removeAll()
         
         for index in arrayIndexs {
-            for phone in firebaseService.userContacts[index].phoneNumbers {
+            for phone in firebaseService.userContacts[index].contactInfo.phoneNumbers {
                 if let label = phone.label {
                     if label == CNLabelPhoneNumberMobile {
                         var number = phone.value.stringValue
