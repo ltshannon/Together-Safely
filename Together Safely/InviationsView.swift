@@ -57,22 +57,38 @@ struct InviationsView: View {
                                     .padding(.trailing, 5)
                             }
                             Spacer()
-                            Button(action: {
-                                WebService.acceptInviteToGroup(groupId: invite.groupId) { successful in
-                                    if successful {
-                                        
-                                    } else {
-                                        
-                                    }
+                                VStack {
+                                    Button(action: {
+                                        WebService.acceptInviteToGroup(groupId: invite.groupId) { successful in
+                                            if successful {
+                                                
+                                            } else {
+                                                
+                                            }
+                                        }
+                                    }) {
+                                        HStack {
+                                            Image(systemName: "checkmark")
+                                            Text("Accept")
+                                        }
+                                        .padding(.all, 10)
+                                        .foregroundColor(.white)
+                                        .background(Color("Color3"))
+                                        .cornerRadius(8)
+                                    }.padding(.trailing, 5)
+                                    Button(action: {
+                                        //TODO: replace with decline webservice call
+                                    }) {
+                                        HStack {
+                                            Image(systemName: "xmark.circle")
+                                            Text("Decline")
+                                        }
+                                        .padding(.all, 10)
+                                        .foregroundColor(.white)
+                                        .background(Color("Colorred"))
+                                        .cornerRadius(8)
+                                    }.padding(.trailing, 5)
                                 }
-                            }) {
-                                Image("accept")
-                                    .renderingMode(.original)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(height: 50)
-                                    .padding(.trailing, 20)
-                            }
                         }
                         Capsule()
                             .fill(Color("Colorgray"))
