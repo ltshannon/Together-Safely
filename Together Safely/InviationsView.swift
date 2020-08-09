@@ -44,7 +44,7 @@ struct InviationsView: View {
                                 riskScore: invite.riskScore,
                                 riskRanges: self.firebaseService.riskRanges)
                             VStack(alignment: .leading) {
-                                Text("Name")
+                                Text(invite.adminName)
                                     .foregroundColor(Color("Colorblack"))
                                     .font(Font.custom("Avenir Next Medium", size: 25))
                                     .padding(.leading, 5)
@@ -71,11 +71,13 @@ struct InviationsView: View {
                                             Image(systemName: "checkmark")
                                             Text("Accept")
                                         }
-                                        .padding(.all, 10)
+                                        .padding([.top, .bottom], 10)
+                                        .padding([.leading, .trailing], 15)
+                                        .frame(minWidth: 0, maxWidth: .infinity)
                                         .foregroundColor(.white)
                                         .background(Color("Color3"))
                                         .cornerRadius(8)
-                                    }.padding(.trailing, 5)
+                                    }
                                     Button(action: {
                                         WebService.declineInviteToGroup(groupId: invite.groupId) { successful in
                                             if successful {
@@ -89,12 +91,14 @@ struct InviationsView: View {
                                             Image(systemName: "xmark.circle")
                                             Text("Decline")
                                         }
-                                        .padding(.all, 10)
+                                        .padding([.top, .bottom], 10)
+                                        .padding([.leading, .trailing], 15)
+                                        .frame(minWidth: 0, maxWidth: .infinity)
                                         .foregroundColor(.white)
                                         .background(Color("Colorred"))
                                         .cornerRadius(8)
-                                    }.padding(.trailing, 5)
-                                }
+                                    }
+                                }.padding(.trailing, 5)
                         }
                         Capsule()
                             .fill(Color("Colorgray"))
