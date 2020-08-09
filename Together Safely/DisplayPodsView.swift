@@ -30,20 +30,19 @@ struct DisplayPodsView: View {
                                 VStack {
                                     HStack {
                                         Text("\(group.name)")
-                                            .font(Font.custom("Avenir-Heavy", size: 25))
+                                            .font(Font.custom("Avenir-Medium", size: 18))
                                             .padding(.leading, 20)
                                             .foregroundColor(.white)
                                         Spacer()
                                         Image(systemName: "chevron.right")
-                                            .font(Font.custom("Avenir-Heavy", size: 20))
+                                            .font(Font.custom("Avenir-Medium", size: 18))
                                             .padding(.trailing, 20)
-                                            .foregroundColor(Color("Colorgray"))
-                                    }
+                                            .foregroundColor(.white)
+                                    }.padding([.top, .bottom], 15)
                                 }
-                                    .frame(height:(75))
                                     .background(Color("Color3")).edgesIgnoringSafeArea(.all)
                                 Capsule()
-                                    .fill(Color(.blue))
+                                    .fill(Color(.darkGray))
                                     .frame(height: 2)
                                     .padding(0)
                                 Spacer()
@@ -67,7 +66,6 @@ struct DisplayPodsView: View {
                                 }
                                 Spacer()
                             }
-                                .frame(height: 300)
                                 .background(Color.white)
                                 .cornerRadius(20)
                                 .shadow(color: .gray, radius: 2, x: 0, y: 2)
