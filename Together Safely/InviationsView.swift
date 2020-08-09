@@ -48,16 +48,14 @@ struct InviationsView: View {
                             VStack(alignment: .leading) {
                                 Text(self.firebaseService.getNameForPhone(invite.adminPhone, dict: self.firebaseService.contactInfo))
                                     .foregroundColor(Color("Colorblack"))
-                                    .font(Font.custom("Avenir Next Medium", size: 25))
-                                    .padding(.leading, 5)
+                                    .font(Font.custom("Avenir Next Medium", size: 18))
                                 Text("invited you to:")
-                                    .font(Font.custom("Avenir Next Medium Italic", size: 20))
+                                    .font(Font.custom("Avenir Next Medium Italic", size: 14))
                                     .foregroundColor(Color("Colorgray"))
                                 Text(invite.groupName)
                                     .foregroundColor(Color("Color13"))
-                                    .font(Font.custom("Avenir Next Medium", size: 20))
-                                    .padding(.trailing, 5)
-                            }
+                                    .font(Font.custom("Avenir Next Medium", size: 16))
+                            }.padding(.trailing, 10)
                             Spacer()
                                 VStack {
                                     Button(action: {
@@ -74,7 +72,7 @@ struct InviationsView: View {
                                             Text("Accept")
                                         }
                                         .padding([.top, .bottom], 10)
-                                        .padding([.leading, .trailing], 15)
+                                        .padding([.leading, .trailing], 5)
                                         .frame(minWidth: 0, maxWidth: .infinity)
                                         .foregroundColor(.white)
                                         .background(Color("Color3"))
@@ -94,7 +92,7 @@ struct InviationsView: View {
                                             Text("Decline")
                                         }
                                         .padding([.top, .bottom], 10)
-                                        .padding([.leading, .trailing], 15)
+                                        .padding([.leading, .trailing], 5)
                                         .frame(minWidth: 0, maxWidth: .infinity)
                                         .foregroundColor(.white)
                                         .background(Color("Colorred"))
@@ -105,8 +103,8 @@ struct InviationsView: View {
                         Capsule()
                             .fill(Color("Colorgray"))
                             .frame(height: 1)
-                            .padding(10)
-                        }
+                            .padding([.leading, .trailing], 5)
+                        }.padding([.top, .bottom], 10)
                     }
                 }
             }
