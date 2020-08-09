@@ -14,10 +14,7 @@ struct ContentView: View {
     init() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
-        appearance.titleTextAttributes = [
-            .font : UIFont.systemFont(ofSize: 20),
-            NSAttributedString.Key.foregroundColor : UIColor.white
-        ]
+        
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().standardAppearance = appearance
         

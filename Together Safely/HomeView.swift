@@ -101,23 +101,22 @@ struct HomeView: View {
                         Image(uiImage: UIImage(data:self.firebaseService.user.image!)!)
                             .renderingMode(.original)
                             .resizable()
-                            .frame(width: 40, height: 40)
+                            .frame(width: 35, height: 35)
                             .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.white, lineWidth: 1))
-                            .padding(5)
+                            .padding([.top, .bottom], 5)
                     } else {
                         Image(systemName: "person.fill")
                             .resizable()
-                            .frame(width: 40, height: 40)
+                            .renderingMode(.template)
+                            .foregroundColor(.white)
+                            .frame(width: 35, height: 35)
                             .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.white, lineWidth: 2))
                             .foregroundColor(Color.blue)
-                            .padding(5)
+                            .padding([.top, .bottom], 5)
                     }
                 }
-//                Text("")
-//                    .frame(width: 40, height: 10)
-//                HeaderView()
+                HeaderView()
+                    .padding(.leading, (metrics.size.width / 2.0) - CGFloat(HeaderView.width))//130 is the width of the header view
             }
         )
         }
