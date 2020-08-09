@@ -17,24 +17,18 @@ struct InviationsView: View {
         VStack(alignment: .leading, spacing: 0) {
             VStack {
                 HStack {
-                    Text("All invites")
-                        .font(Font.custom("Avenir-Heavy", size: 25))
+                    Text("All Invites")
+                        .font(Font.custom("Avenir-Medium", size: 18))
                         .padding(.leading, 20)
                         .foregroundColor(.white)
                     Spacer()
-                    Image(systemName: "line.horizontal.3.decrease")
-                        .font(Font.custom("Avenir-Heavy", size: 35))
-                        .padding(.trailing, 20)
-                        .foregroundColor(Color.white)
-                }
+                }.padding([.top, .bottom], 15)
             }
-                .frame(height:(75))
                 .background(Color("Color3")).edgesIgnoringSafeArea(.all)
             Capsule()
-                .fill(Color(.blue))
+                .fill(Color(.darkGray))
                 .frame(height: 2)
                 .padding(0)
-            Spacer()
             if !firebaseService.groups.isEmpty {
                 ScrollView(.vertical, showsIndicators: false) {
                     ForEach(firebaseService.invites, id: \.self) { invite in
@@ -104,7 +98,7 @@ struct InviationsView: View {
                             .fill(Color("Colorgray"))
                             .frame(height: 1)
                             .padding([.leading, .trailing], 5)
-                        }.padding([.top, .bottom], 10)
+                        }.padding([.leading, .trailing, .top], 10)
                     }
                 }
             }
