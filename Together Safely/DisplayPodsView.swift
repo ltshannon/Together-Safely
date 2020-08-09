@@ -17,11 +17,12 @@ struct DisplayPodsView: View {
     @State private var widthArray: Array = []
     @State private var getRiskColor: Color = Color.white
     @State private var getImageForPhone: Data = Data()
+    @State private var isVisible = false
     
     var body: some View {
 
         VStack {
-            if !firebaseService.groups.isEmpty {
+            if !firebaseService.groups.isEmpty && self.isVisible {
                 ScrollView(.vertical, showsIndicators: false) {
                     ForEach(firebaseService.groups, id: \.self) { group in
                         NavigationLink(destination: DetailPodView(group: group).environmentObject(self.firebaseService)) {
@@ -81,6 +82,10 @@ struct DisplayPodsView: View {
             } else {
                 Spacer()
             }
+        }.onAppear() {
+            self.isVisible = true
+        }.onDisappear() {
+            self.isVisible = false
         }
     }
     
