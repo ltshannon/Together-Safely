@@ -20,38 +20,33 @@ struct DetailPodView: View {
     
     var body: some View {
         VStack {
-            VStack {
+            VStack(alignment: .leading, spacing: 0) {
                 HStack {
                     if firebaseService.user.image != nil {
                         Image(uiImage: UIImage(data:firebaseService.user.image!)!)
                             .resizable()
-                            .frame(width: 75, height: 75)
+                            .renderingMode(.original)
+                            .frame(width: 45, height: 45)
                             .clipShape(Circle())
                             .overlay(Circle().stroke(Color.black, lineWidth: 1))
-                            .foregroundColor(Color.blue)
-                            .padding(5)
+                            .padding([.top, .bottom], 5)
 
                     } else {
                         Image(systemName: "person.fill")
                             .resizable()
-                            .frame(width: 75, height: 75)
+                            .renderingMode(.template)
+                            .foregroundColor(.gray)
+                            .frame(width: 45, height: 45)
                             .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.black, lineWidth: 1))
-                            .foregroundColor(Color.blue)
-                            .padding(5)
+                            .padding([.top, .bottom], 5)
                     }
                     HStack {
-//                        Capsule()
-//                            .fill(Color(.black))
-//                            .frame(width: 1, height: 60)
-//                            .padding(0)
                         TextFieldWrapperView(text: self.$emojiText)
                             .background(Color.white)
                             .frame(width: 30, height: 30)
-                            .font(Font.custom("Avenir Next Medium Italic", size: 40))
-//                            .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.gray, lineWidth: 1))
+                            .font(Font.custom("Avenir-Medium", size: 18))
                         TextField("I want to..", text: $inputStr)
-                            .font(Font.custom("Avenir Next Medium Italic", size: 30))
+                            .font(Font.custom("Avenir-Medium", size: 18))
                             .foregroundColor(Color("Colorblack"))
                         Button (action: {
                             if self.inputStr.count == 0 {
@@ -67,86 +62,79 @@ struct DetailPodView: View {
                         }) {
                             Image(systemName: "chevron.right")
                                 .foregroundColor(Color("Colorgray"))
-                                .font(Font.custom("Avenir Next Medium", size: 30))
+                                .font(Font.custom("Avenir-Medium", size: 18))
                         }
                     }
-                    .padding()
-                    .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.gray, lineWidth: 1))
+                    .padding(5)
+                    .overlay(Rectangle().stroke(Color.gray, lineWidth: 1))
                     .background(Color.white)
                 }
-                    .frame(width: UIScreen.main.bounds.size.width - 40)
                 HStack {
                     Spacer()
                     if firebaseService.user.id == group.adminId {
                         NavigationLink(destination: AddFriendView(group: group).environmentObject(self.firebaseService)) {
                             Text("Add Friend")
-                                .font(Font.custom("Avenir-Heavy", size: 35))
+                                .font(Font.custom("Avenir-Medium", size: 22))
                                 .foregroundColor(.white)
                             Image(systemName: "plus.circle")
-    //                            .renderingMode(.original)
-                                .font(.title)
-                                .foregroundColor(.white).opacity(81)
+                                .font(Font.system(size: 22))
+                                .foregroundColor(.white)
                         }
                     } else {
                         Spacer()
                     }
-                }
-                 .padding(.trailing, 20)
+                }.padding(.top, 20)
+                    .padding(.bottom, 5)
                 VStack(alignment: .leading, spacing: 0) {
                     VStack {
                         HStack {
                             Text(group.name)
-                                .font(Font.custom("Avenir-Heavy", size: 25))
+                                .font(Font.custom("Avenir-Medium", size: 18))
                                 .padding(.leading, 20)
                                 .foregroundColor(.white)
                             Spacer()
-                            Image(systemName: "line.horizontal.3.decrease")
-                                .font(Font.custom("Avenir-Heavy", size: 35))
-                                .padding(.trailing, 20)
-                                .foregroundColor(Color.white)
-                        }
+                        }.padding([.top, .bottom], 15)
                     }
-                        .frame(height:(75))
-                        .background(Color("Color3")).edgesIgnoringSafeArea(.all)
+                    .background(Color("Color3")).edgesIgnoringSafeArea(.all)
                     Capsule()
-                        .fill(Color(.blue))
+                        .fill(Color(.darkGray))
                         .frame(height: 2)
                         .padding(0)
-                    Spacer()
-                    BuildRiskBar(group: group, array: widthArray.getWidths(group: group, width: 300)).environmentObject(self.firebaseService)
-                    Spacer()
-                    Text(group.averageRisk)
-                        .font(Font.custom("Avenir-Heavy", size: 20))
-                        .foregroundColor(getRiskColor.getRiskColor(riskScore: group.averageRiskValue, riskRanges: firebaseService.riskRanges))
-                        .padding(.leading, 10)
-                    Spacer()
+                    VStack(alignment: .leading, spacing: 0) {
+                        Spacer()
+                        BuildRiskBar(highRiskCount: group.riskTotals["High Risk"] ?? 0, medRiskCount: group.riskTotals["Medium Risk"] ?? 0, lowRiskCount: group.riskTotals["Low Risk"] ?? 0, memberCount: group.members.count).environmentObject(self.firebaseService).padding(15)
+                        Spacer()
+                        Text(group.averageRisk)
+                            .font(Font.custom("Avenir-Medium", size: 16))
+                            .foregroundColor(self.getRiskColor.getRiskColor(riskScore: group.averageRiskValue, riskRanges: self.firebaseService.riskRanges))
+                            .padding(.leading, 15)
+                    }
+                    .frame(height: 75)
+                    .padding(.bottom, 15)
                     ScrollView(.vertical, showsIndicators: false) {
-                        VStack {
+                        VStack(alignment: .leading, spacing: 5) {
                             ForEach(0..<group.members.count) { index in
-                                Capsule()
-                                    .fill(Color(.gray))
-                                    .frame(height: 1)
-                                    .padding(10)
-                                HStack {
-                                    Text("")
-                                    
-                                    FullMemberProfileView(
-                                        groupId: self.group.id,
-                                        member: self.group.members[index]).environmentObject(self.firebaseService)
+                                VStack(alignment: .leading, spacing: 0) {
+                                    Capsule()
+                                        .fill(Color(.gray))
+                                        .frame(height: 1)
+                                        .padding(.top, 5)
+                                    HStack {
+                                        FullMemberProfileView(
+                                            groupId: self.group.id,
+                                            member: self.group.members[index]).environmentObject(self.firebaseService)
+                                    }.padding([.leading, .trailing], 15)
                                 }
                             }
                         }
                     }
-                    Spacer()
                 }
-                    .frame(width: UIScreen.main.bounds.size.width - 40)
                     .background(Color.white)
                     .cornerRadius(20)
                     .shadow(color: .gray, radius: 2, x: 0, y: 2)
-                    .padding(5)
-                Spacer()
             }
         }
+            .padding([.leading, .trailing, .bottom], 15)
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: btnBack)
             .background(Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all))
@@ -155,15 +143,15 @@ struct DetailPodView: View {
     var btnBack : some View { Button(action: {
           self.presentationMode.wrappedValue.dismiss()
           }) {
-              HStack {
+            HStack {
                 Image(systemName: "chevron.left")
                     .aspectRatio(contentMode: .fit)
-                    .font(Font.custom("Avenir Next Medium", size: 30))
+                    .font(Font.custom("Avenir-Medium", size: 18))
                     .foregroundColor(.white)
                 Text("Back")
-                    .font(Font.custom("Avenir Next Medium", size: 30))
+                    .font(Font.custom("Avenir-Medium", size: 18))
                     .foregroundColor(.white)
-              }
+            }
           }
       }
 }

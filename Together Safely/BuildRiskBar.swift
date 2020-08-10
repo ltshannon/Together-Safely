@@ -10,44 +10,51 @@ import SwiftUI
 
 struct BuildRiskBar: View {
 
-    var group: Groups
-    var array: [CGFloat]
+    var highRiskCount: Int
+    var medRiskCount: Int
+    var lowRiskCount: Int
+    var memberCount: Int
     @EnvironmentObject var firebaseService: FirebaseService
     
     var body: some View {
-    
-        VStack(spacing: 0) {
-            HStack {
+        GeometryReader { metrics in
+            HStack(spacing: 0) {
                 ZStack {
                     Rectangle()
-                        .fill(Color("riskHigh"))
-                        .frame(width: array[0] > 0 ? array[0] : 0, height: 50)
-                        .cornerRadius(radius: 6, corners: array[1] == 0 && array[2] == 0  ? [.topRight, .bottomRight, .topLeft, .bottomLeft] : [.topLeft, .bottomLeft])
-                        Text("\(array[0] > 0 ? String(Int(array[3])) : "")")
-                            .font(Font.custom("Avenir-Heavy", size: 20))
-                            .foregroundColor(Color("Colorblack"))
+                        .foregroundColor(Color("Colorred"))
+                        .frame(width: (self.calculateWidthPercentage(riskCount: self.highRiskCount, metricWidth: metrics.size.width)))
+                    Text("\(self.highRiskCount)")
+                        .font(Font.custom("Avenir-Medium", size: 16))
+                        .foregroundColor(.white)
                 }
                 ZStack {
                     Rectangle()
-                        .fill(Color("riskMed"))
-                        .frame(width: array[1] > 0 ? array[1] : 0, height: 50)
-                        .cornerRadius(radius: 6, corners: array[0] == 0 && array[2] == 0 ? [.topRight, .bottomRight, .topLeft, .bottomLeft] : [])
-                        Text("\(array[1] > 0 ? String(Int(array[4])) : "")")
-                            .font(Font.custom("Avenir-Heavy", size: 20))
-                            .foregroundColor(Color("Colorblack"))
+                        .foregroundColor(Color("Colormed"))
+                        .frame(width: (self.calculateWidthPercentage(riskCount: self.medRiskCount, metricWidth: metrics.size.width)))
+                    Text("\(self.medRiskCount)")
+                        .font(Font.custom("Avenir-Medium", size: 16))
+                        .foregroundColor(.white)
                 }
                 ZStack {
                     Rectangle()
-                        .fill(Color("riskLow"))
-                        .frame(width: array[2] > 0 ? array[2] : 0, height: 50)
-                        .cornerRadius(radius: 6, corners: array[0] == 0 ? [.topRight, .bottomRight, .topLeft, .bottomLeft] : [.topRight, .bottomRight])
-                        Text("\(array[2] > 0 ? String(Int(array[5])) : "")")
-                            .font(Font.custom("Avenir-Heavy", size: 20))
-                            .foregroundColor(Color("Colorblack"))
+                        .foregroundColor(Color("Colorlow"))
+                        .frame(width: (self.calculateWidthPercentage(riskCount: self.lowRiskCount, metricWidth: metrics.size.width)))
+                    Text("\(self.lowRiskCount)")
+                        .font(Font.custom("Avenir-Medium", size: 16))
+                        .foregroundColor(.white)
                 }
             }
-            .padding(10)
+            .clipShape(RoundedRectangle(cornerRadius: 6))
+            .frame(width: metrics.size.width, height: 25)
         }
+    }
+    
+    private func calculateWidthPercentage(riskCount: Int, metricWidth: CGFloat) -> CGFloat {
+        guard riskCount > 0 else {
+            return 0.0
+        }
+        
+        return metricWidth * CGFloat((CGFloat(riskCount)/CGFloat(self.memberCount)))
     }
 }
 

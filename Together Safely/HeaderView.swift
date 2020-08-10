@@ -9,24 +9,11 @@
 import SwiftUI
 
 struct HeaderView: View {
+    static let width: Float = 131.0
     var body: some View {
-        HStack {
-            Spacer()
-            Image("homeTop")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(height: 35)
-/*
-            Text("together")
-                .font(Font.custom("Avenir-Heavy", size: 28))
-                .foregroundColor(.white)
-//                .padding(.trailing, 20)
-//                .background(Color.blue)
- */
-            Spacer()
-        }
-//        .background(Color.black)
-    .padding(0)
+        Image("header-logo")
+            .renderingMode(.template)
+            .foregroundColor(.white)
     }
 }
 

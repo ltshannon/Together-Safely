@@ -52,7 +52,7 @@ struct CreatePodsView: View {
                 Text("Failure")
             }
         }
-        .navigationBarTitle("")
+        .navigationBarTitle("", displayMode: .inline)
         .background(Image("backgroudImage").edgesIgnoringSafeArea(.all))
         .alert(isPresented: $showingAlert) {
             Alert(title: Text("Error"), message: Text("Pod name must have at least 1 character"), dismissButton: .default(Text("Continue")))

@@ -29,27 +29,22 @@ struct AllContactsCardView: View {
     
     var body: some View {
         VStack {
-            VStack(spacing: 0) {
+            Spacer()
+            VStack(alignment: .leading, spacing: 0) {
                 VStack {
                     HStack {
                         Text("All Contacts")
-                            .font(Font.custom("Avenir-Heavy", size: 30))
+                            .font(Font.custom("Avenir-Medium", size: 18))
                             .padding(.leading, 20)
                             .foregroundColor(.white)
                         Spacer()
-                        Image(systemName: "line.horizontal.3.decrease")
-                            .font(Font.custom("Avenir-Heavy", size: 35))
-                            .padding(.trailing, 20)
-                            .foregroundColor(Color.white)
-                    }
+                    }.padding([.top, .bottom], 15)
                 }
-                    .frame(height:(75))
-                    .background(Color("Color3")).edgesIgnoringSafeArea(.all)
+                .background(Color("Color3")).edgesIgnoringSafeArea(.all)
                 Capsule()
-                    .fill(Color(.blue))
+                    .fill(Color(.darkGray))
                     .frame(height: 2)
                     .padding(0)
-                Spacer()
                 if !firebaseService.userContacts.isEmpty {
                     ScrollView(.vertical, showsIndicators: false) {
                         ForEach(firebaseService.userContacts.indices) { index in
@@ -60,36 +55,27 @@ struct AllContactsCardView: View {
                                             Image(uiImage: UIImage(data: self.firebaseService.userContacts[index].contactInfo.imageData!)!)
                                                 .resizable()
                                                 .renderingMode(.original)
-                                                .frame(width: 75, height: 75)
+                                                .frame(width: 40, height: 40)
                                                 .clipShape(Circle())
                                                 .overlay(Circle().stroke(Color.black, lineWidth: 1))
-                                                .foregroundColor(Color.blue)
                                                 .padding(5)
                                         } else {
                                             Image(systemName: "person.fill")
                                                 .resizable()
-                                                .frame(width: 75, height: 75)
+                                                .renderingMode(.template)
+                                                .foregroundColor(.gray)
+                                                .frame(width: 40, height: 40)
                                                 .clipShape(Circle())
-                                                .overlay(Circle().stroke(Color("Color9"), lineWidth: 7))
-                                                .foregroundColor(Color.blue)
-                                                .padding(.leading, 10)
+                                                .padding([.top, .bottom], 5)
                                         }
-                                            Circle()
-                                                .frame(width: 25, height: 25)
-                                                .foregroundColor(self.firebaseService.userContacts[index].riskScore != nil ? self.riskColor.getRiskColor(riskScore: self.firebaseService.userContacts[index].riskScore!, riskRanges: self.firebaseService.riskRanges) : Color("Colorgray"))
-                                                .overlay(Circle().stroke(Color.white, lineWidth: 3))
-                                                .offset(x: 30, y: 30)
                                     }
-                                    .padding(.bottom, 5)
                                     VStack(alignment: .leading) {
                                         Text("\(self.firebaseService.userContacts[index].contactInfo.name)")
                                             .foregroundColor(Color("Colorblack"))
-                                            .font(Font.custom("Avenir Next Medium", size: 28))
-                                            .padding(.leading, 5)
+                                            .font(Font.custom("Avenir-Medium", size: 18))
                                         Text(self.firebaseService.userContacts[index].riskString != nil ? self.firebaseService.userContacts[index].riskString! : "No risk status")
                                                 .foregroundColor(self.firebaseService.userContacts[index].riskScore != nil ? self.riskColor.getRiskColor(riskScore: self.firebaseService.userContacts[index].riskScore!, riskRanges: self.firebaseService.riskRanges) : Color("Colorgray"))
-//                                            .foregroundColor(Color("Colorgray"))
-                                            .font(Font.custom("Avenir Next Medium", size: 20))
+                                            .font(Font.custom("Avenir-Medium", size: 14))
                                             .padding(.leading, 5)
                                     }
                                     Spacer()
@@ -125,37 +111,38 @@ struct AllContactsCardView: View {
                                     .fill(Color("Colorgray"))
                                     .frame(height: 1)
                                     .padding(10)
-                            }
+                            }.padding([.leading, .trailing], 15)
                         }
-                    }
+                    }.padding(.top, 15)
                 }
             }
-                .frame(width: UIScreen.main.bounds.size.width - 40)
+                .frame(minHeight: 300, maxHeight: .infinity)
                 .background(Color.white)
                 .cornerRadius(20)
                 .shadow(color: .gray, radius: 2, x: 0, y: 2)
-                .padding(5)
-            Spacer()
+                .padding([.leading, .trailing, .bottom], 15)
             if pageType == .createPod {
-                VStack {
-                    Button(action: {
-                        if self.name.count < 1 {
-                            self.showingAlert = true
-                            return
-                        }
-                        WebService.createNewGroup(name: self.name, members: self.members) { successful in
-                            if !successful {
-                                print("createNewGroup failed for: \(self.name)")
-                            }
-                        }
-                        self.presentation.wrappedValue.dismiss()
-                    }) {
-                    Image("createButton")
-                        .renderingMode(.original)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 50)
+                Button(action: {
+                    if self.name.count < 1 {
+                        self.showingAlert = true
+                        return
                     }
+                    WebService.createNewGroup(name: self.name, members: self.members) { successful in
+                        if !successful {
+                            print("createNewGroup failed for: \(self.name)")
+                        }
+                    }
+                    self.presentation.wrappedValue.dismiss()
+                }) {
+                    HStack {
+                        Text("Create")
+                        Image(systemName: "checkmark")
+                    }
+                    .padding([.top, .bottom], 10)
+                    .padding([.leading, .trailing], 15)
+                    .foregroundColor(.white)
+                    .background(Color("Color3"))
+                    .cornerRadius(8)
                 }
                 .alert(isPresented: $showingAlert) {
                     Alert(title: Text("Error"), message: Text("Pod name must have at least 1 character"), dismissButton: .default(Text("Continue")))
@@ -171,11 +158,15 @@ struct AllContactsCardView: View {
                     }
                     self.presentation.wrappedValue.dismiss()
                 }) {
-                    Image("addButton")
-                        .renderingMode(.original)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 50)
+                    HStack {
+                        Text("Add")
+                        Image(systemName: "checkmark")
+                    }
+                    .padding([.top, .bottom], 10)
+                    .padding([.leading, .trailing], 15)
+                    .foregroundColor(.white)
+                    .background(Color("Color3"))
+                    .cornerRadius(8)
                 }
             }
         }

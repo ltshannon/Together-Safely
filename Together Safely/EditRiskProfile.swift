@@ -17,11 +17,8 @@ struct EditRiskProfile: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Risk Profile")
-                .font(Font.custom("Avenir-Heavy", size: 40))
-//                .padding(.leading, 5)
-//                .padding(.trailing, 5)
+                .font(Font.custom("Avenir-Medium", size: 22))
                 .foregroundColor(Color.white)
-                .padding(.leading, 30)
 
             List {
                 ForEach (questions, id: \.id) { question in
@@ -43,25 +40,28 @@ struct EditRiskProfile: View {
                 .background(Color.white)
                 .cornerRadius(20)
                 .shadow(color: .gray, radius: 2, x: 0, y: 2)
-                .padding(20)
-            Button(action: {
-                WebService.postQuestionAnswers(answers: self.responses) { (success) in
-                    print("\(success)")
+            Spacer()
+            HStack {
+                Spacer()
+                Button(action: {
+                    WebService.postQuestionAnswers(answers: self.responses) { (success) in
+                        print("\(success)")
+                    }
+                }) {
+                    HStack {
+                        Text("Accept")
+                        Image(systemName: "checkmark")
+                    }
+                    .padding([.top, .bottom], 10)
+                    .padding([.leading, .trailing], 15)
+                    .foregroundColor(.white)
+                    .background(Color("Color3"))
+                    .cornerRadius(8)
                 }
-            }) {
-                HStack {
-                    Spacer()
-                     Image("accept")
-                        .renderingMode(.original)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 150)
-                }
-                    .padding(.trailing, 20)
-                    .padding(.top, 35)
             }
             Spacer()
         }
+            .padding(15)
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: btnBack)
             .background(Image("backgroudImage").edgesIgnoringSafeArea(.all))
@@ -80,13 +80,13 @@ struct EditRiskProfile: View {
                 self.presentationMode.wrappedValue.dismiss()
                 }) {
                     HStack {
-                    Image(systemName: "chevron.left")
-                        .aspectRatio(contentMode: .fit)
-                        .font(Font.custom("Avenir Next Medium", size: 30))
-                        .foregroundColor(.white)
-                    Text("Back")
-                        .font(Font.custom("Avenir Next Medium", size: 30))
-                        .foregroundColor(.white)
+                        Image(systemName: "chevron.left")
+                            .aspectRatio(contentMode: .fit)
+                            .font(Font.custom("Avenir-Medium", size: 18))
+                            .foregroundColor(.white)
+                        Text("Back")
+                            .font(Font.custom("Avenir-Medium", size: 18))
+                            .foregroundColor(.white)
                     }
                 }
         }

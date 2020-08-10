@@ -25,53 +25,47 @@ struct DisplayPodsContactPod: View {
                         VStack {
                             HStack {
                                 Text("All Contacts")
-                                    .font(Font.custom("Avenir-Heavy", size: 25))
+                                    .font(Font.custom("Avenir-Medium", size: 18))
                                     .padding(.leading, 20)
                                     .foregroundColor(.white)
                                 Spacer()
-                                Image(systemName: "chevron.right")
-                                    .font(Font.custom("Avenir-Heavy", size: 20))
-                                    .padding(.trailing, 20)
-                                    .foregroundColor(Color("Colorgray"))
-                            }
+                            }.padding([.top, .bottom], 15)
                         }
-                            .frame(height:(75))
                             .background(Color("Color3")).edgesIgnoringSafeArea(.all)
                         Capsule()
-                            .fill(Color(.blue))
+                            .fill(Color(.darkGray))
                             .frame(height: 2)
                             .padding(0)
-                        Spacer()
 
                         List(firebaseService.userContacts, id: \.self) { (contact: TogetherContactType) in
                             if contact.contactInfo.imageDataAvailable {
                                 Image(uiImage: UIImage(data: contact.contactInfo.imageData!)!)
-                                    .renderingMode(.original)
                                     .resizable()
-                                    .scaledToFit()
+                                    .renderingMode(.original)
+                                    .frame(width: 40, height: 40)
                                     .clipShape(Circle())
-                                    .overlay(Circle().stroke(Color(.white), lineWidth: 1))
-                                    .frame(width: 75, height: 75)
+                                    .overlay(Circle().stroke(Color.black, lineWidth: 1))
+                                    .padding(5)
                             } else {
                                 Image(systemName: "person.fill")
                                     .resizable()
-                                    .scaledToFit()
+                                    .renderingMode(.template)
+                                    .foregroundColor(.gray)
+                                    .frame(width: 40, height: 40)
                                     .clipShape(Circle())
-                                    .overlay(Circle().stroke(Color.white, lineWidth: 1))
-                                    .frame(width: 60, height: 60)
-                                    .foregroundColor(Color.blue)
+                                    .padding([.top, .bottom], 5)
                             }
                             Text("\(contact.contactInfo.name)")
                                 .foregroundColor(Color("Colorblack"))
-                                .font(Font.custom("Avenir Next Medium", size: 28))
-                            Spacer()
-                        }
+                                .font(Font.custom("Avenir-Medium", size: 18))
+                        }.frame(height: 300)
                     }
+                    .background(Color.white)
+                    .cornerRadius(20)
+                    .shadow(color: .gray, radius: 2, x: 0, y: 2)
+                    .padding([.leading, .trailing], 15)
+                    .padding(.bottom, 5)
                 }
-                .frame(width: UIScreen.main.bounds.size.width - 40, height: 300)
-                .background(Color.white)
-                .cornerRadius(20)
-                .shadow(color: .gray, radius: 2, x: 0, y: 2)
             }
         }
     }

@@ -11,16 +11,26 @@ import SwiftUI
 struct ContentView: View {
     @State var status = UserDefaults.standard.value(forKey: "status") as? Bool ?? false
     
+    init() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().standardAppearance = appearance
+        
+        UINavigationBar.appearance().tintColor = .white
+    }
+    
     var body: some View {
-
-        VStack {
+        GeometryReader { metrics in
             NavigationView {
-                if status {
+                if self.status {
                     DummyView()
                 } else {
                     StartLoginView().environmentObject(LocationFetcher())
                 }
             }
+            .navigationBarTitle("", displayMode: .inline)
         }
     }
 }

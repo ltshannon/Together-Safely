@@ -10,7 +10,8 @@ import SwiftUI
 
 struct StartLoginView: View {
     @State private var show = false
-    @State private var textSize:CGFloat = 35
+    private var headerTextSize:CGFloat = 40
+    private var bodyTextSize:CGFloat = 22
     @State private var disableButton = false
 //    @ObservedObject private var locationFetcher = LocationFetcher()
     @State private var showError = false
@@ -20,37 +21,20 @@ struct StartLoginView: View {
         ZStack {
             Color("Colorgreen").edgesIgnoringSafeArea(.all)
             VStack {
-                Spacer()
-                HStack {
-                    Image("appIcon")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                    Text("together")
-                        .font(Font.custom("Avenir-Heavy", size: 50))
-                        .foregroundColor(.white)
-                }
-                Spacer()
-                Text("Welcome to")
-                    .font(Font.custom("Avenir-Black", size: textSize))
+                Image("start-login-logo")
+                    .renderingMode(.template)
                     .foregroundColor(.white)
-                Text("Together!")
-                    .font(Font.custom("Avenir-Black", size: textSize))
+                    .frame(width: 200, height: 50)
+                Spacer()
+                Text("Welcome to Together!")
+                    .multilineTextAlignment(.center)
+                    .font(Font.custom("Avenir-Black", size: headerTextSize))
                     .foregroundColor(.white)
                 Spacer()
-                Group {
-                    Text("Together lets you")
-                            .font(Font.custom("Avenir-Black", size: textSize))
-                            .foregroundColor(.white)
-                        Text("socialize safely")
-                            .font(Font.custom("Avenir-Black", size: textSize))
-                            .foregroundColor(.white)
-                        Text("with friends.")
-                            .font(Font.custom("Avenir-Black", size: textSize))
-                            .foregroundColor(.white)
-                        Text("Let's get started!")
-                            .font(Font.custom("Avenir-Black", size: textSize))
-                            .foregroundColor(.white)
-                }
+                Text("Together lets you socialize safely with friends. Let's get started!")
+                    .multilineTextAlignment(.center)
+                    .font(Font.custom("Avenir-Medium", size: bodyTextSize))
+                    .foregroundColor(.white)
                 Spacer()
                 NavigationLink(destination: PhoneLoginView().environmentObject(locationFetcher), isActive: $show) {
                     Button(action: {
@@ -65,12 +49,9 @@ struct StartLoginView: View {
                         .cornerRadius(10)
                         .disabled(disableButton)
                 }
-                Group {
-                    NavigationLink(destination: LocationServiceNotEnableView(), isActive: $showError) {
-                        EmptyView()
-                    }
-                }
+                Spacer()
             }
+                .padding(15)
                 .navigationBarHidden(true)
                 .navigationBarBackButtonHidden(true)
                 .onAppear() {
