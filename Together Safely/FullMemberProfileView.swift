@@ -23,24 +23,19 @@ struct FullMemberProfileView: View {
                 groupId: groupId,
                 riskScore: member.riskScore,
                 riskRanges: firebaseService.riskRanges).environmentObject(self.firebaseService)
-                .padding(.trailing, 10)
             VStack(alignment: .leading, spacing: 5) {
                 Text(self.getName(phoneName: self.member.phoneNumber, dict: self.firebaseService.contactInfo))
                 Text(member.status.text)
-                    .font(Font.custom("Avenir Next Medium Italic", size: 20))
+                    .font(Font.custom("Avenir-Medium", size: 14))
                     .foregroundColor(Color("Colorgray"))
                 Text(member.riskString)
-                    .font(Font.custom("Avenir Next Medium", size: 20))
+                    .font(Font.custom("Avenir-Medium", size: 14))
                     .foregroundColor(getRiskColor.getRiskColor(riskScore: member.riskScore, riskRanges: self.firebaseService.riskRanges))
             }
-                .padding(.top, 20)
-                .padding(.bottom, 20)
             Spacer()
             Text(member.status.emoji)
-            .font(Font.custom("Avenir Next Medium", size: 50))
+            .font(Font.custom("Avenir Next Medium", size: 45))
         }
-            .padding(.leading, 10)
-            .padding(.trailing, 10)
     }
     
     func getName(phoneName: String, dict: [[String:ContactInfo]]) -> String {
