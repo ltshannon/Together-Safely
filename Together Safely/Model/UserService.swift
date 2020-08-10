@@ -120,6 +120,9 @@ class FirebaseService: ObservableObject {
                         if let label = phone.label {
                             if label == CNLabelPhoneNumberMobile {
                                 var number = phone.value.stringValue
+                                if number.contains("+") {
+                                    number = number.deletingPrefix("+1")
+                                }
                                 number = format(with: "+1XXXXXXXXXX", phone: number)
                                 if returnedNumbers.invitablePhoneNumbers.contains(number) {
                                     let c = TogetherContactType(contactInfo: contact, type: .invitablePhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
