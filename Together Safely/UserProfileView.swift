@@ -142,13 +142,13 @@ struct UserProfileView: View {
             self.presentationMode.wrappedValue.dismiss()
             }) {
                 HStack {
-                Image(systemName: "chevron.left")
-                    .aspectRatio(contentMode: .fit)
-                    .font(Font.custom("Avenir Next Medium", size: 30))
-                    .foregroundColor(.white)
-                Text("Back")
-                    .font(Font.custom("Avenir Next Medium", size: 30))
-                    .foregroundColor(.white)
+                    Image(systemName: "chevron.left")
+                        .aspectRatio(contentMode: .fit)
+                        .font(Font.custom("Avenir-Medium", size: 18))
+                        .foregroundColor(.white)
+                    Text("Back")
+                        .font(Font.custom("Avenir-Medium", size: 18))
+                        .foregroundColor(.white)
                 }
             }
     }

@@ -35,7 +35,7 @@ struct CreatePodView: View {
     var btnBack : some View { Button(action: {
           self.presentationMode.wrappedValue.dismiss()
           }) {
-              HStack {
+            HStack {
                 Image(systemName: "chevron.left")
                     .aspectRatio(contentMode: .fit)
                     .font(Font.custom("Avenir-Medium", size: 18))
@@ -43,7 +43,7 @@ struct CreatePodView: View {
                 Text("Back")
                     .font(Font.custom("Avenir-Medium", size: 18))
                     .foregroundColor(.white)
-              }
+            }
           }
     }
 }
