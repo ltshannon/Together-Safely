@@ -68,12 +68,17 @@ class FirebaseService: ObservableObject {
             let userPhoneNumber =  UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? ""
             var cinfo: [[String:ContactInfo]] = []
             for contact in contacts {
+                print("name: \(contact.givenName) \(contact.familyName)")
                 for phone in contact.phoneNumbers {
                     if let label = phone.label {
                         if label == CNLabelPhoneNumberMobile {
                             var number = phone.value.stringValue
+                            if number.contains("+") {
+                                number = number.deletingPrefix("+1")
+                            }
                             number = format(with: "+1XXXXXXXXXX", phone: number)
-                            print(number)
+                            
+                            print("number: \(number) name: \(contact.givenName) \(contact.familyName)")
                             let c: ContactInfo = ContactInfo(
                                 image: contact.imageData,
                                 name: "\(contact.givenName) " + "\(contact.familyName)"
