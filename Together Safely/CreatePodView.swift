@@ -20,11 +20,10 @@ struct CreatePodView: View {
         VStack {
             TextField("Pod name", text: $name)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                .font(Font.custom("Avenir Next Medium Italic", size: 25))
+                .font(Font.custom("Avenir-Medium", size: 16))
                 .foregroundColor(Color("Colorblack"))
-                .padding(.leading, 10)
-                .padding(.trailing, 10)
-                .padding(.bottom, 20)
+                .padding([.leading, .trailing], 15)
+                .padding([.top, .bottom], 10)
             AllContactsCardView(pageType: .createPod, name: self.$name, group: group).environmentObject(self.firebaseService)
             Spacer()
         }
@@ -39,10 +38,10 @@ struct CreatePodView: View {
               HStack {
                 Image(systemName: "chevron.left")
                     .aspectRatio(contentMode: .fit)
-                    .font(Font.custom("Avenir Next Medium", size: 30))
+                    .font(Font.custom("Avenir-Medium", size: 18))
                     .foregroundColor(.white)
                 Text("Back")
-                    .font(Font.custom("Avenir Next Medium", size: 30))
+                    .font(Font.custom("Avenir-Medium", size: 18))
                     .foregroundColor(.white)
               }
           }
