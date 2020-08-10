@@ -13,7 +13,7 @@ struct DisplayPodsView: View {
     @EnvironmentObject var firebaseService: FirebaseService
     @State private var membersArray: [Int] = []
     @State var memberRiskColor: Color = Color("Colorgray")
-    @State var group: Groups = Groups(id: "", name: "", members: [], riskTotals: [:], riskCompiledSring: [], riskCompiledValue: [], averageRisk: "", averageRiskValue: 0)
+    @State var group: Groups = Groups(id: "", adminId: "", name: "", members: [], riskTotals: [:], riskCompiledSring: [], riskCompiledValue: [], averageRisk: "", averageRiskValue: 0)
     @State private var widthArray: Array = []
     @State private var getRiskColor: Color = Color.white
     @State private var getImageForPhone: Data = Data()

@@ -77,14 +77,18 @@ struct DetailPodView: View {
                     .frame(width: UIScreen.main.bounds.size.width - 40)
                 HStack {
                     Spacer()
-                    NavigationLink(destination: AddFriendView(group: group).environmentObject(self.firebaseService)) {
-                        Text("Add Friend")
-                            .font(Font.custom("Avenir-Heavy", size: 35))
-                            .foregroundColor(.white)
-                        Image(systemName: "plus.circle")
-//                            .renderingMode(.original)
-                            .font(.title)
-                            .foregroundColor(.white).opacity(81)
+                    if firebaseService.user.id == group.adminId {
+                        NavigationLink(destination: AddFriendView(group: group).environmentObject(self.firebaseService)) {
+                            Text("Add Friend")
+                                .font(Font.custom("Avenir-Heavy", size: 35))
+                                .foregroundColor(.white)
+                            Image(systemName: "plus.circle")
+    //                            .renderingMode(.original)
+                                .font(.title)
+                                .foregroundColor(.white).opacity(81)
+                        }
+                    } else {
+                        Spacer()
                     }
                 }
                  .padding(.trailing, 20)

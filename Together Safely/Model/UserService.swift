@@ -260,13 +260,14 @@ class FirebaseService: ObservableObject {
         self.database.collection("users").whereField("phoneNumber", isEqualTo: phoneNumber)
             .addSnapshotListener { querySnapshot, error in
                 guard let documents = querySnapshot?.documents else {
-                    print("Error fetching documents: \(error!)")
+                    print("Error fetching documents: \(error)")
                     completion(error)
                     return
                 }
                 if documents.count == 1 {
                     let doc = querySnapshot!.documents[0]
                     var user = User(snapshot: doc.data())
+                    user.id = doc.documentID
                     user.riskString = self.getRiskString(value: user.riskScore)
                     user.name = self.userName
                     user.image = self.userImage
@@ -285,7 +286,8 @@ class FirebaseService: ObservableObject {
                                 
                                 var invite:Invite = Invite(adminName: "", adminPhone: "", groupName: group.name, groupId: invite, riskScore: 99999)
                                 
-                                let docRef2 = self.database.collection("users").document(group.id) //group.id is the ID of the admin, not the group
+                                print("groupid: \(group.adminId)")
+                                let docRef2 = self.database.collection("users").document(group.adminId) //group.id is the ID of the admin, not the group
                                     docRef2.getDocument { (document, error) in
                                         if let document = document, document.exists {
                                             let user = User(snapshot: document.data() ?? [:])
@@ -297,11 +299,11 @@ class FirebaseService: ObservableObject {
                                                 self.invites = invites
                                             }
                                         } else {
-                                            print("User document not found look for group admin: \(error!)")
+                                            print("User document not found look for group admin: \(error)")
                                         }
                                     }
                             } else {
-                                print("Group document not found: \(error!)")
+                                print("Group document not found: \(error)")
                             }
                         }
                     }
@@ -310,7 +312,7 @@ class FirebaseService: ObservableObject {
                         self.database.collection("groups").document(group)
                             .addSnapshotListener { documentSnapshot, error in
                             guard let document = documentSnapshot else {
-                                print("Error fetching document: \(error!)")
+                                print("Error fetching document: \(error)")
                                 return
                             }
                             var groups = Groups(snapshot: document.data() ?? [:])
@@ -341,6 +343,12 @@ class FirebaseService: ObservableObject {
                             for dict in sortedByValueDictionary {
                                 groups.riskCompiledSring.append(dict.key)
                                 groups.riskCompiledValue.append(dict.value)
+                            }
+                            print("document.documentID: \(document.documentID)")
+                            print("groups.id: \(groups.id)")
+                            print("groups.adminId: \(groups.adminId)")
+                            if let userId = user.id {
+                                print("user.id: \(userId)")
                             }
                             groups.id = document.documentID
                             for (index, _) in self.groupsArray.enumerated() {

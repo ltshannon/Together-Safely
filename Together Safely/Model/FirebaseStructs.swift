@@ -59,6 +59,7 @@ struct UserAnswer: Codable, Hashable {
 
 struct Groups: Identifiable, Codable, Hashable {
     var id: String
+    var adminId: String
     var name: String
     var members: [Member]
     var riskTotals: [String : Int]
@@ -119,7 +120,8 @@ struct ContactInfo: Hashable {
 
 extension Groups {
     init(snapshot: Dictionary<String, Any>) {
-        id = snapshot["admin"] as? String ?? ""
+        adminId = snapshot["admin"] as? String ?? ""
+        id = snapshot["id"] as? String ?? ""
         name = snapshot["name"] as? String ?? ""
         members = []
         riskTotals = [:]
@@ -157,7 +159,7 @@ extension Member {
 
 extension User {
     init(snapshot: Dictionary<String, Any>) {
-        id = snapshot["name"] as? String ?? ""
+        id = snapshot["id"] as? String ?? ""
         phoneNumber = snapshot["phoneNumber"] as? String ?? ""
         let array = snapshot["groups"] as? Array ?? []
         var g: [String] = []
