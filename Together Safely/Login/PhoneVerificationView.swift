@@ -71,7 +71,14 @@ struct PhoneVerificationView: View {
                                 if let str = idToken {
                                     UserDefaults.standard.set(str, forKey: "idToken")
                                     UserDefaults.standard.set(true, forKey: "status")
-                                    self.show.toggle()
+                                    WebService.createUser { (successful: Bool) in
+                                        if !successful {
+                                            self.msg = "Creating user failed"
+                                            self.alert.toggle()
+                                            return
+                                        }
+                                        self.show.toggle()
+                                    }
                                     return
                                 }
                                 
