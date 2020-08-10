@@ -53,7 +53,7 @@ struct PhoneLoginView: View {
                     .padding(.bottom, keyboardHeight)
                     .onReceive(Publishers.keyboardHeight) { self.keyboardHeight = $0 }
                 Spacer()
-                NavigationLink(destination: PhoneVerificationView(id: $returnId), isActive: $show) {
+                NavigationLink(destination: PhoneVerificationView(id: $returnId).environmentObject(locationFetcher), isActive: $show) {
                     Button(action: {
                         if self.phoneNumber.count != 10 {
                             self.msg = "Enter a 10 digit number"

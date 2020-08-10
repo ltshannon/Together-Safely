@@ -127,6 +127,7 @@
 				46ACD59624C512590083F308 /* PhoneVerificationView.swift */,
 				46ACD59324C512590083F308 /* SpinnerView.swift */,
 				46F7E64924CE1EA2004EAF24 /* LocationServiceNotEnableView.swift */,
+				46F7E64524CCEC1E004EAF24 /* LocationManager.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -177,7 +178,6 @@
 				4660E6ED24D4B52C00C6B993 /* MemberProfileView.swift */,
 				4635F3A724D6104800A4A7E2 /* FullMemberProfileView.swift */,
 				46DE5E7F24D9FED9005912CD /* CheckboxView.swift */,
-				46F7E64524CCEC1E004EAF24 /* LocationManager.swift */,
 				46252C5324C787F8005B592F /* MyselfView.swift */,
 				46F7E64224CCE9B5004EAF24 /* PlacesTest.xcdatamodeld */,
 				46ACD58324C510810083F308 /* Assets.xcassets */,

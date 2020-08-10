@@ -23,6 +23,7 @@ enum Endpoint {
     case checkPhoneNumbers
     case inviteUser
     case deleteGroup(groupId: String)
+    case location
     
     var baseUrlString: String {
         //TODO: move this into its own ENUM at some point in order to switch between staging/dev/prod server environments
@@ -42,7 +43,8 @@ enum Endpoint {
              .postStatus,
              .postQuestionAnswers,
              .checkPhoneNumbers,
-             .inviteUser:
+             .inviteUser,
+             .location:
             return .post
         case .deleteGroup:
             return .delete
@@ -76,6 +78,8 @@ enum Endpoint {
             return "invites/create"
         case .deleteGroup(groupId: let groupId):
             return "groups/\(groupId)"
+        case .location:
+            return "users/location"
         }
     }
 }
@@ -124,6 +128,14 @@ class WebService {
     }
     
     //MARK:- Request Methods
+    
+    static func updateLocation(lat: Float, lng: Float, completion: @escaping (Bool) -> Void)  {
+        let requestBody = try? JSONSerialization.data(withJSONObject: ["latitude" : lat, "longitude" : lng], options: [])
+        networkRequest(.location, responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
+            completion(error == nil)
+        }
+    }
+    
     static func acceptInviteToGroup(groupId: String, completion: @escaping (Bool) -> Void)  {
         let requestBody = try? JSONSerialization.data(withJSONObject: [String : Any](), options: [])
         networkRequest(.acceptInvite(groupId: groupId), responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in

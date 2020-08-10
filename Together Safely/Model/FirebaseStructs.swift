@@ -135,7 +135,8 @@ extension Groups {
             let m = element as? [String : Any] ?? [:]
             let uid = m["uid"] as? String ?? ""
             let phoneNumber = m["phoneNumber"] as? String ?? ""
-            let riskScore = m["riskScore"] as? Int ?? 99999
+            let doubleValue = m["riskScore"] as? Double ?? 99999
+            let riskScore = Int(doubleValue)
             let stat = m["status"] as? Dictionary<String, Any>  ?? [:]
             let status = Status(emoji: stat["emoji"] as? String ?? "", text: stat["text"] as? String ?? "")
             let member = Member(uID: uid, phone: phoneNumber, risk: riskScore, stat: status)
@@ -167,7 +168,8 @@ extension User {
             g.append(groupId as? String ?? "")
         }
         groups = g
-        riskScore = snapshot["riskScore"] as? Int ?? 99999
+        let doubleValue = snapshot["riskScore"] as? Double ?? 99999
+        riskScore = Int(doubleValue)
         riskString = ""
         name = ""
         var groupInvites: [String] = []

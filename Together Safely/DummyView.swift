@@ -13,6 +13,7 @@ struct DummyView: View {
     
 //    @ObservedObject private var contactStore: ContactStore = ContactStore()
     @State var firebaseService:FirebaseService = FirebaseService()
+    @State var locationFetcher: LocationFetcher = LocationFetcher()
     
     var body: some View {
         VStack {
@@ -20,7 +21,12 @@ struct DummyView: View {
         }
         .onAppear {
             self.firebaseService.getServerData(byPhoneNumber: UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? "")
-        }.background(Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all))
+        }
+            .background(Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all))
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+            print("Moving back to the foreground!")
+            self.locationFetcher.start()
+        }
     }
 }
 

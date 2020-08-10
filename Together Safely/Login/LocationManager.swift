@@ -30,7 +30,7 @@ class LocationFetcher: NSObject, CLLocationManagerDelegate, ObservableObject {
         manager.allowsBackgroundLocationUpdates = true
         manager.distanceFilter = 10
         manager.desiredAccuracy = kCLLocationAccuracyBest
-//        manager.startUpdatingLocation()
+        manager.startUpdatingLocation()
     }
     
     func checkIfEnabled() {
@@ -54,8 +54,17 @@ class LocationFetcher: NSObject, CLLocationManagerDelegate, ObservableObject {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first?.coordinate {
-            print("\n\nLocation update called\n\n")
+            print("\n\nLocation update called")
             lastKnownLocation = location
+            print("GPS lat: \(location.latitude) lng: \(location.longitude)\n\n")
+            manager.stopUpdatingLocation()
+            WebService.updateLocation(lat: Float(location.latitude), lng: Float(location.longitude)) { successful in
+                if successful {
+                    print("success")
+                } else {
+                    print("fail")
+                }
+            }
 //            db.saveDataPoints(timeStamp: Date(), lat: location.latitude, lng: location.longitude)
         }
     }
