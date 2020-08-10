@@ -25,8 +25,7 @@ struct CreatePodView: View {
                 .padding([.leading, .trailing], 15)
                 .padding([.top, .bottom], 10)
             AllContactsCardView(pageType: .createPod, name: self.$name, group: group).environmentObject(self.firebaseService)
-            Spacer()
-        }
+        }.padding(.bottom, 15)
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: btnBack)
             .background(Image("backgroudImage").edgesIgnoringSafeArea(.all))

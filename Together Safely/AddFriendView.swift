@@ -19,7 +19,7 @@ struct AddFriendView: View {
     var body: some View {
         VStack {
             AllContactsCardView(pageType: .addFriends, name: self.$name, group: group).environmentObject(self.firebaseService)
-        }
+        }.padding(.bottom, 15)
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: btnBack)
             .background(Image("backgroudImage").edgesIgnoringSafeArea(.all))

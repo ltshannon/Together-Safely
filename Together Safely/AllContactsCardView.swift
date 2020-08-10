@@ -29,7 +29,8 @@ struct AllContactsCardView: View {
     
     var body: some View {
         VStack {
-            VStack(spacing: 0) {
+            Spacer()
+            VStack(alignment: .leading, spacing: 0) {
                 VStack {
                     HStack {
                         Text("All Contacts")
@@ -39,7 +40,7 @@ struct AllContactsCardView: View {
                         Spacer()
                     }.padding([.top, .bottom], 15)
                 }
-                    .background(Color("Color3")).edgesIgnoringSafeArea(.all)
+                .background(Color("Color3")).edgesIgnoringSafeArea(.all)
                 Capsule()
                     .fill(Color(.darkGray))
                     .frame(height: 2)
@@ -119,32 +120,29 @@ struct AllContactsCardView: View {
                 .background(Color.white)
                 .cornerRadius(20)
                 .shadow(color: .gray, radius: 2, x: 0, y: 2)
-                .padding([.leading, .trailing], 15)
-            Spacer()
+                .padding([.leading, .trailing, .bottom], 15)
             if pageType == .createPod {
-                VStack {
-                    Button(action: {
-                        if self.name.count < 1 {
-                            self.showingAlert = true
-                            return
-                        }
-                        WebService.createNewGroup(name: self.name, members: self.members) { successful in
-                            if !successful {
-                                print("createNewGroup failed for: \(self.name)")
-                            }
-                        }
-                        self.presentation.wrappedValue.dismiss()
-                    }) {
-                        HStack {
-                            Text("Create")
-                            Image(systemName: "checkmark")
-                        }
-                        .padding([.top, .bottom], 10)
-                        .padding([.leading, .trailing], 15)
-                        .foregroundColor(.white)
-                        .background(Color("Color3"))
-                        .cornerRadius(8)
+                Button(action: {
+                    if self.name.count < 1 {
+                        self.showingAlert = true
+                        return
                     }
+                    WebService.createNewGroup(name: self.name, members: self.members) { successful in
+                        if !successful {
+                            print("createNewGroup failed for: \(self.name)")
+                        }
+                    }
+                    self.presentation.wrappedValue.dismiss()
+                }) {
+                    HStack {
+                        Text("Create")
+                        Image(systemName: "checkmark")
+                    }
+                    .padding([.top, .bottom], 10)
+                    .padding([.leading, .trailing], 15)
+                    .foregroundColor(.white)
+                    .background(Color("Color3"))
+                    .cornerRadius(8)
                 }
                 .alert(isPresented: $showingAlert) {
                     Alert(title: Text("Error"), message: Text("Pod name must have at least 1 character"), dismissButton: .default(Text("Continue")))
@@ -160,11 +158,15 @@ struct AllContactsCardView: View {
                     }
                     self.presentation.wrappedValue.dismiss()
                 }) {
-                    Image("addButton")
-                        .renderingMode(.original)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 50)
+                    HStack {
+                        Text("Add")
+                        Image(systemName: "checkmark")
+                    }
+                    .padding([.top, .bottom], 10)
+                    .padding([.leading, .trailing], 15)
+                    .foregroundColor(.white)
+                    .background(Color("Color3"))
+                    .cornerRadius(8)
                 }
             }
         }
