@@ -101,11 +101,9 @@ class FirebaseService: ObservableObject {
                 for number in returnedNumbers.invitablePhoneNumbers {
                     print("invitablePhoneNumbers: \(number)")
                 }
-                
                 for number in returnedNumbers.invitedPhoneNumbers {
                     print("invitedPhoneNumbers: \(number)")
                 }
-                
                 for number in returnedNumbers.userPhoneNumbers {
                     print("userPhoneNumbers: \(number)")
                 }
@@ -264,6 +262,7 @@ class FirebaseService: ObservableObject {
                     completion(error)
                     return
                 }
+                print("Received Firebase data for users document")
                 if documents.count == 1 {
                     let doc = querySnapshot!.documents[0]
                     var user = User(snapshot: doc.data())
@@ -278,6 +277,7 @@ class FirebaseService: ObservableObject {
                     
                     var invites: [Invite] = []
                     self.invites = invites //trigger a refresh if this is a response to the user snapshot listener
+                    print("Received Firebase data for \(user.groupInvites.count) invites")
                     for invite in user.groupInvites {
                         let docRef = self.database.collection("groups").document(invite)
                         docRef.getDocument { (document, error) in
@@ -286,7 +286,6 @@ class FirebaseService: ObservableObject {
                                 
                                 var invite:Invite = Invite(adminName: "", adminPhone: "", groupName: group.name, groupId: invite, riskScore: 99999)
                                 
-                                print("groupid: \(group.adminId)")
                                 let docRef2 = self.database.collection("users").document(group.adminId) //group.id is the ID of the admin, not the group
                                     docRef2.getDocument { (document, error) in
                                         if let document = document, document.exists {
@@ -308,6 +307,7 @@ class FirebaseService: ObservableObject {
                         }
                     }
                     
+                    print("Received Firebase data for \(user.groups.count) groups")
                     for group in user.groups {
                         self.database.collection("groups").document(group)
                             .addSnapshotListener { documentSnapshot, error in
@@ -344,12 +344,14 @@ class FirebaseService: ObservableObject {
                                 groups.riskCompiledSring.append(dict.key)
                                 groups.riskCompiledValue.append(dict.value)
                             }
+/*
                             print("document.documentID: \(document.documentID)")
                             print("groups.id: \(groups.id)")
                             print("groups.adminId: \(groups.adminId)")
                             if let userId = user.id {
                                 print("user.id: \(userId)")
                             }
+*/
                             groups.id = document.documentID
                             for (index, _) in self.groupsArray.enumerated() {
                                 if self.groupsArray[index].id == document.documentID {
