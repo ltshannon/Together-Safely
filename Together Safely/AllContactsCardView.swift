@@ -26,6 +26,7 @@ struct AllContactsCardView: View {
     @State private var arrayIndexs: [Int] = []
     @State private var members:[String] = []
     @State private var riskColor: Color = Color.white
+    @State private var str: String = ""
     
     var body: some View {
         VStack {
@@ -57,7 +58,11 @@ struct AllContactsCardView: View {
                                                 .renderingMode(.original)
                                                 .frame(width: 40, height: 40)
                                                 .clipShape(Circle())
-                                                .overlay(Circle().stroke(Color.black, lineWidth: 1))
+                                                .overlay(Circle().stroke(
+                                                    self.firebaseService.userContacts[index].riskScore != nil ?
+                                                    self.riskColor.getRiskColor(riskScore: self.firebaseService.userContacts[index].riskScore!, riskRanges: self.firebaseService.riskRanges) :
+                                                    Color("Colorgray")
+                                                    , lineWidth: 2))
                                                 .padding(5)
                                         } else {
                                             Image(systemName: "person.fill")
@@ -73,10 +78,20 @@ struct AllContactsCardView: View {
                                         Text("\(self.firebaseService.userContacts[index].contactInfo.name)")
                                             .foregroundColor(Color("Colorblack"))
                                             .font(Font.custom("Avenir-Medium", size: 18))
-                                        Text(self.firebaseService.userContacts[index].riskString != nil ? self.firebaseService.userContacts[index].riskString! : "No risk status")
-                                                .foregroundColor(self.firebaseService.userContacts[index].riskScore != nil ? self.riskColor.getRiskColor(riskScore: self.firebaseService.userContacts[index].riskScore!, riskRanges: self.firebaseService.riskRanges) : Color("Colorgray"))
-                                            .font(Font.custom("Avenir-Medium", size: 14))
-                                            .padding(.leading, 5)
+                                        if self.firebaseService.userContacts[index].riskString != nil {
+                                            Text(self.firebaseService.userContacts[index].riskString!)
+                                                .foregroundColor(self.riskColor.getRiskColor(riskScore: self.firebaseService.userContacts[index].riskScore!, riskRanges: self.firebaseService.riskRanges))
+                                                .font(Font.custom("Avenir-Medium", size: 14))
+                                                .padding(.leading, 5)
+                                        } else {
+                                            Text(self.firebaseService.userContacts[index].phoneNumber.applyPatternOnNumbers(pattern: "###-###-####", replacmentCharacter: "#"))
+                                                .foregroundColor(Color("Colorblack"))
+                                                .font(Font.custom("Avenir-Medium", size: 12))
+                                            Text("No risk status")
+                                            .foregroundColor(Color("Colorgray"))
+                                            .font(Font.custom("Avenir-Medium", size: 15))
+                                                Spacer()
+                                        }
                                     }
                                     Spacer()
                                     if self.pageType == .addContacts {
@@ -198,53 +213,53 @@ struct AllContactsCardView: View {
         print("members: \(members)")
     }
 }
-/*
-struct CheckboxView: View {
-    let id: Int
-    let label: String
-    let size: CGFloat
-    let color: Color
-    let textSize: Int
-    let callback: (Int, Bool)->()
+
+extension String {
     
-    init(
-        id: Int,
-        label:String,
-        size: CGFloat = 10,
-        color: Color = Color.black,
-        textSize: Int = 14,
-        callback: @escaping (Int, Bool)->()
-        ) {
-        self.id = id
-        self.label = label
-        self.size = size
-        self.color = color
-        self.textSize = textSize
-        self.callback = callback
-    }
-    
-    @State var isMarked:Bool = false
-    
-    var body: some View {
-        Button(action:{
-            self.isMarked.toggle()
-            self.callback(self.id, self.isMarked)
-        }) {
-            HStack(alignment: .center, spacing: 10) {
-                Image(self.isMarked ? "checkboxOn" : "checkboxOff")
-                    .renderingMode(.original)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 50, height: 50)
-                Text(label)
-                    .font(Font.system(size: size))
-                Spacer()
-            }.foregroundColor(self.color)
+    func getContactLabel(contactInfo: CNContact, phoneNumber: String) -> String {
+        
+        for phone in contactInfo.phoneNumbers {
+            var number = phone.value.stringValue
+            number = number.deletingPrefix("+")
+            number = number.deletingPrefix("1")
+            number = format(with: "+1XXXXXXXXXX", phone: number)
+            
+            if number == phoneNumber {
+                if let label = phone.label {
+                    
+                    switch label {
+                    case CNLabelHome:
+                        return "Home"
+                    case CNLabelWork:
+                        return "Work"
+                    case CNLabelPhoneNumberMobile :
+                        return "Mobile"
+                    default:
+                        return ""
+                    }
+                }
+            }
         }
-        .foregroundColor(Color.white)
+        return ""
+    }
+        
+    func applyPatternOnNumbers(pattern: String, replacmentCharacter: Character) -> String {
+        var number = self
+        if number.contains("+") {
+            number = number.deletingPrefix("+1")
+        }
+        var pureNumber = number.replacingOccurrences( of: "[^0-9]", with: "", options: .regularExpression)
+        for index in 0 ..< pattern.count {
+            guard index < pureNumber.count else { return pureNumber }
+            let stringIndex = String.Index(utf16Offset: index, in: self)
+            let patternCharacter = pattern[stringIndex]
+            guard patternCharacter != replacmentCharacter else { continue }
+            pureNumber.insert(patternCharacter, at: stringIndex)
+        }
+        return pureNumber
     }
 }
-*/
+
 
 /*
 struct AllContactsCardView_Previews: PreviewProvider {

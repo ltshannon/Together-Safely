@@ -70,12 +70,11 @@ class FirebaseService: ObservableObject {
             for contact in contacts {
                 print("name: \(contact.givenName) \(contact.familyName)")
                 for phone in contact.phoneNumbers {
-                    if let label = phone.label {
-                        if label == CNLabelPhoneNumberMobile {
+//                    if let label = phone.label {
+//                        if label == CNLabelPhoneNumberMobile {
                             var number = phone.value.stringValue
-                            if number.contains("+") {
-                                number = number.deletingPrefix("+1")
-                            }
+                            number = number.deletingPrefix("+")
+                            number = number.deletingPrefix("1")
                             number = format(with: "+1XXXXXXXXXX", phone: number)
                             
                             print("number: \(number) name: \(contact.givenName) \(contact.familyName)")
@@ -93,8 +92,8 @@ class FirebaseService: ObservableObject {
                             }
                             phoneNumbers.append(number)
                         }
-                    }
-                }
+//                    }
+//                }
             }
             
             DispatchQueue.main.async {
@@ -117,25 +116,23 @@ class FirebaseService: ObservableObject {
              
                 for contact in contacts {
                     for phone in contact.phoneNumbers {
-                        if let label = phone.label {
-                            if label == CNLabelPhoneNumberMobile {
+//                        if let label = phone.label {
+//                            if label == CNLabelPhoneNumberMobile {
                                 var number = phone.value.stringValue
-                                if number.contains("+") {
-                                    number = number.deletingPrefix("+1")
-                                }
+                                number = number.deletingPrefix("+")
+                                number = number.deletingPrefix("1")
                                 number = format(with: "+1XXXXXXXXXX", phone: number)
+                                var c: TogetherContactType
                                 if returnedNumbers.invitablePhoneNumbers.contains(number) {
-                                    let c = TogetherContactType(contactInfo: contact, type: .invitablePhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
-                                    userContacts.append(c)
+                                    c = TogetherContactType(contactInfo: contact, type: .invitablePhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
                                 } else if returnedNumbers.invitedPhoneNumbers.contains(number) {
-                                    let c = TogetherContactType(contactInfo: contact, type: .invitedPhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
-                                    userContacts.append(c)
+                                    c = TogetherContactType(contactInfo: contact, type: .invitedPhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
                                 } else {
-                                    let c = TogetherContactType(contactInfo: contact, type: .userPhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
-                                    userContacts.append(c)
+                                    c = TogetherContactType(contactInfo: contact, type: .userPhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
                                 }
-                            }
-                        }
+                                userContacts.append(c)
+//                            }
+//                        }
                     }
                 }
                 DispatchQueue.main.async {
