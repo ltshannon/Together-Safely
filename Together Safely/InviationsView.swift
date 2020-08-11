@@ -29,7 +29,7 @@ struct InviationsView: View {
                 .fill(Color(.darkGray))
                 .frame(height: 2)
                 .padding(0)
-            if !firebaseService.groups.isEmpty {
+            if !firebaseService.invites.isEmpty {
                 ScrollView(.vertical, showsIndicators: false) {
                     ForEach(firebaseService.invites, id: \.self) { invite in
                         VStack {
