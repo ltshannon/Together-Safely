@@ -72,6 +72,7 @@ extension UIColor {
 }
 
 extension String {
+    
     func image() -> UIImage? {
         let size = CGSize(width: 40, height: 40)
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
@@ -83,6 +84,50 @@ extension String {
         UIGraphicsEndImageContext()
         return image
     }
+
+    func getContactLabel(contactInfo: CNContact, phoneNumber: String) -> String {
+        
+        for phone in contactInfo.phoneNumbers {
+            var number = phone.value.stringValue
+            number = number.deletingPrefix("+")
+            number = number.deletingPrefix("1")
+            number = format(with: "+1XXXXXXXXXX", phone: number)
+            
+            if number == phoneNumber {
+                if let label = phone.label {
+                    
+                    switch label {
+                    case CNLabelHome:
+                        return "Home"
+                    case CNLabelWork:
+                        return "Work"
+                    case CNLabelPhoneNumberMobile :
+                        return "Mobile"
+                    default:
+                        return ""
+                    }
+                }
+            }
+        }
+        return ""
+    }
+            
+    func applyPatternOnNumbers(pattern: String, replacmentCharacter: Character) -> String {
+        var number = self
+        if number.contains("+") {
+            number = number.deletingPrefix("+1")
+        }
+        var pureNumber = number.replacingOccurrences( of: "[^0-9]", with: "", options: .regularExpression)
+        for index in 0 ..< pattern.count {
+            guard index < pureNumber.count else { return pureNumber }
+            let stringIndex = String.Index(utf16Offset: index, in: self)
+            let patternCharacter = pattern[stringIndex]
+            guard patternCharacter != replacmentCharacter else { continue }
+            pureNumber.insert(patternCharacter, at: stringIndex)
+        }
+        return pureNumber
+    }
+
 }
 
 extension CNContact: Identifiable {

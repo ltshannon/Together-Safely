@@ -29,6 +29,10 @@ struct DisplayPodsContactPod: View {
                                     .padding(.leading, 20)
                                     .foregroundColor(.white)
                                 Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(Font.custom("Avenir-Medium", size: 18))
+                                    .padding(.trailing, 20)
+                                    .foregroundColor(.white)
                             }.padding([.top, .bottom], 15)
                         }
                             .background(Color("Color3")).edgesIgnoringSafeArea(.all)
@@ -55,9 +59,14 @@ struct DisplayPodsContactPod: View {
                                     .clipShape(Circle())
                                     .padding([.top, .bottom], 5)
                             }
-                            Text("\(contact.contactInfo.name)")
-                                .foregroundColor(Color("Colorblack"))
-                                .font(Font.custom("Avenir-Medium", size: 18))
+                            VStack(alignment: .leading) {
+                                Text("\(contact.contactInfo.name)")
+                                    .foregroundColor(Color("Colorblack"))
+                                    .font(Font.custom("Avenir-Medium", size: 18))
+                                Text(contact.phoneNumber.applyPatternOnNumbers(pattern: "###-###-####", replacmentCharacter: "#"))
+                                    .foregroundColor(Color("Colorblack"))
+                                    .font(Font.custom("Avenir-Medium", size: 12))
+                            }
                         }.frame(height: 300)
                     }
                     .background(Color.white)
