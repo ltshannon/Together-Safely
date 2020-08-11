@@ -47,7 +47,7 @@ struct DisplayPodsContactPod: View {
                                     .overlay(Circle().stroke(Color.black, lineWidth: 1))
                                     .padding(5)
                             } else {
-                                Image(systemName: "person.fill")
+                                Image(systemName: "person.crop.circle.fill")
                                     .resizable()
                                     .renderingMode(.template)
                                     .foregroundColor(.gray)

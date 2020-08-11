@@ -44,7 +44,7 @@ struct UserProfileView: View {
                             .padding(5)
 
                     } else {
-                        Image(systemName: "person.fill")
+                        Image(systemName: "person.crop.circle.fill")
                             .resizable()
                             .renderingMode(.template)
                             .foregroundColor(.gray)

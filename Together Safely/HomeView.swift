@@ -106,7 +106,7 @@ struct HomeView: View {
                             .clipShape(Circle())
                             .padding([.top, .bottom], 5)
                     } else {
-                        Image(systemName: "person.fill")
+                        Image(systemName: "person.crop.circle.fill")
                             .resizable()
                             .renderingMode(.template)
                             .foregroundColor(.white)
