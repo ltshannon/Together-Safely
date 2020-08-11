@@ -310,7 +310,7 @@ class FirebaseService: ObservableObject {
                                         }
                                     }
                             } else {
-                                print("Group document not found: \(error)")
+                                print("Group document for group id: \(invite) not found: \(error)")
                             }
                         }
                     }

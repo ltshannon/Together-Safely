@@ -101,6 +101,8 @@ struct InviationsView: View {
                         }.padding([.leading, .trailing, .top], 10)
                     }
                 }
+            } else {
+                Spacer()
             }
         }
             .background(Color.white)
