@@ -121,7 +121,8 @@ struct GroupInvites {
     var groupInvites: [String]
 }
 
-struct Invite: Hashable {
+struct Invite: Hashable, Identifiable {
+    let id = UUID()
     var adminName: String?
     var adminPhone: String
     var groupName: String

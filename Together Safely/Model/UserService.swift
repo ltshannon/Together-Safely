@@ -29,6 +29,7 @@ class FirebaseService: ObservableObject {
     static let shared = FirebaseService()
     private var database = Firestore.firestore()
     private var groupsArray: [Groups] = []
+    private var invitesArray: [Invite] = []
     private var userName: String = ""
     private var userImage: Data?
     private var allUsers: [User] = []
@@ -284,7 +285,7 @@ class FirebaseService: ObservableObject {
         self.database.collection("users").whereField("phoneNumber", isEqualTo: phoneNumber)
             .addSnapshotListener { querySnapshot, error in
                 guard let documents = querySnapshot?.documents else {
-                    print("Error fetching documents: \(error)")
+                    print("Error fetching documents: users")
                     completion(error)
                     return
                 }
@@ -306,15 +307,22 @@ class FirebaseService: ObservableObject {
                         self.user = user
                     }
                     
-                    var invites: [Invite] = []
-                    self.invites = invites //trigger a refresh if this is a response to the user snapshot listener
+//                    var invites: [Invite] = []
+                    self.invitesArray.removeAll()
+                    self.invites = self.invitesArray //trigger a refresh if this is a response to the user snapshot listener
+                    if user.groupInvites.count == 0 {
+                        print("In side if statement for invites")
+                        DispatchQueue.main.async {
+                            self.invites = self.invitesArray
+                        }
+                    }
                     print("Received Firebase data for \(user.groupInvites.count) invites")
                     for invite in user.groupInvites {
                         let docRef = self.database.collection("groups").document(invite)
                         docRef.getDocument { (document, error) in
                             if let document = document, document.exists {
                                 let group = Groups(snapshot: document.data() ?? [:])
-                                
+                                print("Firebase data for invite for group: \(invite)")
                                 var invite:Invite = Invite(adminName: "", adminPhone: "", groupName: group.name, groupId: invite, riskScore: 99999)
                                 
                                 let docRef2 = self.database.collection("users").document(group.adminId) //group.id is the ID of the admin, not the group
@@ -324,29 +332,47 @@ class FirebaseService: ObservableObject {
                                             invite.riskScore = user.riskScore
                                             invite.adminPhone = user.phoneNumber
                                             invite.adminName = user.name
-                                            invites.append(invite)
+                                            self.invitesArray.append(invite)
                                             DispatchQueue.main.async {
-                                                self.invites = invites
+                                                self.invites = self.invitesArray
                                             }
                                         } else {
-                                            print("User document not found look for group admin: \(error)")
+                                            print("User document not found look for group admin")
                                         }
                                     }
                             } else {
-                                print("Group document for group id: \(invite) not found: \(error)")
+                                print("Group document for group id: \(invite) not found")
                             }
                         }
                     }
                     
-                    print("Received Firebase data for \(user.groups.count) groups")
+                        
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.timeZone = TimeZone.current
+                    dateFormatter.timeStyle = .medium
+                    let localDate = dateFormatter.string(from: Date())
+                    
+                    print("Received Firebase data for \(user.groups.count) groups at: \(localDate)")
                     for group in user.groups {
                         self.database.collection("groups").document(group)
                             .addSnapshotListener { documentSnapshot, error in
+//                        let docRef = self.database.collection("groups").document(group)
+//                        docRef.getDocument { (documentSnapshot, error) in
                             guard let document = documentSnapshot else {
-                                print("Error fetching document: \(error)")
+                                print("Error fetching document")
                                 return
                             }
+                                
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.timeZone = TimeZone.current
+                            dateFormatter.timeStyle = .medium
+                            let localDate = dateFormatter.string(from: Date())
+
+                            print("Received Firebase data for group document: \(group) at: \(localDate)")
+                                
                             var groups = Groups(snapshot: document.data() ?? [:])
+                                
+                            print("")
                             var dict: [String : Int] = [:]
                             var groupAverageRisk = 0.0
 

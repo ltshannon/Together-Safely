@@ -25,8 +25,9 @@ struct DisplayPodsView: View {
             if self.isVisible {
                 ScrollView(.vertical, showsIndicators: false) {
                     if !firebaseService.groups.isEmpty {
-                        ForEach(firebaseService.groups, id: \.self) { group in
-                            NavigationLink(destination: DetailPodView(group: group).environmentObject(self.firebaseService)) {
+                        ForEach(Array(firebaseService.groups.enumerated()), id: \.offset) { index, group in
+//                        ForEach(firebaseService.groups, id: \.self) { group in
+                            NavigationLink(destination: DetailPodView(index: index).environmentObject(self.firebaseService)) {
                                 VStack(alignment: .leading, spacing: 0) {
                                     VStack {
                                         HStack {

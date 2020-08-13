@@ -31,7 +31,8 @@ struct InviationsView: View {
                 .padding(0)
             if !firebaseService.invites.isEmpty {
                 ScrollView(.vertical, showsIndicators: false) {
-                    ForEach(firebaseService.invites, id: \.self) { invite in
+                    ForEach(Array(firebaseService.invites.enumerated()), id: \.offset) { index, invite in
+//                    ForEach(firebaseService.invites, id: \.self) { invite in
                         VStack {
                             HStack {
                             MemberProfileView(
