@@ -26,52 +26,52 @@ struct DisplayPodsView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     if !firebaseService.groups.isEmpty {
                         ForEach(firebaseService.groups, id: \.self) { group in
-                        NavigationLink(destination: DetailPodView(group: group).environmentObject(self.firebaseService)) {
-                            VStack(alignment: .leading, spacing: 0) {
-                                VStack {
-                                    HStack {
-                                        Text("\(group.name)")
-                                            .font(Font.custom("Avenir-Medium", size: 18))
-                                            .padding(.leading, 20)
-                                            .foregroundColor(.white)
-                                        Spacer()
-                                        Image(systemName: "chevron.right")
-                                            .font(Font.custom("Avenir-Medium", size: 18))
-                                            .padding(.trailing, 20)
-                                            .foregroundColor(.white)
-                                    }.padding([.top, .bottom], 15)
-                                }
-                                    .background(Color("Color3")).edgesIgnoringSafeArea(.all)
-                                Capsule()
-                                    .fill(Color(.darkGray))
-                                    .frame(height: 2)
-                                    .padding(0)
-                                BuildRiskBar(highRiskCount: group.riskTotals["High Risk"] ?? 0, medRiskCount: group.riskTotals["Medium Risk"] ?? 0, lowRiskCount: group.riskTotals["Low Risk"] ?? 0, memberCount: group.members.count).environmentObject(self.firebaseService).padding(15)
-                                Spacer()
-                                Text(group.averageRisk)
-                                    .font(Font.custom("Avenir-Medium", size: 16))
-                                    .foregroundColor(self.getRiskColor.getRiskColor(riskScore: group.averageRiskValue, riskRanges: self.firebaseService.riskRanges))
-                                    .padding(.leading, 15)
-                                Spacer()
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack {
-                                        ForEach(0..<group.members.count) { index in
-                                            MemberProfileView(
-                                                image: self.getImageForPhone.getImage(phoneName: group.members[index].phoneNumber, dict: self.firebaseService.contactInfo),
-                                                groupId: group.id,
-                                                riskScore: group.members[index].riskScore,
-                                                riskRanges: self.firebaseService.riskRanges)
-                                        }
+                            NavigationLink(destination: DetailPodView(group: group).environmentObject(self.firebaseService)) {
+                                VStack(alignment: .leading, spacing: 0) {
+                                    VStack {
+                                        HStack {
+                                            Text("\(group.name)")
+                                                .font(Font.custom("Avenir-Medium", size: 18))
+                                                .padding(.leading, 20)
+                                                .foregroundColor(.white)
+                                            Spacer()
+                                            Image(systemName: "chevron.right")
+                                                .font(Font.custom("Avenir-Medium", size: 18))
+                                                .padding(.trailing, 20)
+                                                .foregroundColor(.white)
+                                        }.padding([.top, .bottom], 15)
                                     }
-                                }.padding(.leading, 5)
+                                        .background(Color("Color3")).edgesIgnoringSafeArea(.all)
+                                    Capsule()
+                                        .fill(Color(.darkGray))
+                                        .frame(height: 2)
+                                        .padding(0)
+                                    BuildRiskBar(highRiskCount: group.riskTotals["High Risk"] ?? 0, medRiskCount: group.riskTotals["Medium Risk"] ?? 0, lowRiskCount: group.riskTotals["Low Risk"] ?? 0, memberCount: group.members.count).environmentObject(self.firebaseService).padding(15)
+                                    Spacer()
+                                    Text(group.averageRisk)
+                                        .font(Font.custom("Avenir-Medium", size: 16))
+                                        .foregroundColor(self.getRiskColor.getRiskColor(riskScore: group.averageRiskValue, riskRanges: self.firebaseService.riskRanges))
+                                        .padding(.leading, 15)
+                                    Spacer()
+                                    ScrollView(.horizontal, showsIndicators: false) {
+                                        HStack {
+                                            ForEach(0..<group.members.count) { index in
+                                                MemberProfileView(
+                                                    image: self.getImageForPhone.getImage(phoneName: group.members[index].phoneNumber, dict: self.firebaseService.contactInfo),
+                                                    groupId: group.id,
+                                                    riskScore: group.members[index].riskScore,
+                                                    riskRanges: self.firebaseService.riskRanges)
+                                            }
+                                        }
+                                    }.padding(.leading, 5)
+                                }
+                                    .background(Color.white)
+                                    .cornerRadius(20)
+                                    .shadow(color: .gray, radius: 2, x: 0, y: 2)
+                                .padding([.leading, .trailing], 15)
+                                .padding(.bottom, 5)
                             }
-                                .background(Color.white)
-                                .cornerRadius(20)
-                                .shadow(color: .gray, radius: 2, x: 0, y: 2)
-                            .padding([.leading, .trailing], 15)
-                            .padding(.bottom, 5)
                         }
-                    }
                     }
                     Spacer()
                     VStack {

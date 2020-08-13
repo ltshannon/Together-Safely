@@ -21,24 +21,28 @@ class FirebaseService: ObservableObject {
     @Published var userContacts: [TogetherContactType] = []
     @Published var contactGroups: [Groups] = []
     @Published var contactInfo: [[String:ContactInfo]] = []
-    
+    @Published var userContantRiskAverageString = ""
+    @Published var userContantRiskAverageValue = 0.0
+    @Published var userContantRiskAverageDict: [String : Int] = [:]
+    @Published var userContantUsersCount = 0
 
     static let shared = FirebaseService()
     private var database = Firestore.firestore()
     private var groupsArray: [Groups] = []
     private var userName: String = ""
     private var userImage: Data?
+    private var allUsers: [User] = []
 
     init() {}
     
-    func checkUser(byPhoneNumber phoneNumber: String, completion: @escaping (Int, Error?) -> Void) {
+    func checkUser(byPhoneNumber phoneNumber: String, completion: @escaping (Double, Error?) -> Void) {
         self.database.collection("users").whereField("phoneNumber", isEqualTo: phoneNumber).getDocuments() { (querySnapshot, err) in
             if let err = err {
                 completion(0, err)
             } else {
                 if querySnapshot!.documents.count == 1 {
                     let doc = querySnapshot!.documents[0]
-                    let riskScore = (doc.data()["riskScore"] as? Int) ?? 99999
+                    let riskScore = (doc.data()["riskScore"] as? Double) ?? 99999
                     completion(riskScore, nil)
                 }
             }
@@ -61,39 +65,31 @@ class FirebaseService: ObservableObject {
             let containerId = store.defaultContainerIdentifier()
             let predicate = CNContact.predicateForContactsInContainer(withIdentifier: containerId)
             let contacts = try store.unifiedContacts(matching: predicate, keysToFetch: keysToFetch)
-            print("Fetching contacts: succesfull with count = %d", contacts.count)
+            print("Fetching contacts: succesfull with count = \(contacts.count)")
 
             var phoneNumbers: [String] = []
-            print("Numbers returned for contacts call:")
             let userPhoneNumber =  UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? ""
             var cinfo: [[String:ContactInfo]] = []
             for contact in contacts {
-                print("name: \(contact.givenName) \(contact.familyName)")
                 for phone in contact.phoneNumbers {
-//                    if let label = phone.label {
-//                        if label == CNLabelPhoneNumberMobile {
-                            var number = phone.value.stringValue
-                            number = number.deletingPrefix("+")
-                            number = number.deletingPrefix("1")
-                            number = format(with: "+1XXXXXXXXXX", phone: number)
-                            
-                            print("number: \(number) name: \(contact.givenName) \(contact.familyName)")
-                            let c: ContactInfo = ContactInfo(
-                                image: contact.imageData,
-                                name: "\(contact.givenName) " + "\(contact.familyName)"
-                            )
+                    var number = phone.value.stringValue
+                    number = number.deletingPrefix("+")
+                    number = number.deletingPrefix("1")
+                    number = format(with: "+1XXXXXXXXXX", phone: number)
+                    let c: ContactInfo = ContactInfo(
+                        image: contact.imageData,
+                        name: "\(contact.givenName) " + "\(contact.familyName)"
+                    )
          
-                            cinfo.append([number:c])
-                            if number.contains(userPhoneNumber) {
-                                userName = "\(contact.givenName) " + "\(contact.familyName)"
-                                if let imageData = contact.imageData {
-                                    userImage = imageData
-                                }
-                            }
-                            phoneNumbers.append(number)
+                    cinfo.append([number:c])
+                    if number.contains(userPhoneNumber) {
+                        userName = "\(contact.givenName) " + "\(contact.familyName)"
+                        if let imageData = contact.imageData {
+                            userImage = imageData
                         }
-//                    }
-//                }
+                    }
+                    phoneNumbers.append(number)
+                }
             }
             
             DispatchQueue.main.async {
@@ -101,7 +97,7 @@ class FirebaseService: ObservableObject {
             }
              
             WebService.checkPhoneNumbers(phoneNumbers: phoneNumbers) { returnedNumbers in
-                
+/*
                 for number in returnedNumbers.invitablePhoneNumbers {
                     print("invitablePhoneNumbers: \(number)")
                 }
@@ -111,49 +107,31 @@ class FirebaseService: ObservableObject {
                 for number in returnedNumbers.userPhoneNumbers {
                     print("userPhoneNumbers: \(number)")
                 }
-                
+*/
                 var userContacts: [TogetherContactType] = []
              
                 for contact in contacts {
                     for phone in contact.phoneNumbers {
-//                        if let label = phone.label {
-//                            if label == CNLabelPhoneNumberMobile {
-                                var number = phone.value.stringValue
-                                number = number.deletingPrefix("+")
-                                number = number.deletingPrefix("1")
-                                number = format(with: "+1XXXXXXXXXX", phone: number)
-                                var c: TogetherContactType
-                                if returnedNumbers.invitablePhoneNumbers.contains(number) {
-                                    c = TogetherContactType(contactInfo: contact, type: .invitablePhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
-                                } else if returnedNumbers.invitedPhoneNumbers.contains(number) {
-                                    c = TogetherContactType(contactInfo: contact, type: .invitedPhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
-                                } else {
-                                    c = TogetherContactType(contactInfo: contact, type: .userPhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
-                                }
-                                userContacts.append(c)
-//                            }
-//                        }
+                        var number = phone.value.stringValue
+                        number = number.deletingPrefix("+")
+                        number = number.deletingPrefix("1")
+                        number = format(with: "+1XXXXXXXXXX", phone: number)
+                        var c: TogetherContactType
+                        if returnedNumbers.invitablePhoneNumbers.contains(number) {
+                            c = TogetherContactType(contactInfo: contact, type: .invitablePhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
+                        } else if returnedNumbers.invitedPhoneNumbers.contains(number) {
+                            c = TogetherContactType(contactInfo: contact, type: .invitedPhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
+                        } else {
+                            c = TogetherContactType(contactInfo: contact, type: .userPhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
+                        }
+                        userContacts.append(c)
                     }
                 }
+                
+                userContacts.sort { return $0.type.sortOrder < $1.type.sortOrder }
+                
                 DispatchQueue.main.async {
                     self.userContacts = userContacts
-                }
-                if self.riskRanges.count > 0 {
-                    for (index, contact) in self.userContacts.enumerated() {
-                        if contact.type == .userPhoneNumber {
-                            self.checkUser(byPhoneNumber: contact.phoneNumber) { (score, error) in
-                                if let error = error {
-                                    print("firebase couldn't find user: \(contact.phoneNumber) with error: \(error.localizedDescription)")
-                                } else {
-                                    self.userContacts[index].riskScore = score
-                                    self.userContacts[index].riskString = self.getRiskString(value: score)
-                                    DispatchQueue.main.async {
-                                        self.userContacts = self.userContacts
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
                 
                 self.getUserData(phoneNumber: byPhoneNumber)
@@ -174,41 +152,84 @@ class FirebaseService: ObservableObject {
                     }
                     return
                 }
-                for (index, contact) in self.userContacts.enumerated() {
-                    if contact.type == .userPhoneNumber {
-                        self.checkUser(byPhoneNumber: contact.phoneNumber) { (score, error) in
-                            if let error = error {
-                                print("firebase couldn't find user: \(contact.phoneNumber) with error: \(error.localizedDescription)")
-                            } else {
-                                self.userContacts[index].riskScore = score
-                                self.userContacts[index].riskString = self.getRiskString(value: score)
-                                DispatchQueue.main.async {
-                                    self.userContacts = self.userContacts
-                                }
-                            }
+                
+                guard Auth.auth().currentUser != nil  else {
+                    print("Could not auth user")
+                    return
+                }
+                self.database.collection("users").getDocuments() { (querySnapshot, err) in
+                    if let err = err {
+                        print("Error getting documents: \(err)")
+                    } else {
+                        for document in querySnapshot!.documents {
+                            let user = User(snapshot: document.data())
+                            self.allUsers.append(user)
                         }
                     }
-                }
-                self.getUserData(phoneNumber: phoneNumber) { error in
+                
+                    var dict: [String : Int] = [:]
+                    var userContactAverageRisk = 0.0
+                    var userContactCount = 0.0
+
+                    for (index, contact) in self.userContacts.enumerated() {
+                        if contact.type == .userPhoneNumber {
+                            let score = self.getRiskScoreForUser(phoneNumber: self.userContacts[index].phoneNumber)
+                            self.userContacts[index].riskScore = score
+ 
+                            let str = self.getRiskString(value: score)
+                            self.userContacts[index].riskString = str
+                            if let total = dict[str] {
+                                dict[str] = total + 1
+                            }
+                            else {
+                                dict[str] = 1
+                            }
+                            userContactAverageRisk += score
+                            userContactCount += 1
+                        }
+                    }
+
+                    DispatchQueue.main.async {
+                        if userContactCount > 0 {
+                            let average = userContactAverageRisk / userContactCount
+                            self.userContantRiskAverageString = self.getRiskString(value: average)
+                            self.userContantRiskAverageValue = average
+                            self.userContantRiskAverageDict = dict
+                            self.userContantUsersCount = Int(userContactCount)
+                        }
+                    }
+                    
+                    self.getUserData(phoneNumber: phoneNumber) { error in
                         guard error == nil else {
                             if let error = error {
                                 print(error.localizedDescription)
                             }
                             return
                         }
-                    return
+                    }
                 }
             }
-            return
-        }
-        getUserData(phoneNumber: phoneNumber) { error in
-                guard error == nil else {
-                    if let error = error {
-                        print(error.localizedDescription)
+        } else {
+            getUserData(phoneNumber: phoneNumber) { error in
+                    guard error == nil else {
+                        if let error = error {
+                            print(error.localizedDescription)
+                        }
+                        return
                     }
-                    return
-                }
+            }
         }
+    }
+    
+    func getRiskScoreForUser(phoneNumber: String) -> Double {
+        
+        for user in allUsers {
+            if user.phoneNumber == phoneNumber {
+                return user.riskScore
+            }
+        }
+        return 0
+        
     }
     
     func getRiskFactorQuestions(_ completion: @escaping ([UserQuestion]) -> Void) {
@@ -267,7 +288,12 @@ class FirebaseService: ObservableObject {
                     completion(error)
                     return
                 }
-                print("Received Firebase data for users document")
+                let dateFormatter = DateFormatter()
+                dateFormatter.timeZone = TimeZone.current
+                dateFormatter.timeStyle = .medium
+                let localDate = dateFormatter.string(from: Date())
+
+                print("Received Firebase data for users document: \(localDate)")
                 if documents.count == 1 {
                     let doc = querySnapshot!.documents[0]
                     var user = User(snapshot: doc.data())
@@ -322,7 +348,7 @@ class FirebaseService: ObservableObject {
                             }
                             var groups = Groups(snapshot: document.data() ?? [:])
                             var dict: [String : Int] = [:]
-                            var groupAverageRisk: Int = 0
+                            var groupAverageRisk = 0.0
 
                             for (index, member) in groups.members.enumerated() {
                                 groups.members[index].riskString = self.getRiskString(value: member.riskScore)
@@ -336,7 +362,7 @@ class FirebaseService: ObservableObject {
                             }
                                 
                             if groups.members.count > 0 {
-                                let average = groupAverageRisk / groups.members.count
+                                let average = groupAverageRisk / Double(groups.members.count)
                                 groups.averageRisk = self.getRiskString(value: average)
                                 groups.averageRiskValue = average
                             }
@@ -375,6 +401,8 @@ class FirebaseService: ObservableObject {
         }
     }
     
+
+    
     func getRiskRanges(completion: @escaping (Error?) -> Void) {
         
         database.collection("riskRanges").getDocuments() { (querySnapshot, err) in
@@ -398,7 +426,7 @@ class FirebaseService: ObservableObject {
         }
     }
     
-    func getRiskString(value: Int) -> String {
+    func getRiskString(value: Double) -> String {
         
         for riskRange in self.riskRanges {
             let element = riskRange.values

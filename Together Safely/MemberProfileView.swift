@@ -12,9 +12,9 @@ struct MemberProfileView: View {
     
     var image: Data?
     var groupId: String
-    @EnvironmentObject var firebaseService: FirebaseService
-    var riskScore: Int
+    var riskScore: Double
     var riskRanges: [Dictionary<String,RiskHighLow>]
+    @EnvironmentObject var firebaseService: FirebaseService
     @State private var getRiskColor: Color = Color.white
     
     var body: some View {

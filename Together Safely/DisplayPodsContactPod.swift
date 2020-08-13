@@ -14,6 +14,8 @@ struct DisplayPodsContactPod: View {
     var group: Groups
     @State var selection: Int? = nil
     @EnvironmentObject var firebaseService: FirebaseService
+    @State private var getRiskColor: Color = Color.white
+    @State private var getImageForPhone: Data = Data()
     
     var body: some View {
         VStack {
@@ -40,34 +42,26 @@ struct DisplayPodsContactPod: View {
                             .fill(Color(.darkGray))
                             .frame(height: 2)
                             .padding(0)
-
-                        List(firebaseService.userContacts, id: \.self) { (contact: TogetherContactType) in
-                            if contact.contactInfo.imageDataAvailable {
-                                Image(uiImage: UIImage(data: contact.contactInfo.imageData!)!)
-                                    .resizable()
-                                    .renderingMode(.original)
-                                    .frame(width: 40, height: 40)
-                                    .clipShape(Circle())
-                                    .overlay(Circle().stroke(Color.black, lineWidth: 1))
-                                    .padding(5)
-                            } else {
-                                Image(systemName: "person.crop.circle.fill")
-                                    .resizable()
-                                    .renderingMode(.template)
-                                    .foregroundColor(.gray)
-                                    .frame(width: 40, height: 40)
-                                    .clipShape(Circle())
-                                    .padding([.top, .bottom], 5)
+                        BuildRiskBar(highRiskCount: firebaseService.userContantRiskAverageDict["High Risk"] ?? 0, medRiskCount: firebaseService.userContantRiskAverageDict["Medium Risk"] ?? 0, lowRiskCount: firebaseService.userContantRiskAverageDict["Low Risk"] ?? 0, memberCount: firebaseService.userContantUsersCount).environmentObject(self.firebaseService).padding(15)
+                        Spacer()
+                        Text(firebaseService.userContantRiskAverageString)
+                            .font(Font.custom("Avenir-Medium", size: 16))
+                            .foregroundColor(self.getRiskColor.getRiskColor(riskScore: firebaseService.userContantRiskAverageValue, riskRanges: self.firebaseService.riskRanges))
+                            .padding(.leading, 15)
+                        Spacer()
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(firebaseService.userContacts) { item in
+//                                    if item.type == .userPhoneNumber {
+                                        MemberProfileView(
+                                            image: self.getImageForPhone.getImage(phoneName: item.phoneNumber, dict: self.firebaseService.contactInfo),
+                                            groupId: "",
+                                            riskScore: item.riskScore != nil ? item.riskScore! : 0,
+                                            riskRanges: self.firebaseService.riskRanges)
+//                                    }
+                                }
                             }
-                            VStack(alignment: .leading) {
-                                Text("\(contact.contactInfo.name)")
-                                    .foregroundColor(Color("Colorblack"))
-                                    .font(Font.custom("Avenir-Medium", size: 18))
-                                Text(contact.phoneNumber.applyPatternOnNumbers(pattern: "###-###-####", replacmentCharacter: "#"))
-                                    .foregroundColor(Color("Colorblack"))
-                                    .font(Font.custom("Avenir-Medium", size: 12))
-                            }
-                        }.frame(height: 300)
+                        }.padding(.leading, 5)
                     }
                     .background(Color.white)
                     .cornerRadius(20)

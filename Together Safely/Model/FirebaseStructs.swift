@@ -12,17 +12,33 @@ import FirebaseFirestoreSwift
 import SwiftUI
 import Contacts
 
-enum TogetherContactTypes {
+enum TogetherContactTypes: Comparable {
     case invitablePhoneNumber
     case invitedPhoneNumber
     case userPhoneNumber
+    
+    var sortOrder: Int {
+        switch self {
+            case .userPhoneNumber:
+                return 0
+            case .invitedPhoneNumber:
+                return 1
+            case .invitablePhoneNumber:
+                return 2
+        }
+    }
+
+    static func <(lhs: TogetherContactTypes, rhs: TogetherContactTypes) -> Bool {
+       return lhs.sortOrder < rhs.sortOrder
+    }
 }
 
-struct TogetherContactType: Hashable {
+struct TogetherContactType: Hashable, Identifiable {
+    let id = UUID()
     var contactInfo: CNContact
     var type: TogetherContactTypes
     var phoneNumber: String
-    var riskScore: Int?
+    var riskScore: Double?
     var riskString: String?
 }
 
@@ -32,7 +48,7 @@ struct User: Identifiable, Codable {
     var image: Data?
     var phoneNumber: String
     var groups: [String]
-    var riskScore: Int
+    var riskScore: Double
     var riskString: String
     var groupInvites: [String]
     var userAnswers: [UserAnswer]
@@ -66,14 +82,14 @@ struct Groups: Identifiable, Codable, Hashable {
     var riskCompiledSring: [String]
     var riskCompiledValue: [Int]
     var averageRisk: String
-    var averageRiskValue: Int
+    var averageRiskValue: Double
 }
 
 struct Member: Identifiable, Codable, Hashable {
     var id: String
     var adminId: String
     var phoneNumber: String
-    var riskScore: Int
+    var riskScore: Double
     var status: Status
     var riskString: String
     var riskIndex: Int
@@ -86,8 +102,8 @@ struct Status: Codable, Hashable {
 }
 
 struct RiskHighLow: Codable, Hashable {
-    var min: Int
-    var max: Int
+    var min: Double
+    var max: Double
 }
 
 struct RiskRanges {
@@ -96,8 +112,8 @@ struct RiskRanges {
 
 extension RiskHighLow {
     init(snapshot: Dictionary<String, Any>) {
-        min = snapshot["min"] as? Int ?? 9999999
-        max = snapshot["max"] as? Int ?? 9999999
+        min = snapshot["min"] as? Double ?? 9999999
+        max = snapshot["max"] as? Double ?? 9999999
     }
 }
 
@@ -110,7 +126,7 @@ struct Invite: Hashable {
     var adminPhone: String
     var groupName: String
     var groupId: String
-    var riskScore: Int
+    var riskScore: Double
 }
 
 struct ContactInfo: Hashable {
@@ -136,7 +152,7 @@ extension Groups {
             let uid = m["uid"] as? String ?? ""
             let phoneNumber = m["phoneNumber"] as? String ?? ""
             let doubleValue = m["riskScore"] as? Double ?? 99999
-            let riskScore = Int(doubleValue)
+            let riskScore = doubleValue
             let stat = m["status"] as? Dictionary<String, Any>  ?? [:]
             let status = Status(emoji: stat["emoji"] as? String ?? "", text: stat["text"] as? String ?? "")
             let member = Member(uID: uid, phone: phoneNumber, risk: riskScore, stat: status)
@@ -146,7 +162,7 @@ extension Groups {
 }
 
 extension Member {
-    init(uID: String, phone: String, risk: Int, stat: Status) {
+    init(uID: String, phone: String, risk: Double, stat: Status) {
         self.id = ""
         self.adminId = uID
         self.phoneNumber = phone
@@ -169,7 +185,7 @@ extension User {
         }
         groups = g
         let doubleValue = snapshot["riskScore"] as? Double ?? 99999
-        riskScore = Int(doubleValue)
+        riskScore = doubleValue
         riskString = ""
         name = ""
         var groupInvites: [String] = []

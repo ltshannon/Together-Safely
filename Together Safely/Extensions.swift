@@ -152,7 +152,7 @@ extension Data {
 
 extension Color {
     
-    func getRiskColor(riskScore: Int, riskRanges: [[String:RiskHighLow]]) -> Color {
+    func getRiskColor(riskScore: Double, riskRanges: [[String:RiskHighLow]]) -> Color {
         
         for riskRange in riskRanges {
             let element = riskRange.values
@@ -182,7 +182,7 @@ extension Color {
 
 extension Image {
     
-    func getRiskImage(riskScore: Int, riskRanges: [[String:RiskHighLow]]) -> Image {
+    func getRiskImage(riskScore: Double, riskRanges: [[String:RiskHighLow]]) -> Image {
     
         for riskRange in riskRanges {
             let element = riskRange.values
