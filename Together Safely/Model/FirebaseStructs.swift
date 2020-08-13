@@ -130,9 +130,21 @@ struct Invite: Hashable, Identifiable {
     var riskScore: Double
 }
 
+
 struct ContactInfo: Hashable {
     var image: Data?
     var name: String
+}
+
+extension GroupInvites {
+    init(snapshot: Dictionary<String, Any>) {
+        let invites = snapshot["groupInvites"] as? Array ?? []
+        groupInvites = []
+        for invite in invites {
+            let i = invite as? String ?? ""
+            groupInvites.append(i)
+        }
+    }
 }
 
 extension Groups {
