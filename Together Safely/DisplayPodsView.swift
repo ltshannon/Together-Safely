@@ -56,7 +56,8 @@ struct DisplayPodsView: View {
                                     Spacer()
                                     ScrollView(.horizontal, showsIndicators: false) {
                                         HStack {
-                                            ForEach(0..<group.members.count) { index in
+                                            ForEach(Array(group.members.enumerated()), id: \.offset) { index, element in
+//                                            ForEach(0..<group.members.count) { index in
                                                 MemberProfileView(
                                                     image: self.getImageForPhone.getImage(phoneName: group.members[index].phoneNumber, dict: self.firebaseService.contactInfo),
                                                     groupId: group.id,
