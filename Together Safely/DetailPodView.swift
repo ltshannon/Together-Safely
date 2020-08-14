@@ -114,7 +114,8 @@ struct DetailPodView: View {
                     .padding(.bottom, 15)
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack(alignment: .leading, spacing: 5) {
-                            ForEach(0..<self.firebaseService.groups[index].members.count) { i in
+                            ForEach(Array(firebaseService.groups[index].members.enumerated()), id: \.offset) { i, element in
+//                            ForEach(0..<self.firebaseService.groups[index].members.count) { i in
                                 VStack(alignment: .leading, spacing: 0) {
                                     Capsule()
                                         .fill(Color(.gray))

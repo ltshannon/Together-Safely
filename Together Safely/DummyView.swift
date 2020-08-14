@@ -20,7 +20,7 @@ struct DummyView: View {
             HomeView().environmentObject(firebaseService).padding(.top, 10)
         }
         .onAppear {
-            self.firebaseService.getServerData(byPhoneNumber: UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? "")
+//            self.firebaseService.getServerData(byPhoneNumber: UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? "")
         }
             .background(Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all))
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in

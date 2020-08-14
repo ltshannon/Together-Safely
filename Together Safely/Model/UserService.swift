@@ -36,7 +36,9 @@ class FirebaseService: ObservableObject {
     private var userListener: ListenerRegistration?
     private var groupListeners: [ListenerRegistration?] = []
 
-    init() {}
+    init() {
+        getServerData(byPhoneNumber: UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? "")
+    }
     
     func checkUser(byPhoneNumber phoneNumber: String, completion: @escaping (Double, Error?) -> Void) {
         self.database.collection("users").whereField("phoneNumber", isEqualTo: phoneNumber).getDocuments() { (querySnapshot, err) in
@@ -315,89 +317,64 @@ class FirebaseService: ObservableObject {
                     DispatchQueue.main.async {
                         self.user = user
                     }
-/*
-                    var groupInvites: GroupInvites?
+
                     querySnapshot!.documentChanges.forEach { diff in
-                        if (diff.type == .added) {
-                            print("New city: \(diff.document.data())")
-                            groupInvites = GroupInvites(snapshot: diff.document.data())
-                        }
-                        if (diff.type == .modified) {
-                            print("Modified city: \(diff.document.data())")
-                        }
-                        if (diff.type == .removed) {
-                            print("Removed city: \(diff.document.data())")
-                        }
-                        
-                    }
-*/
-
-                    self.invitesArray.removeAll()
-                    self.invites = self.invitesArray //trigger a refresh if this is a response to the user snapshot listener
-                    if user.groupInvites.count == 0 {
-                        print("In side if statement for invites")
-                        DispatchQueue.main.async {
-                            self.invites = self.invitesArray
-                        }
-                    }
-
-                    localDate = dateFormatter.string(from: Date())
-                    print("Received Firebase data for \(user.groupInvites.count) invites: \(localDate)")
-                    for invite in user.groupInvites {
-                        let docRef = self.database.collection("groups").document(invite)
-                        docRef.getDocument { (document, error) in
-                            
-                            if let document = document, document.exists {
-                                let group = Groups(snapshot: document.data() ?? [:])
-                                localDate = dateFormatter.string(from: Date())
-                                print("Firebase data for invite for group: \(invite) : \(localDate)")
-                                var invite:Invite = Invite(adminName: "", adminPhone: "", groupName: group.name, groupId: invite, riskScore: 99999)
-                                
-//                                let docRef2 = self.database.collection("users").document(group.adminId) //group.id is the ID of the admin, not the group
-//                                    docRef2.getDocument { (document, error) in
-//                                        if let document = document, document.exists {
-//                                            localDate = dateFormatter.string(from: Date())
-//                                            print("Firebase data for user infro from admin: \(group.adminId) : \(localDate)")
-//                                            let user = User(snapshot: document.data() ?? [:])
-                                
-                                for user in self.allUsers {
-                                    if user.id == group.adminId {
-                                        invite.riskScore = user.riskScore
-                                        invite.adminPhone = user.phoneNumber
-                                        invite.adminName = user.name
-                                        self.invitesArray.append(invite)
-                                        DispatchQueue.main.async {
-                                            self.invites = self.invitesArray
+                        print("User documentChanges: \(diff.document.data()) type: \(diff.type == .added ? "Add" : diff.type == .modified ? "Modified" :  diff.type == .removed ? "Removed" : "nothing")")
+                        if (diff.type == .added || diff.type == .modified) {
+                            print("Add or modified")
+                            self.invitesArray.removeAll()
+                            DispatchQueue.main.async {
+                                self.invites = self.invitesArray
+                            }
+                            let item = GroupInvites(snapshot: diff.document.data())
+                            for invite in item.groupInvites {
+                                let docRef = self.database.collection("groups").document(invite)
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        let group = Groups(snapshot: document.data() ?? [:])
+                                        localDate = dateFormatter.string(from: Date())
+                                        print("Firebase data for invite for group: \(invite) : \(localDate)")
+                                        var invite:Invite = Invite(adminName: "", adminPhone: "", groupName: group.name, groupId: invite, riskScore: 99999)
+                                        for user in self.allUsers {
+                                            if user.id == group.adminId {
+                                                invite.riskScore = user.riskScore
+                                                invite.adminPhone = user.phoneNumber
+                                                invite.adminName = user.name
+                                                self.invitesArray.append(invite)
+                                                DispatchQueue.main.async {
+                                                    self.invites = self.invitesArray
+                                                }
+                                                break
+                                            }
                                         }
+                                    } else {
+                                        print("Group document for group id: \(invite) not found")
                                     }
                                 }
-//                                            invite.riskScore = user.riskScore
-//                                            invite.adminPhone = user.phoneNumber
-//                                            invite.adminName = user.name
-//                                            self.invitesArray.append(invite)
-//                                            DispatchQueue.main.async {
-//                                                self.invites = self.invitesArray
-//                                            }
-//                                        } else {
-//                                            print("User document not found look for group admin")
-//                                        }
-//                                    }
-                            } else {
-                                print("Group document for group id: \(invite) not found")
+                            }
+                        }
+                        if (diff.type == .removed) {
+                            print("Removed")
+                            let item = GroupInvites(snapshot: diff.document.data())
+                            for invite in item.groupInvites {
+                                for (index, element) in self.invitesArray.enumerated() {
+                                    if invite == element.groupId {
+                                        self.invitesArray.remove(at: index)
+                                    }
+                                }
                             }
                         }
                     }
-                    
+
                     localDate = dateFormatter.string(from: Date())
-                    
                     for listener in self.groupListeners {
                         if let listen = listener {
                             print("Group listener being removed: \(localDate)")
                             listen.remove()
                         }
                     }
-                    self.groupListeners.removeAll()
                     
+                    self.groupListeners.removeAll()
                     localDate = dateFormatter.string(from: Date())
                     print("Received Firebase data for \(user.groups.count) groups at: \(localDate)")
                     for group in user.groups {
@@ -452,14 +429,18 @@ class FirebaseService: ObservableObject {
                                 print("user.id: \(userId)")
                             }
 */
+                            var found = false
                             groups.id = document.documentID
                             for (index, _) in self.groupsArray.enumerated() {
                                 if self.groupsArray[index].id == document.documentID {
-                                    self.groupsArray.remove(at: index)
+                                    self.groupsArray[index] = groups
+                                    found = true
                                     break
                                 }
                             }
-                            self.groupsArray.append(groups)
+                            if !found {
+                                self.groupsArray.append(groups)
+                            }
                             DispatchQueue.main.async {
                                 self.groups = self.groupsArray
                             }
