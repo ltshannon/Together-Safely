@@ -10,7 +10,7 @@ import SwiftUI
 
 struct CheckboxView: View {
     let id: Int
-    let label: String
+    let arrayIndexs: [Int]
     let size: CGFloat
     let color: Color
     let textSize: Int
@@ -18,14 +18,14 @@ struct CheckboxView: View {
     
     init(
         id: Int,
-        label:String,
+        arrayIndexs: [Int],
         size: CGFloat = 10,
         color: Color = Color.black,
         textSize: Int = 14,
         callback: @escaping (Int, Bool)->()
         ) {
         self.id = id
-        self.label = label
+        self.arrayIndexs = arrayIndexs
         self.size = size
         self.color = color
         self.textSize = textSize
@@ -36,11 +36,12 @@ struct CheckboxView: View {
     
     var body: some View {
         Button(action:{
+            self.isMarked = self.arrayIndexs.contains(self.id)
             self.isMarked.toggle()
             self.callback(self.id, self.isMarked)
         }) {
             HStack(alignment: .center, spacing: 10) {
-                Image(self.isMarked ? "radioButtonOn" : "radioButtonOff")
+                Image(arrayIndexs.contains(id) ? "radioButtonOn" : "radioButtonOff")
                     .renderingMode(.original)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
