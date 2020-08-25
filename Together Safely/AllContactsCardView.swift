@@ -47,7 +47,7 @@ struct AllContactsCardView: View {
                         Spacer()
                     }.padding([.top, .bottom], 15)
                 }
-                .background(Color("Color3")).edgesIgnoringSafeArea(.all)
+                .background(Color("Color4")).edgesIgnoringSafeArea(.all)
                 Capsule()
                     .fill(Color(.darkGray))
                     .frame(height: 2)
@@ -166,7 +166,7 @@ struct AllContactsCardView: View {
                     .padding([.top, .bottom], 10)
                     .padding([.leading, .trailing], 15)
                     .foregroundColor(.white)
-                    .background(Color("Color3"))
+                    .background(Color("Color4"))
                     .cornerRadius(8)
                 }
                 .alert(isPresented: $showingAlert) {
@@ -190,7 +190,7 @@ struct AllContactsCardView: View {
                     .padding([.top, .bottom], 10)
                     .padding([.leading, .trailing], 15)
                     .foregroundColor(.white)
-                    .background(Color("Color3"))
+                    .background(Color("Color4"))
                     .cornerRadius(8)
                 }
             }

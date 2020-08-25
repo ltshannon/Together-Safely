@@ -24,7 +24,7 @@ struct InviationsView: View {
                     Spacer()
                 }.padding([.top, .bottom], 15)
             }
-                .background(Color("Color3")).edgesIgnoringSafeArea(.all)
+                .background(Color("Color4")).edgesIgnoringSafeArea(.all)
             Capsule()
                 .fill(Color(.darkGray))
                 .frame(height: 2)
@@ -70,7 +70,7 @@ struct InviationsView: View {
                                         .padding([.leading, .trailing], 5)
                                         .frame(minWidth: 0, maxWidth: .infinity)
                                         .foregroundColor(.white)
-                                        .background(Color("Color3"))
+                                        .background(Color("Color4"))
                                         .cornerRadius(8)
                                     }
                                     Button(action: {

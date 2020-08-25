@@ -55,7 +55,7 @@ struct EditRiskProfile: View {
                     .padding([.top, .bottom], 10)
                     .padding([.leading, .trailing], 15)
                     .foregroundColor(.white)
-                    .background(Color("Color3"))
+                    .background(Color("Color4"))
                     .cornerRadius(8)
                 }
             }

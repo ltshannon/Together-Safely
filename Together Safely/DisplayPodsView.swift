@@ -42,7 +42,7 @@ struct DisplayPodsView: View {
                                                 .foregroundColor(.white)
                                         }.padding([.top, .bottom], 15)
                                     }
-                                        .background(Color("Color3")).edgesIgnoringSafeArea(.all)
+                                        .background(Color("Color4")).edgesIgnoringSafeArea(.all)
                                     Capsule()
                                         .fill(Color(.darkGray))
                                         .frame(height: 2)
