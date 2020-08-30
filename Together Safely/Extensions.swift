@@ -269,4 +269,12 @@ extension Binding {
     }
 }
 
+extension Array where Element: Hashable {
+    func same(as other: [Element]) -> [Element] {
+        let thisSet = Set(self)
+        let otherSet = Set(other)
+        return Array(thisSet.intersection(otherSet))
+    }
+}
+
 

@@ -14,7 +14,8 @@ struct LocationServiceNotEnableView: View {
     
     var body: some View {
         ZStack {
-            Color("Colorgreen").edgesIgnoringSafeArea(.all)
+            Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all)
+//            Color("Colorgreen").edgesIgnoringSafeArea(.all)
             VStack {
                 Spacer()
                 HStack {

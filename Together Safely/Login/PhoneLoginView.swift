@@ -30,7 +30,8 @@ struct PhoneLoginView: View {
     
     var body: some View {
         ZStack {
-            Color("Colorgreen").edgesIgnoringSafeArea(.all)
+//            Color("Colorgreen").edgesIgnoringSafeArea(.all)
+            Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all)
             VStack {
                 Image("start-login-logo")
                     .renderingMode(.template)

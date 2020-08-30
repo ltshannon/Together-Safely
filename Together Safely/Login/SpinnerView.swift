@@ -14,7 +14,8 @@ struct SpinnerView: View {
     
     var body: some View {
         ZStack {
-            Color("Colorgreen").edgesIgnoringSafeArea(.all)
+//            Color("Colorgreen").edgesIgnoringSafeArea(.all)
+            Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all)
             VStack {
                 Image("start-login-logo")
                     .renderingMode(.template)
@@ -24,13 +25,13 @@ struct SpinnerView: View {
                 VStack {
                 Circle()
                     .trim()
-                    .stroke(AngularGradient(gradient: .init(colors: [.white, .green]), center:  .center), style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                    .stroke(AngularGradient(gradient: .init(colors: [.white, .blue]), center:  .center), style: StrokeStyle(lineWidth: 10, lineCap: .round))
                     .frame(width: 125, height: 125)
                     .rotationEffect(.init(degrees: self.animate ? 360 : 0))
                     .animation(Animation.linear(duration: 0.7).repeatForever(autoreverses: false))
                 }
                 .padding(20)
-                .background(Color("Colorgreen"))
+                .background(Image("backgroudImage"))
                 .cornerRadius(15)
                 .onAppear {
                     self.animate.toggle()

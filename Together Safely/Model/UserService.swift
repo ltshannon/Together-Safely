@@ -238,6 +238,38 @@ class FirebaseService: ObservableObject {
         
     }
     
+    func getRiskQuestionGroups(_ completion: @escaping ([QuestionGroups]) -> Void) {
+        guard let currentUser = Auth.auth().currentUser else {
+            completion([QuestionGroups]())
+            return
+        }
+        database.collection("users").document(currentUser.uid).getDocument { [weak self] (userSnapshot, error) in
+            guard let self = self, let userData = userSnapshot?.data(), error == nil else {
+                completion([QuestionGroups]())
+                return
+            }
+            let user = User(snapshot: userData)
+            self.database.collection("questionGroups").getDocuments { (groupsSnapshot, error) in
+                guard let groupsSnapshot = groupsSnapshot?.documents, error == nil else {
+                    completion([QuestionGroups]())
+                    return
+                }
+                
+                var questions: [QuestionGroups] = []
+                for document in groupsSnapshot {
+                    var question = QuestionGroups(snapshot: document.data(), groupID: document.documentID, answers: user.userGroupAnswers)
+                    question.id = document.documentID
+                    questions.append(question)
+                }
+                let orderedQuestions = questions.sorted { (q1, q2) -> Bool in
+                    return q1.order < q2.order
+                }
+                completion(orderedQuestions)
+            }
+        }
+        
+    }
+    
     func getRiskFactorQuestions(_ completion: @escaping ([UserQuestion]) -> Void) {
         guard let currentUser = Auth.auth().currentUser else {
             completion([UserQuestion]())

@@ -20,6 +20,7 @@ enum Endpoint {
     case leavePod(groupId: String)
     case postStatus(groupId: String)
     case postQuestionAnswers
+    case postGroupAnswers
     case checkPhoneNumbers
     case inviteUser
     case deleteGroup(groupId: String)
@@ -42,6 +43,7 @@ enum Endpoint {
              .leavePod,
              .postStatus,
              .postQuestionAnswers,
+             .postGroupAnswers,
              .checkPhoneNumbers,
              .inviteUser,
              .location:
@@ -72,6 +74,8 @@ enum Endpoint {
             return "groups/\(groupId)/status"
         case .postQuestionAnswers:
             return "answers"
+        case .postGroupAnswers:
+            return "answerQuestions"
         case .checkPhoneNumbers:
             return "checkPhoneNumbers"
         case .inviteUser:
@@ -207,8 +211,6 @@ class WebService {
         }
     }
     
-    
-    
     static func setStatus(text: String, emoji: String, groupId: String, completion: @escaping (Bool) -> Void)  {
         let requestBody = try? JSONSerialization.data(withJSONObject: ["emoji" : emoji, "text" : text], options: [])
         networkRequest(.postStatus(groupId: groupId), responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
@@ -222,6 +224,16 @@ class WebService {
         }
         let requestBody = try? JSONSerialization.data(withJSONObject: ["answers" : mappedAnswers], options: [])
         networkRequest(.postQuestionAnswers, responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
+            completion(error == nil)
+        }
+    }
+    
+    static func postGroupAnswers(answers: [QuestionGroupsAnswer], completion: @escaping (Bool) -> Void) {
+        let mappedAnswers = answers.map { (answer) -> [String : Any?] in
+            return ["questionGroup" : answer.questionGroup, "question" : answer.question, "answer" : answer.answer]
+        }
+        let requestBody = try? JSONSerialization.data(withJSONObject: ["answers" : mappedAnswers], options: [])
+        networkRequest(.postGroupAnswers, responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
             completion(error == nil)
         }
     }

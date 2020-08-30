@@ -52,6 +52,7 @@ struct User: Identifiable, Codable {
     var riskString: String
     var groupInvites: [String]
     var userAnswers: [UserAnswer]
+    var userGroupAnswers: [QuestionGroupsAnswer]
 }
 
 struct RiskScores: Equatable {
@@ -130,10 +131,94 @@ struct Invite: Hashable, Identifiable {
     var riskScore: Double
 }
 
-
 struct ContactInfo: Hashable {
     var image: Data?
     var name: String
+}
+
+struct Choice: Codable, Identifiable, Hashable {
+    let id = UUID()
+    let text: String
+    let value: Double
+}
+
+struct Questions: Codable, Identifiable {
+    let id = UUID()
+    let choices: [Choice]
+    let text: String
+    let type: String
+    var userResponse: Int?
+}
+
+struct QuestionGroups: Identifiable, Codable {
+    @DocumentID var id: String?
+    let order: Int
+    var questions: [Questions]
+    let text: String
+}
+
+struct QuestionGroupsAnswer: Codable, Hashable {
+    var answer: Int
+    let question: Int
+    let questionGroup: String
+    let questionId: UUID
+    let groupIndexs: [Int]
+    let groupNumber: Int
+}
+
+struct QuestionGroupsAnswers: Codable, Hashable {
+    let answers: [QuestionGroupsAnswer]
+}
+
+extension QuestionGroupsAnswers {
+    init(groups: [QuestionGroups]) {
+
+        var answers: [QuestionGroupsAnswer] = []
+        for (groupIndex, group) in groups.enumerated() {
+            let id = group.id != nil ? group.id! : ""
+            for (questionIndex, question) in group.questions.enumerated() {
+                let response = question.userResponse != nil ? question.userResponse! : 9999
+                var array: [Int] = []
+                for (count, _) in question.choices.enumerated() {
+                    let id = groupIndex * 100 + questionIndex * 10 + count
+                    array.append(id)
+                }
+                let answer = QuestionGroupsAnswer(answer: response, question: questionIndex, questionGroup: id, questionId: question.id, groupIndexs: array, groupNumber: groupIndex)
+                answers.append(answer)
+            }
+        }
+        
+        self.answers = answers
+    }
+}
+
+extension QuestionGroups {
+    init(snapshot: Dictionary<String, Any>, groupID: String, answers: [QuestionGroupsAnswer]) {
+        let answers = answers.filter { $0.questionGroup == groupID }
+        order = snapshot["order"] as? Int ?? 0
+        text = snapshot["text"] as? String ?? ""
+        let array = snapshot["questions"] as? Array ?? []
+        questions = []
+        for (index, item) in array.enumerated() {
+            let i = item as! Dictionary<String, Any>
+            let text = i["text"] as? String ?? ""
+            let type = i["type"] as? String ?? ""
+            let cc = i["choices"] as? Array ?? []
+            
+            var choices: [Choice] = []
+            for c in cc {
+                let y = c as! Dictionary<String, Any>
+                let text = y["text"] as? String ?? ""
+                let value = y["value"] as? Double ?? 0
+                let choice = Choice(text: text, value: value)
+                choices.append(choice)
+            }
+            
+            let question = Questions(choices: choices, text: text, type: type, userResponse: index > answers.count - 1 ? nil : answers[index].answer)
+            questions.append(question)
+        }
+        
+    }
 }
 
 extension GroupInvites {
@@ -207,6 +292,7 @@ extension User {
             groupInvites.append(groupInvite as? String ?? "")
         }
         self.groupInvites = groupInvites
+
         let answersCollection = snapshot["userAnswers"] as? [[String : AnyObject]] ?? []
         var userAnswers = [UserAnswer]()
         for answer in answersCollection {
@@ -215,62 +301,15 @@ extension User {
             userAnswers.append(UserAnswer(answer: userAnswer, userQuestion: questionId))
         }
         self.userAnswers = userAnswers
+        
+        let groupAnswersCollection = snapshot["answers"] as? [[String : AnyObject]] ?? []
+        var userGroupAnswers = [QuestionGroupsAnswer]()
+        for answer in groupAnswersCollection {
+            let userAnswer = answer["answer"] as? Int ?? 9999
+            let question = answer["question"] as? Int ?? 9999
+            let questionGroup = answer["questionGroup"] as? String ?? ""
+            userGroupAnswers.append(QuestionGroupsAnswer(answer: userAnswer, question: question, questionGroup: questionGroup, questionId: UUID(), groupIndexs: [], groupNumber: 0))
+        }
+        self.userGroupAnswers = userGroupAnswers
     }
 }
-
-        
-/*
-        addressString = (dictionary["address"] as? String) ?? ""
-        
-        let categoryString = (dictionary["category"] as? String) ?? ""
-        category = Category(rawValue: categoryString) ?? .greatFood
-        let otherDescription = (dictionary["description"] as? String) ?? ""
-        if otherDescription.count > 0 {
-            desc = [otherDescription]
-        } else {
-            desc = (dictionary["desc"] as? [String]) ?? [""]
-        }
-        imgUrlMO = (dictionary["imgUrlMO"] as? String) ?? ""
-        if imgUrlMO.count > 0 {
-            imageURL = imgUrlMO
-        } else {
-            imageURL = (dictionary["imageURL"] as? String) ?? ""
-            if imageURL.count > 0 {
-                imageURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=\(imageURL)&key=AIzaSyAKLWDaXfuVGwqjHBMXSttTNhD3gtvj2vs"
-            }
-        }
-        lat = (dictionary["lat"] as? Double) ?? 0.0
-        lon = (dictionary["lon"] as? Double) ?? 0.0
-        name = (dictionary["name"] as? String) ?? ""
-        phone = (dictionary["phone"] as? String) ?? ""
-        url = (dictionary["url"] as? String) ?? ""
-        time = (dictionary["time"] as? [String]) ?? [""]
-        var offers: [Offers] = []
-        if let object = dictionary["offers"] as? Dictionary<String, Any> {
-            let aa = object.keys
-            for a in aa {
-                if let b = object[a] as? [String:Any] {
-                    let offer: Offers = Offers.init(active: b["active"] != nil ? b["active"]! as! String :  "",
-                                                code: b["code"] != nil ? b["code"]! as! String :  "",
-                                                codeDescription: b["codeDescription"] != nil ? b["codeDescription"]! as! String :  "",
-                                                businessDescription: b["businessDescription"] != nil ? b["businessDescription"]! as! String :  "")
-                    offers.append(offer)
-                }
-            }
-        }
-/*
-        if let objects = dictionary["offers"] as? NSArray {
-            for object in objects {
-                if let dict = object as? Dictionary<String, String> {
-                    let offer: Offers = Offers.init(active: dict["active"] ?? "",
-                                                code: dict["code"] ?? "",
-                                                codeDescription: dict["codeDescription"] ?? "",
-                                                businessDescription: dict["businessDescription"] ?? "")
-                    offers.append(offer)
-                }
-            }
-        }
-*/
-        self.offers = offers
-        distance = 0
-*/

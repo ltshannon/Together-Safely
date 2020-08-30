@@ -36,6 +36,7 @@ struct CheckboxView: View {
     
     var body: some View {
         Button(action:{
+            print("Button touched for index: \(self.id)")
             self.isMarked = self.arrayIndexs.contains(self.id)
             self.isMarked.toggle()
             self.callback(self.id, self.isMarked)
@@ -45,10 +46,11 @@ struct CheckboxView: View {
                     .renderingMode(.original)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 40, height: 40)
+                    .frame(width: 25, height: 25)
             }
         }
-        .padding(.trailing, 20)
+            .buttonStyle(BorderlessButtonStyle())
+            .padding(.trailing, 20)
     }
 }
 
