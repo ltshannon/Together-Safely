@@ -65,7 +65,7 @@ struct AllContactsCardView: View {
                                             .clipShape(Circle())
                                             .overlay(Circle().stroke(
                                                 element.riskScore != nil ?
-                                                self.riskColor.getRiskColor(riskScore: element.riskScore!, riskRanges: self.firebaseService.riskRanges) :
+                                                self.riskColor.getRiskColor(riskScore: element.riskScore!, firebaseService: self.firebaseService) :
                                                 Color("Colorgray")
                                                 , lineWidth: 2))
                                             .padding(5)
@@ -85,7 +85,7 @@ struct AllContactsCardView: View {
                                         .font(Font.custom("Avenir-Medium", size: 18))
                                     if element.riskString != nil {
                                         Text(element.riskString!)
-                                            .foregroundColor(self.riskColor.getRiskColor(riskScore: element.riskScore!, riskRanges: self.firebaseService.riskRanges))
+                                            .foregroundColor(self.riskColor.getRiskColor(riskScore: element.riskScore!, firebaseService: self.firebaseService))
                                             .font(Font.custom("Avenir-Medium", size: 14))
                                             .padding(.leading, 5)
                                     } else {

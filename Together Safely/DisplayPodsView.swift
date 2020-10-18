@@ -22,7 +22,7 @@ struct DisplayPodsView: View {
     var body: some View {
 
         VStack {
-            if self.isVisible {
+//            if self.isVisible {
                 ScrollView(.vertical, showsIndicators: false) {
                     if !firebaseService.groups.isEmpty {
                         ForEach(Array(firebaseService.groups.enumerated()), id: \.offset) { index, group in
@@ -51,7 +51,7 @@ struct DisplayPodsView: View {
                                     Spacer()
                                     Text(group.averageRisk)
                                         .font(Font.custom("Avenir-Medium", size: 16))
-                                        .foregroundColor(self.getRiskColor.getRiskColor(riskScore: group.averageRiskValue, riskRanges: self.firebaseService.riskRanges))
+                                        .foregroundColor(self.getRiskColor.getRiskColor(riskScore: group.averageRiskValue, firebaseService: self.firebaseService))
                                         .padding(.leading, 15)
                                     Spacer()
                                     ScrollView(.horizontal, showsIndicators: false) {
@@ -80,13 +80,13 @@ struct DisplayPodsView: View {
                         DisplayPodsContactPod(group: group).environmentObject(self.firebaseService)
                     }
                 }.padding(.bottom, 15)
-            } else {
-                Spacer()
-            }
+//            } else {
+//                Spacer()
+//            }
         }.onAppear() {
-            self.isVisible = true
+//            self.isVisible = true
         }.onDisappear() {
-            self.isVisible = false
+//            self.isVisible = false
         }
     }
     

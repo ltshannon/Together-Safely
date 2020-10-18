@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		4609C91924DCBB3C004BC76C /* BuildRiskBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4609C91824DCBB3C004BC76C /* BuildRiskBar.swift */; };
 		4609C91D24DCDDFD004BC76C /* DisplayPodsContactPod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4609C91C24DCDDFD004BC76C /* DisplayPodsContactPod.swift */; };
-		46252C2E24C62517005B592F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 46252C2D24C62517005B592F /* GoogleService-Info.plist */; };
 		46252C3024C63882005B592F /* StartLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46252C2F24C63882005B592F /* StartLoginView.swift */; };
 		46252C3224C67CE3005B592F /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46252C3124C67CE3005B592F /* WebService.swift */; };
 		46252C5424C787F8005B592F /* MyselfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46252C5324C787F8005B592F /* MyselfView.swift */; };
@@ -18,10 +17,10 @@
 		4635F3A424D5129E00A4A7E2 /* AllContactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4635F3A324D5129E00A4A7E2 /* AllContactsView.swift */; };
 		4635F3A624D5FE6A00A4A7E2 /* DetailPodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4635F3A524D5FE6A00A4A7E2 /* DetailPodView.swift */; };
 		4635F3A824D6104800A4A7E2 /* FullMemberProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4635F3A724D6104800A4A7E2 /* FullMemberProfileView.swift */; };
+		4638E5B5251173BB001895AB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4638E5B4251173BA001895AB /* GoogleService-Info.plist */; };
 		465BE90C24DB461B008DA1CD /* EditRiskProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465BE90B24DB461B008DA1CD /* EditRiskProfile.swift */; };
 		4660E6EE24D4B52C00C6B993 /* MemberProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4660E6ED24D4B52C00C6B993 /* MemberProfileView.swift */; };
 		46806E5A24F5C2A4000A177B /* EditRiskProfile2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46806E5924F5C2A4000A177B /* EditRiskProfile2.swift */; };
-		4698A94824C51529005E884F /* GoogleService-Info-old.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4698A94724C51529005E884F /* GoogleService-Info-old.plist */; };
 		46ACD57E24C510800083F308 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ACD57D24C510800083F308 /* AppDelegate.swift */; };
 		46ACD58024C510800083F308 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ACD57F24C510800083F308 /* SceneDelegate.swift */; };
 		46ACD58224C510800083F308 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ACD58124C510800083F308 /* ContentView.swift */; };
@@ -55,7 +54,6 @@
 		4609C91824DCBB3C004BC76C /* BuildRiskBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildRiskBar.swift; sourceTree = "<group>"; };
 		4609C91C24DCDDFD004BC76C /* DisplayPodsContactPod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPodsContactPod.swift; sourceTree = "<group>"; };
 		46252C2C24C54F7F005B592F /* Together Safely.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Together Safely.entitlements"; sourceTree = "<group>"; };
-		46252C2D24C62517005B592F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		46252C2F24C63882005B592F /* StartLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartLoginView.swift; sourceTree = "<group>"; };
 		46252C3124C67CE3005B592F /* WebService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebService.swift; sourceTree = "<group>"; };
 		46252C5324C787F8005B592F /* MyselfView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyselfView.swift; sourceTree = "<group>"; };
@@ -64,11 +62,11 @@
 		4635F3A324D5129E00A4A7E2 /* AllContactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllContactsView.swift; sourceTree = "<group>"; };
 		4635F3A524D5FE6A00A4A7E2 /* DetailPodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPodView.swift; sourceTree = "<group>"; };
 		4635F3A724D6104800A4A7E2 /* FullMemberProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullMemberProfileView.swift; sourceTree = "<group>"; };
+		4638E5B4251173BA001895AB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		465BE90B24DB461B008DA1CD /* EditRiskProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRiskProfile.swift; sourceTree = "<group>"; };
 		4660E6ED24D4B52C00C6B993 /* MemberProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberProfileView.swift; sourceTree = "<group>"; };
 		46806E5924F5C2A4000A177B /* EditRiskProfile2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRiskProfile2.swift; sourceTree = "<group>"; };
-		4698A94724C51529005E884F /* GoogleService-Info-old.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-old.plist"; sourceTree = "<group>"; };
-		46ACD57A24C510800083F308 /* Together Safely.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Together Safely.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		46ACD57A24C510800083F308 /* Together Safe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Together Safe.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		46ACD57D24C510800083F308 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		46ACD57F24C510800083F308 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		46ACD58124C510800083F308 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -147,7 +145,7 @@
 		46ACD57B24C510800083F308 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				46ACD57A24C510800083F308 /* Together Safely.app */,
+				46ACD57A24C510800083F308 /* Together Safe.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -186,8 +184,7 @@
 				46ACD58324C510810083F308 /* Assets.xcassets */,
 				46ACD58824C510810083F308 /* LaunchScreen.storyboard */,
 				46ACD58B24C510810083F308 /* Info.plist */,
-				4698A94724C51529005E884F /* GoogleService-Info-old.plist */,
-				46252C2D24C62517005B592F /* GoogleService-Info.plist */,
+				4638E5B4251173BA001895AB /* GoogleService-Info.plist */,
 				46ACD58524C510810083F308 /* Preview Content */,
 			);
 			path = "Together Safely";
@@ -241,7 +238,7 @@
 			);
 			name = "Together Safely";
 			productName = "Together Safely";
-			productReference = 46ACD57A24C510800083F308 /* Together Safely.app */;
+			productReference = 46ACD57A24C510800083F308 /* Together Safe.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -283,8 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				46ACD58A24C510810083F308 /* LaunchScreen.storyboard in Resources */,
-				4698A94824C51529005E884F /* GoogleService-Info-old.plist in Resources */,
-				46252C2E24C62517005B592F /* GoogleService-Info.plist in Resources */,
+				4638E5B5251173BB001895AB /* GoogleService-Info.plist in Resources */,
 				46ACD58724C510810083F308 /* Preview Assets.xcassets in Resources */,
 				46ACD58424C510810083F308 /* Assets.xcassets in Resources */,
 			);
@@ -442,7 +438,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -496,7 +492,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -513,17 +509,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Together Safely/Together Safely.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_ASSET_PATHS = "\"Together Safely/Preview Content\"";
-				DEVELOPMENT_TEAM = DDDAQ32TPA;
+				DEVELOPMENT_TEAM = J4837STP57;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Together Safely/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.breakawaydesign.Together;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.togethersafelyapp.social;
+				PRODUCT_NAME = "Together Safe";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -536,17 +533,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Together Safely/Together Safely.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_ASSET_PATHS = "\"Together Safely/Preview Content\"";
-				DEVELOPMENT_TEAM = DDDAQ32TPA;
+				DEVELOPMENT_TEAM = J4837STP57;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Together Safely/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.breakawaydesign.Together;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.togethersafelyapp.social;
+				PRODUCT_NAME = "Together Safe";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

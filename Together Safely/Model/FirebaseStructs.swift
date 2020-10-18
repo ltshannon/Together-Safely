@@ -105,6 +105,8 @@ struct Status: Codable, Hashable {
 struct RiskHighLow: Codable, Hashable {
     var min: Double
     var max: Double
+    var name: String
+    var color: String
 }
 
 struct RiskRanges {
@@ -115,6 +117,8 @@ extension RiskHighLow {
     init(snapshot: Dictionary<String, Any>) {
         min = snapshot["min"] as? Double ?? 9999999
         max = snapshot["max"] as? Double ?? 9999999
+        name = snapshot["name"] as? String ?? "N/A"
+        color = snapshot["color"] as? String ?? "FFFFFF"
     }
 }
 

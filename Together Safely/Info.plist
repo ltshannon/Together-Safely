@@ -23,7 +23,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.366967144619-ht025p29jdf2dmbvntammfupdeotc2ra</string>
+				<string>com.googleusercontent.apps.366967144619-i5b10tuik874n70spbglfhmpit75iu3t</string>
 			</array>
 		</dict>
 	</array>
@@ -37,11 +37,11 @@
 		<true/>
 	</dict>
 	<key>NSContactsUsageDescription</key>
-	<string>Allow contacts access</string>
+	<string>We need contacts to populate your contacts as potential pod members in the app</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>To be able to see where you go we need access to your locations.</string>
+	<string>Together uses your general region to determine risk levels</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>To be able to see where you go we need access to your locations.</string>
+	<string>Together uses your general region to determine risk levels</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -37,7 +37,7 @@ class FirebaseService: ObservableObject {
     private var groupListeners: [ListenerRegistration?] = []
 
     init() {
-        getServerData(byPhoneNumber: UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? "")
+//        getServerData(byPhoneNumber: UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? "")
     }
     
     func checkUser(byPhoneNumber phoneNumber: String, completion: @escaping (Double, Error?) -> Void) {
@@ -497,7 +497,7 @@ class FirebaseService: ObservableObject {
                 for document in querySnapshot!.documents {
                     let riskRange = RiskHighLow(snapshot: document.data())
                     var s = [String: RiskHighLow]()
-                    s[document.documentID] = riskRange
+                    s[riskRange.name] = riskRange
                     dictionary.append(s)
                 }
                 print(dictionary)

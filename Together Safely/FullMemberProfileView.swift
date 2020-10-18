@@ -30,7 +30,7 @@ struct FullMemberProfileView: View {
                     .foregroundColor(Color("Colorgray"))
                 Text(member.riskString)
                     .font(Font.custom("Avenir-Medium", size: 14))
-                    .foregroundColor(getRiskColor.getRiskColor(riskScore: member.riskScore, riskRanges: self.firebaseService.riskRanges))
+                    .foregroundColor(getRiskColor.getRiskColor(riskScore: member.riskScore, firebaseService: self.firebaseService))
             }
             Spacer()
             Text(member.status.emoji)

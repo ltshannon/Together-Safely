@@ -39,7 +39,7 @@ struct MemberProfileView: View {
             }
             Circle()
                 .frame(width: 25, height: 25)
-                .foregroundColor(getRiskColor.getRiskColor(riskScore: riskScore, riskRanges: self.firebaseService.riskRanges))
+                .foregroundColor(getRiskColor.getRiskColor(riskScore: riskScore, firebaseService: self.firebaseService))
                 .overlay(Circle().stroke(Color.white, lineWidth: 3))
                 .offset(x: 25, y: 25)
         }

@@ -9,18 +9,19 @@
 import SwiftUI
 import Contacts
 
+@available(iOS 14.0, *)
 struct DummyView: View {
     
 //    @ObservedObject private var contactStore: ContactStore = ContactStore()
-    @State var firebaseService:FirebaseService = FirebaseService()
-    @State var locationFetcher: LocationFetcher = LocationFetcher()
+    @StateObject var firebaseService:FirebaseService = FirebaseService()
+    @StateObject var locationFetcher: LocationFetcher = LocationFetcher()
     
     var body: some View {
         VStack {
             HomeView().environmentObject(firebaseService).padding(.top, 10)
         }
         .onAppear {
-//            self.firebaseService.getServerData(byPhoneNumber: UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? "")
+            self.firebaseService.getServerData(byPhoneNumber: UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? "")
         }
             .background(Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all))
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in

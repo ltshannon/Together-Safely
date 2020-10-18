@@ -107,7 +107,7 @@ struct DetailPodView: View {
                         Spacer()
                         Text(self.firebaseService.groups[index].averageRisk)
                             .font(Font.custom("Avenir-Medium", size: 16))
-                            .foregroundColor(self.getRiskColor.getRiskColor(riskScore: self.firebaseService.groups[index].averageRiskValue, riskRanges: self.firebaseService.riskRanges))
+                            .foregroundColor(self.getRiskColor.getRiskColor(riskScore: self.firebaseService.groups[index].averageRiskValue, firebaseService: self.firebaseService))
                             .padding(.leading, 15)
                     }
                     .frame(height: 75)

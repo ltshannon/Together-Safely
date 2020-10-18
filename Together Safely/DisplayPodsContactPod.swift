@@ -46,7 +46,7 @@ struct DisplayPodsContactPod: View {
                         Spacer()
                         Text(firebaseService.userContantRiskAverageString)
                             .font(Font.custom("Avenir-Medium", size: 16))
-                            .foregroundColor(self.getRiskColor.getRiskColor(riskScore: firebaseService.userContantRiskAverageValue, riskRanges: self.firebaseService.riskRanges))
+                            .foregroundColor(self.getRiskColor.getRiskColor(riskScore: firebaseService.userContantRiskAverageValue, firebaseService: self.firebaseService))
                             .padding(.leading, 15)
                         Spacer()
                         ScrollView(.horizontal, showsIndicators: false) {
