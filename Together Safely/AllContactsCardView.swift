@@ -60,7 +60,8 @@ struct AllContactsCardView: View {
                                     if element.contactInfo.imageData != nil {
                                         Image(uiImage: UIImage(data: element.contactInfo.imageData!)!)
                                             .resizable()
-                                            .renderingMode(.original)
+                                            .aspectRatio(contentMode: .fill)
+//                                            .renderingMode(.original)
                                             .frame(width: 40, height: 40)
                                             .clipShape(Circle())
                                             .overlay(Circle().stroke(
@@ -92,7 +93,7 @@ struct AllContactsCardView: View {
                                         Text(element.phoneNumber.applyPatternOnNumbers(pattern: "###-###-####", replacmentCharacter: "#"))
                                             .foregroundColor(Color("Colorblack"))
                                             .font(Font.custom("Avenir-Medium", size: 12))
-                                        Text("No risk status")
+                                        Text("Unknown Mood")
                                         .foregroundColor(Color("Colorgray"))
                                         .font(Font.custom("Avenir-Medium", size: 15))
                                             Spacer()

@@ -10,16 +10,29 @@ import SwiftUI
 
 struct BuildRiskBar: View {
 
-    var highRiskCount: Int
-    var medRiskCount: Int
-    var lowRiskCount: Int
+    var dict: [String:Int]
+//    var highRiskCount: Int
+//    var medRiskCount: Int
+//    var lowRiskCount: Int
     var memberCount: Int
     @EnvironmentObject var firebaseService: FirebaseService
+    @State private var color: Color = Color.white
     
     var body: some View {
         GeometryReader { metrics in
             HStack(spacing: 0) {
-                ZStack {
+                ForEach(dict.sorted(by: >), id: \.key) { key, value in
+                    ZStack {
+                        Rectangle()
+                            .foregroundColor(color.getColorFromString(str: key, firebaseService: self.firebaseService))
+                            .frame(width: (self.calculateWidthPercentage(riskCount: value, metricWidth: metrics.size.width)))
+                        Text("\(value)")
+                            .font(Font.custom("Avenir-Medium", size: 16))
+                            .foregroundColor(.white)
+                    }
+                }
+/*
+                 ZStack {
                     Rectangle()
                         .foregroundColor(Color("Colorred"))
                         .frame(width: (self.calculateWidthPercentage(riskCount: self.highRiskCount, metricWidth: metrics.size.width)))
@@ -43,9 +56,10 @@ struct BuildRiskBar: View {
                         .font(Font.custom("Avenir-Medium", size: 16))
                         .foregroundColor(.white)
                 }
+*/
             }
-            .clipShape(RoundedRectangle(cornerRadius: 6))
-            .frame(width: metrics.size.width, height: 25)
+                .clipShape(RoundedRectangle(cornerRadius: 6))
+                .frame(width: metrics.size.width, height: 25)
         }
     }
     

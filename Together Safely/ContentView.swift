@@ -27,10 +27,12 @@ struct ContentView: View {
                 if self.status {
                     DummyView()
                 } else {
-                    StartLoginView().environmentObject(LocationFetcher())
+//                    StartLoginView().environmentObject(LocationFetcher())
+                    StartLoginView()
                 }
             }
             .navigationBarTitle("", displayMode: .inline)
+            .background(Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all))
         }
     }
 }

@@ -19,7 +19,7 @@ struct PhoneLoginView: View {
     @State private var textSize:CGFloat = 22
     @State private var showIndicator = false
     @State private var keyboardHeight: CGFloat = 0
-    @EnvironmentObject var locationFetcher: LocationFetcher
+//    @EnvironmentObject var locationFetcher: LocationFetcher
     
     var currencyFormatter: NumberFormatter {
     let formatter = NumberFormatter()
@@ -54,7 +54,8 @@ struct PhoneLoginView: View {
                     .padding(.bottom, keyboardHeight)
                     .onReceive(Publishers.keyboardHeight) { self.keyboardHeight = $0 }
                 Spacer()
-                NavigationLink(destination: PhoneVerificationView(id: $returnId).environmentObject(locationFetcher), isActive: $show) {
+//                NavigationLink(destination: PhoneVerificationView(id: $returnId).environmentObject(locationFetcher), isActive: $show) {
+                NavigationLink(destination: PhoneVerificationView(id: $returnId), isActive: $show) {
                     Button(action: {
                         if self.phoneNumber.count != 10 {
                             self.msg = "Enter a 10 digit number"
@@ -85,13 +86,13 @@ struct PhoneLoginView: View {
                     .cornerRadius(10)
                 }
                 Spacer()
-
+/*
                 Group {
                     NavigationLink(destination: LocationServiceNotEnableView(), isActive: $locationFetcher.alert2) {
                         EmptyView()
                     }
                 }
-
+*/
             }
                 .padding(15)
                 .navigationBarHidden(true)
@@ -99,9 +100,9 @@ struct PhoneLoginView: View {
             .alert(isPresented: $alert) {
                 Alert(title: Text("Error"), message: Text(self.msg), dismissButton: .default(Text("ok")))
             }
-            .onAppear() {
-                self.locationFetcher.checkIfEnabled()
-            }
+//            .onAppear() {
+//                self.locationFetcher.checkIfEnabled()
+//            }
             if self.showIndicator {
                 GeometryReader {geometry in
                     SpinnerView()

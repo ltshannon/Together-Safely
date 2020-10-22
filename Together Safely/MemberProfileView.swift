@@ -22,7 +22,8 @@ struct MemberProfileView: View {
             if image != nil {
                 Image(uiImage: UIImage(data: image!)!)
                     .resizable()
-                    .renderingMode(.original)
+                    .aspectRatio(contentMode: .fill)
+//                    .renderingMode(.original)
                     .frame(width: 75, height: 75)
                     .clipShape(Circle())
                     .overlay(Circle().stroke(Color.black, lineWidth: 1))

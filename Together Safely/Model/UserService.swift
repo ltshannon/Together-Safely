@@ -17,6 +17,7 @@ class FirebaseService: ObservableObject {
     @Published var user: User = User(snapshot: [:])
     @Published var groups: [Groups] = []
     @Published var riskRanges: [[String:RiskHighLow]] = []
+    @Published var riskColors: [[String:String]] = []
     @Published var invites: [Invite] = []
     @Published var userContacts: [TogetherContactType] = []
     @Published var contactGroups: [Groups] = []
@@ -494,16 +495,22 @@ class FirebaseService: ObservableObject {
                 completion(err)
             } else {
                 var dictionary: [[String:RiskHighLow]] = [[:]]
+                var colorDictionary: [[String:String]] = [[:]]
                 for document in querySnapshot!.documents {
                     let riskRange = RiskHighLow(snapshot: document.data())
-                    var s = [String: RiskHighLow]()
+                    var s = [String:RiskHighLow]()
                     s[riskRange.name] = riskRange
                     dictionary.append(s)
+                    var color = [String: String]()
+                    color[riskRange.name] = riskRange.color
+                    colorDictionary.append(color)
                 }
                 print(dictionary)
                 self.riskRanges.removeAll()
+                self.riskColors.removeAll()
                 DispatchQueue.main.async {
                     self.riskRanges = dictionary
+                    self.riskColors = colorDictionary
                 }
                 completion(nil)
             }

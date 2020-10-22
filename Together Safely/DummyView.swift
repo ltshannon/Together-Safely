@@ -13,8 +13,11 @@ import Contacts
 struct DummyView: View {
     
 //    @ObservedObject private var contactStore: ContactStore = ContactStore()
-    @StateObject var firebaseService:FirebaseService = FirebaseService()
-    @StateObject var locationFetcher: LocationFetcher = LocationFetcher()
+    @StateObject var firebaseService: FirebaseService = FirebaseService()
+//    @StateObject var locationFetcher: LocationFetcher = LocationFetcher()
+    @State var attitudeQuestion = UserDefaults.standard.value(forKey: "attitudeQuestion") as? Bool ?? false
+    @State private var action1 = true
+    @State private var action2 = true
     
     var body: some View {
         VStack {
@@ -26,7 +29,7 @@ struct DummyView: View {
             .background(Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all))
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             print("Moving back to the foreground!")
-            self.locationFetcher.start()
+//            self.locationFetcher.start()
         }
     }
 }

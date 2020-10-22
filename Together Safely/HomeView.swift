@@ -102,6 +102,7 @@ struct HomeView: View {
                         Image(uiImage: UIImage(data:self.firebaseService.user.image!)!)
                             .renderingMode(.original)
                             .resizable()
+                            .aspectRatio(contentMode: .fill)
                             .frame(width: 40, height: 40)
                             .clipShape(Circle())
                             .padding([.top, .bottom], 5)

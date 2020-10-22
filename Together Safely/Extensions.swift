@@ -29,14 +29,14 @@ extension Notification {
         return (userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? 0
     }
 }
-
+/*
 extension  UITextField{
     @objc func doneButtonTapped(button:UIBarButtonItem) -> Void {
        self.resignFirstResponder()
     }
 
 }
-
+*/
 extension UIApplication {
     func endEditing() {
         sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -163,6 +163,18 @@ extension Color {
                     if let value = UInt(range.color, radix: 16) {
                         return Color(hex:Int(value))
                     }
+                }
+            }
+        }
+        return Color("Colorgray")
+    }
+    
+    func getColorFromString(str: String, firebaseService: FirebaseService) -> Color {
+        
+        for item in firebaseService.riskColors {
+            if let s = item[str] {
+                if let value = UInt(s, radix: 16) {
+                    return Color(hex:Int(value))
                 }
             }
         }

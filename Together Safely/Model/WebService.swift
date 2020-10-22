@@ -25,6 +25,7 @@ enum Endpoint {
     case inviteUser
     case deleteGroup(groupId: String)
     case location
+    case riskScore
     
     var baseUrlString: String {
         //TODO: move this into its own ENUM at some point in order to switch between staging/dev/prod server environments
@@ -46,7 +47,8 @@ enum Endpoint {
              .postGroupAnswers,
              .checkPhoneNumbers,
              .inviteUser,
-             .location:
+             .location,
+             .riskScore:
             return .post
         case .deleteGroup:
             return .delete
@@ -84,6 +86,8 @@ enum Endpoint {
             return "groups/\(groupId)"
         case .location:
             return "users/location"
+        case .riskScore:
+            return "users/riskScore"
         }
     }
 }
@@ -136,6 +140,13 @@ class WebService {
     static func updateLocation(lat: Float, lng: Float, completion: @escaping (Bool) -> Void)  {
         let requestBody = try? JSONSerialization.data(withJSONObject: ["latitude" : lat, "longitude" : lng], options: [])
         networkRequest(.location, responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
+            completion(error == nil)
+        }
+    }
+    
+    static func riskScore(score: Float, completion: @escaping (Bool) -> Void)  {
+        let requestBody = try? JSONSerialization.data(withJSONObject: ["riskScore": score], options: [])
+        networkRequest(.riskScore, responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
             completion(error == nil)
         }
     }

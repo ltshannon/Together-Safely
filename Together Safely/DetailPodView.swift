@@ -22,53 +22,87 @@ struct DetailPodView: View {
     var body: some View {
         VStack {
             VStack(alignment: .leading, spacing: 0) {
-                HStack {
-                    if firebaseService.user.image != nil {
-                        Image(uiImage: UIImage(data:firebaseService.user.image!)!)
-                            .resizable()
-                            .renderingMode(.original)
-                            .frame(width: 45, height: 45)
-                            .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.black, lineWidth: 1))
-                            .padding([.top, .bottom], 5)
-
-                    } else {
-                        Image(systemName: "person.crop.circle.fill")
-                            .resizable()
-                            .renderingMode(.template)
-                            .foregroundColor(.gray)
-                            .frame(width: 45, height: 45)
-                            .clipShape(Circle())
-                            .padding([.top, .bottom], 5)
-                    }
+                VStack(alignment: .leading, spacing: 0) {
                     HStack {
-                        TextFieldWrapperView(text: self.$emojiText)
-                            .background(Color.white)
-                            .frame(width: 30, height: 30)
-                            .font(Font.custom("Avenir-Medium", size: 18))
-                        TextField("I want to..", text: $inputStr)
-                            .font(Font.custom("Avenir-Medium", size: 18))
-                            .foregroundColor(Color("Colorblack"))
-                        Button (action: {
-                            if self.inputStr.count == 0 {
-                                return
-                            }
-                            WebService.setStatus(text: self.inputStr, emoji: self.emojiText, groupId: self.firebaseService.groups[self.index].id){ successful in
-                                if !successful {
-                                    print("Set status failed for groupId : \(self.firebaseService.groups[self.index].id))")
-                                } else {
-                                    self.inputStr = ""
-                                }
-                            }
-                        }) {
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(Color("Colorgray"))
-                                .font(Font.custom("Avenir-Medium", size: 18))
+                        if firebaseService.user.image != nil {
+                            Image(uiImage: UIImage(data:firebaseService.user.image!)!)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+//                                .renderingMode(.original)
+                                .frame(width: 45, height: 45)
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.black, lineWidth: 1))
+                                .padding([.top, .bottom], 5)
+
+                        } else {
+                            Image(systemName: "person.crop.circle.fill")
+                                .resizable()
+                                .renderingMode(.template)
+                                .foregroundColor(.gray)
+                                .frame(width: 45, height: 45)
+                                .clipShape(Circle())
+                                .padding([.top, .bottom], 5)
                         }
+                        Text("My daily status:")
+                            .font(Font.custom("Avenir-Medium", size: 22))
+                            .foregroundColor(.white)
                     }
-                    .padding(5)
-                    .overlay(Rectangle().stroke(Color.gray, lineWidth: 1))
-                    .background(Color.white)
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text("Select:")
+                            .foregroundColor(Color.white)
+                            .font(Font.custom("Avenir-Medium", size: 15))
+                            .padding(.top, 15)
+                            .padding(.bottom, 10)
+                        HStack {
+                            TextFieldWrapperView(text: self.$emojiText)
+                                .background(Color.white)
+                                .frame(width: 30, height: 30)
+//                                .font(Font.custom("Avenir-Medium", size: 18))
+                                .padding(5)
+//                                .clipShape(RoundedRectangle(cornerRadius: 20))
+//                                .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: 1))
+                                .cornerRadius(20)
+                                .background(Color.white)
+
+                            TextField("e.g. let's meet for coffee", text: $inputStr)
+                                .frame(height: 30)
+                                .font(Font.custom("AvenirNext-Italic", size: 18))
+                                .foregroundColor(Color("Colorblack"))
+                                .padding(5)
+//                                .overlay(Rectangle().stroke(Color.gray, lineWidth: 1))
+//                                .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.gray))
+                                .background(Color.white)
+/*
+                            CustomTextfield(text: self.$inputStr, keyType: UIKeyboardType.default, placeHolder: "e.g. let's meet for coffee")
+                                .frame(height: 30)
+                                .font(Font.custom("AvenirNext-Italic", size: 18))
+                                .foregroundColor(Color("Colorblack"))
+                                .padding(5)
+                                .background(Color.white)
+//                                .overlay(Rectangle().stroke(Color.gray, lineWidth: 1))
+//                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+*/
+
+                            Button (action: {
+                                if self.inputStr.count == 0 {
+                                    return
+                                }
+                                WebService.setStatus(text: self.inputStr, emoji: self.emojiText, groupId: self.firebaseService.groups[self.index].id){ successful in
+                                    if !successful {
+                                        print("Set status failed for groupId : \(self.firebaseService.groups[self.index].id))")
+                                    } else {
+                                        self.inputStr = ""
+                                    }
+                                }
+                            }) {
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(Color.black)
+                                    .font(Font.custom("Avenir-Medium", size: 18))
+                            }
+
+                        }
+
+                    }
                 }
                 HStack {
                     Spacer()
@@ -103,9 +137,10 @@ struct DetailPodView: View {
                         .padding(0)
                     VStack(alignment: .leading, spacing: 0) {
                         Spacer()
-                        BuildRiskBar(highRiskCount: self.firebaseService.groups[index].riskTotals["High Risk"] ?? 0, medRiskCount: self.firebaseService.groups[index].riskTotals["Medium Risk"] ?? 0, lowRiskCount: self.firebaseService.groups[index].riskTotals["Low Risk"] ?? 0, memberCount: self.firebaseService.groups[index].members.count).environmentObject(self.firebaseService).padding(15)
+//                        BuildRiskBar(highRiskCount: self.firebaseService.groups[index].riskTotals["High Risk"] ?? 0, medRiskCount: self.firebaseService.groups[index].riskTotals["Medium Risk"] ?? 0, lowRiskCount: self.firebaseService.groups[index].riskTotals["Low Risk"] ?? 0, memberCount: self.firebaseService.groups[index].members.count).environmentObject(self.firebaseService).padding(15)
+                        BuildRiskBar(dict: self.firebaseService.groups[index].riskTotals, memberCount: self.firebaseService.groups[index].members.count).environmentObject(self.firebaseService).padding(15)
                         Spacer()
-                        Text(self.firebaseService.groups[index].averageRisk)
+                        Text("Mostly \(self.firebaseService.groups[index].averageRisk)")
                             .font(Font.custom("Avenir-Medium", size: 16))
                             .foregroundColor(self.getRiskColor.getRiskColor(riskScore: self.firebaseService.groups[index].averageRiskValue, firebaseService: self.firebaseService))
                             .padding(.leading, 15)
@@ -172,7 +207,12 @@ extension TextFieldWrapperView {
     func makeUIView(context: UIViewRepresentableContext<TextFieldWrapperView>) -> UITextField {
         let textField = EmojiTextField()
         textField.delegate = context.coordinator
-        textField.placeholder = "🙂"
+        textField.placeholder = "☕️"
+        let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: textField.frame.size.width, height: 44))
+        let doneButton = UIBarButtonItem(title: "Next", style: .done, target: self, action: #selector(textField.doneButtonTapped(button:)))
+        toolBar.items = [doneButton]
+        toolBar.setItems([doneButton], animated: true)
+        textField.inputAccessoryView = toolBar
         return textField
     }
 
@@ -202,7 +242,6 @@ class TFCoordinator: NSObject, UITextFieldDelegate {
 
 }
 
-
 class EmojiTextField: UITextField {
 
     // required for iOS 13
@@ -218,10 +257,36 @@ class EmojiTextField: UITextField {
     }
 }
 
-/*
-struct DetailPodView_Previews: PreviewProvider {
-    static var previews: some View {
-        DetailPodView()
+struct CustomTextfield: UIViewRepresentable {
+    @Binding var text: String
+    var keyType: UIKeyboardType
+    var placeHolder: String
+    func makeUIView(context: Context) -> UITextField {
+        let textfield = UITextField()
+        textfield.keyboardType = keyType
+        textfield.placeholder = placeHolder
+        let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: textfield.frame.size.width, height: 44))
+        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(textfield.doneButtonTapped(button:)))
+        toolBar.items = [doneButton]
+        toolBar.setItems([doneButton], animated: true)
+        textfield.inputAccessoryView = toolBar
+        return textfield
     }
+
+    func updateUIView(_ uiView: UITextField, context: Context) {
+        uiView.text = text
+    }
+
 }
-*/
+
+extension  UITextField{
+    @objc func doneButtonTapped(button:UIBarButtonItem) -> Void {
+       self.resignFirstResponder()
+    }
+    
+    @objc func NextButtonTapped(button:UIBarButtonItem) -> Void {
+       self.resignFirstResponder()
+    }
+
+
+}

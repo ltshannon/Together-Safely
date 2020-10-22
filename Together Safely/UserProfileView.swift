@@ -37,7 +37,8 @@ struct UserProfileView: View {
                     if firebaseService.user.image != nil {
                         Image(uiImage: UIImage(data:firebaseService.user.image!)!)
                             .resizable()
-                            .renderingMode(.original)
+                            .aspectRatio(contentMode: .fill)
+//                            .renderingMode(.original)
                             .frame(width: 100, height: 100)
                             .clipShape(Circle())
                             .overlay(Circle().stroke(Color.black, lineWidth: 1))
@@ -59,6 +60,9 @@ struct UserProfileView: View {
                         .offset(x: 25, y: 25)
                 }.offset(x: 0, y: -50)
             }
+// Commented out Risk Factors 10/18/2020
+            Spacer()
+/*
             VStack(alignment: .leading, spacing: 0) {
                 Text("Risk factors")
                     .font(Font.custom("Avenir-Heavy", size: 22))
@@ -108,6 +112,7 @@ struct UserProfileView: View {
                         .foregroundColor(.white).opacity(81)
                 }
             }
+*/
         }
             .padding(15)
             .navigationBarBackButtonHidden(true)

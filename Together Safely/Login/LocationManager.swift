@@ -25,12 +25,14 @@ class LocationFetcher: NSObject, CLLocationManagerDelegate, ObservableObject {
     }
 
     func start() {
+/*
         manager.requestWhenInUseAuthorization()
         manager.requestAlwaysAuthorization()
         manager.allowsBackgroundLocationUpdates = true
         manager.distanceFilter = 10
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.startUpdatingLocation()
+ */
     }
     
     func checkIfEnabled() {

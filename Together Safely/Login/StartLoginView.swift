@@ -15,7 +15,7 @@ struct StartLoginView: View {
     @State private var disableButton = false
 //    @ObservedObject private var locationFetcher = LocationFetcher()
     @State private var showError = false
-    @EnvironmentObject var locationFetcher: LocationFetcher
+//    @EnvironmentObject var locationFetcher: LocationFetcher
     
     var body: some View {
         ZStack {
@@ -37,7 +37,8 @@ struct StartLoginView: View {
                     .font(Font.custom("Avenir-Medium", size: bodyTextSize))
                     .foregroundColor(.white)
                 Spacer()
-                NavigationLink(destination: PhoneLoginView().environmentObject(locationFetcher), isActive: $show) {
+//                NavigationLink(destination: PhoneLoginView().environmentObject(locationFetcher), isActive: $show) {
+                NavigationLink(destination: PhoneLoginView(), isActive: $show) {
                     Button(action: {
                         self.show.toggle()
                     }) {
@@ -55,10 +56,11 @@ struct StartLoginView: View {
                 .padding(15)
                 .navigationBarHidden(true)
                 .navigationBarBackButtonHidden(true)
-                .onAppear() {
-                    self.locationFetcher.start()
-                }
+//                .onAppear() {
+//                    self.locationFetcher.start()
+//                }
         }
+/*
         .alert(isPresented: $locationFetcher.alert) {
             Alert(title: Text("Location service needs to be enable"), message: Text("Please enable location service for this app"), primaryButton: .destructive(Text("Continue to settings")) {
                     if let url = URL(string:UIApplication.openSettingsURLString) {
@@ -70,6 +72,7 @@ struct StartLoginView: View {
                 self.showError.toggle()
             })
         }
+*/
     }
 }
 
