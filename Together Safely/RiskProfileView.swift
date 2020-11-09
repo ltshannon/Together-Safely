@@ -20,7 +20,7 @@ struct RiskProfileView: View {
         VStack {
             VStack(alignment: .leading, spacing: 0) {
                 HStack {
-                    Text("Set Attitude")
+                    Text("Set your personality")
                         .font(Font.custom("Avenir-Heavy", size: 30))
                         .foregroundColor(Color.white)
                         .padding([.leading, .trailing, .bottom], 15)
@@ -28,7 +28,7 @@ struct RiskProfileView: View {
                 }
             }
             VStack(alignment: .leading, spacing: 0) {
-                Text("What's your attitude these days?")
+                Text("What’s your personality type")
                     .font(Font.custom("Avenir-Heavy", size: 22))
                     .padding([.leading, .top], 20)
                 VStack(alignment: .leading, spacing: 0) {
@@ -43,7 +43,7 @@ struct RiskProfileView: View {
                                 .renderingMode(.original)
                                 .frame(width: imageSize, height: imageSize)
                             VStack(alignment: .leading, spacing: 0) {
-                                Text("Isolated")
+                                Text("Introvert")
                                     .font(Font.custom("Avenir-Heavy", size: 22))
                                 Text("\"I'm mostly staying at home\"")
                                     .font(Font.custom("AvenirNext-Italic", size: 18))
@@ -85,7 +85,7 @@ struct RiskProfileView: View {
                                 .renderingMode(.original)
                                 .frame(width: imageSize, height: imageSize)
                             VStack(alignment: .leading, spacing: 0) {
-                                Text("Active")
+                                Text("Extrovert")
                                     .font(Font.custom("Avenir-Heavy", size: 22))
                                 Text("\"I'm out and about living my life\"")
                                     .font(Font.custom("AvenirNext-Italic", size: 18))

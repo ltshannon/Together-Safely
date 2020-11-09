@@ -17,7 +17,7 @@
 		4635F3A424D5129E00A4A7E2 /* AllContactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4635F3A324D5129E00A4A7E2 /* AllContactsView.swift */; };
 		4635F3A624D5FE6A00A4A7E2 /* DetailPodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4635F3A524D5FE6A00A4A7E2 /* DetailPodView.swift */; };
 		4635F3A824D6104800A4A7E2 /* FullMemberProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4635F3A724D6104800A4A7E2 /* FullMemberProfileView.swift */; };
-		4638E5B5251173BB001895AB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4638E5B4251173BA001895AB /* GoogleService-Info.plist */; };
+		464515432547333300305EC5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 464515422547333300305EC5 /* GoogleService-Info.plist */; };
 		465BE90C24DB461B008DA1CD /* EditRiskProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465BE90B24DB461B008DA1CD /* EditRiskProfile.swift */; };
 		4660E6EE24D4B52C00C6B993 /* MemberProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4660E6ED24D4B52C00C6B993 /* MemberProfileView.swift */; };
 		46806E5A24F5C2A4000A177B /* EditRiskProfile2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46806E5924F5C2A4000A177B /* EditRiskProfile2.swift */; };
@@ -63,7 +63,7 @@
 		4635F3A324D5129E00A4A7E2 /* AllContactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllContactsView.swift; sourceTree = "<group>"; };
 		4635F3A524D5FE6A00A4A7E2 /* DetailPodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPodView.swift; sourceTree = "<group>"; };
 		4635F3A724D6104800A4A7E2 /* FullMemberProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullMemberProfileView.swift; sourceTree = "<group>"; };
-		4638E5B4251173BA001895AB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		464515422547333300305EC5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		465BE90B24DB461B008DA1CD /* EditRiskProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRiskProfile.swift; sourceTree = "<group>"; };
 		4660E6ED24D4B52C00C6B993 /* MemberProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberProfileView.swift; sourceTree = "<group>"; };
 		46806E5924F5C2A4000A177B /* EditRiskProfile2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRiskProfile2.swift; sourceTree = "<group>"; };
@@ -184,10 +184,10 @@
 				46DE5E7F24D9FED9005912CD /* CheckboxView.swift */,
 				46252C5324C787F8005B592F /* MyselfView.swift */,
 				46F7E64224CCE9B5004EAF24 /* PlacesTest.xcdatamodeld */,
+				464515422547333300305EC5 /* GoogleService-Info.plist */,
 				46ACD58324C510810083F308 /* Assets.xcassets */,
 				46ACD58824C510810083F308 /* LaunchScreen.storyboard */,
 				46ACD58B24C510810083F308 /* Info.plist */,
-				4638E5B4251173BA001895AB /* GoogleService-Info.plist */,
 				46ACD58524C510810083F308 /* Preview Content */,
 			);
 			path = "Together Safely";
@@ -283,7 +283,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				46ACD58A24C510810083F308 /* LaunchScreen.storyboard in Resources */,
-				4638E5B5251173BB001895AB /* GoogleService-Info.plist in Resources */,
+				464515432547333300305EC5 /* GoogleService-Info.plist in Resources */,
 				46ACD58724C510810083F308 /* Preview Assets.xcassets in Resources */,
 				46ACD58424C510810083F308 /* Assets.xcassets in Resources */,
 			);
@@ -513,7 +513,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Together Safely/Together Safely.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 30;
 				DEVELOPMENT_ASSET_PATHS = "\"Together Safely/Preview Content\"";
 				DEVELOPMENT_TEAM = J4837STP57;
 				ENABLE_PREVIEWS = YES;
@@ -537,7 +537,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Together Safely/Together Safely.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 30;
 				DEVELOPMENT_ASSET_PATHS = "\"Together Safely/Preview Content\"";
 				DEVELOPMENT_TEAM = J4837STP57;
 				ENABLE_PREVIEWS = YES;

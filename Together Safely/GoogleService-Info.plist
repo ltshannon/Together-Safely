@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>366967144619-ht025p29jdf2dmbvntammfupdeotc2ra.apps.googleusercontent.com</string>
+	<string>366967144619-i5b10tuik874n70spbglfhmpit75iu3t.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.366967144619-ht025p29jdf2dmbvntammfupdeotc2ra</string>
+	<string>com.googleusercontent.apps.366967144619-i5b10tuik874n70spbglfhmpit75iu3t</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>366967144619-qp813d174aboc48l13imgsuuddqesuhl.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBn6BdtFptiXK_LQ2mmiaUXDBL2PtzrvDE</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.breakawaydesign.Together</string>
+	<string>com.togethersafelyapp.social</string>
 	<key>PROJECT_ID</key>
 	<string>together-c537f</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +31,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:366967144619:ios:59106f4f66648d4b53b7ee</string>
+	<string>1:366967144619:ios:0e4a57bf6846628353b7ee</string>
 	<key>DATABASE_URL</key>
 	<string>https://together-c537f.firebaseio.com</string>
 </dict>
