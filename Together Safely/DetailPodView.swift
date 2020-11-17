@@ -12,20 +12,27 @@ struct DetailPodView: View {
     
 //    var group: Groups
     var index: Int
-    @EnvironmentObject var firebaseService: FirebaseService
+    @EnvironmentObject var dataController: DataController
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var inputStr: String = ""
     @State private var emojiText: String = ""
     @State private var widthArray: Array = []
     @State private var getRiskColor: Color = Color.white
+    let user: FetchRequest<CDUser>
+    
+    init(index: Int) {
+        self.index = index
+        user = FetchRequest(entity: CDUser.entity(), sortDescriptors: [])
+    }
     
     var body: some View {
+        let member = user.wrappedValue.first
         VStack {
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
-                        if firebaseService.user.image != nil {
-                            Image(uiImage: UIImage(data:firebaseService.user.image!)!)
+                        if member?.image != nil {
+                            Image(uiImage: UIImage(data: (member?.image!)!)!)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
 //                                .renderingMode(.original)
@@ -87,9 +94,9 @@ struct DetailPodView: View {
                                 if self.inputStr.count == 0 {
                                     return
                                 }
-                                WebService.setStatus(text: self.inputStr, emoji: self.emojiText, groupId: self.firebaseService.groups[self.index].id){ successful in
+                                WebService.setStatus(text: self.inputStr, emoji: self.emojiText, groupId: self.dataController.groups[self.index].id){ successful in
                                     if !successful {
-                                        print("Set status failed for groupId : \(self.firebaseService.groups[self.index].id))")
+                                        print("Set status failed for groupId : \(self.dataController.groups[self.index].id))")
                                     } else {
                                         self.inputStr = ""
                                     }
@@ -106,8 +113,8 @@ struct DetailPodView: View {
                 }
                 HStack {
                     Spacer()
-                    if firebaseService.user.id == self.firebaseService.groups[index].adminId {
-                        NavigationLink(destination: AddFriendView(group: self.firebaseService.groups[index]).environmentObject(self.firebaseService)) {
+                    if dataController.user.id == self.dataController.groups[index].adminId {
+                        NavigationLink(destination: AddFriendView(group: self.dataController.groups[index]).environmentObject(dataController)) {
                             Text("Add Friend")
                                 .font(Font.custom("Avenir-Medium", size: 22))
                                 .foregroundColor(.white)
@@ -123,7 +130,7 @@ struct DetailPodView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     VStack {
                         HStack {
-                            Text(self.firebaseService.groups[index].name)
+                            Text(self.dataController.groups[index].name)
                                 .font(Font.custom("Avenir-Medium", size: 18))
                                 .padding(.leading, 20)
                                 .foregroundColor(.white)
@@ -137,20 +144,20 @@ struct DetailPodView: View {
                         .padding(0)
                     VStack(alignment: .leading, spacing: 0) {
                         Spacer()
-//                        BuildRiskBar(highRiskCount: self.firebaseService.groups[index].riskTotals["High Risk"] ?? 0, medRiskCount: self.firebaseService.groups[index].riskTotals["Medium Risk"] ?? 0, lowRiskCount: self.firebaseService.groups[index].riskTotals["Low Risk"] ?? 0, memberCount: self.firebaseService.groups[index].members.count).environmentObject(self.firebaseService).padding(15)
-                        BuildRiskBar(dict: self.firebaseService.groups[index].riskTotals, memberCount: self.firebaseService.groups[index].members.count).environmentObject(self.firebaseService).padding(15)
+//                        BuildRiskBar(highRiskCount: self.dataController.groups[index].riskTotals["High Risk"] ?? 0, medRiskCount: self.dataController.groups[index].riskTotals["Medium Risk"] ?? 0, lowRiskCount: self.dataController.groups[index].riskTotals["Low Risk"] ?? 0, memberCount: self.dataController.groups[index].members.count).environmentObject(dataController).padding(15)
+                        BuildRiskBar(dict: self.dataController.groups[index].riskTotals, memberCount: self.dataController.groups[index].members.count).environmentObject(dataController).padding(15)
                         Spacer()
-                        Text("Mostly \(self.firebaseService.groups[index].averageRisk)")
+                        Text("Mostly \(self.dataController.groups[index].averageRisk)")
                             .font(Font.custom("Avenir-Medium", size: 16))
-                            .foregroundColor(self.getRiskColor.getRiskColor(riskScore: self.firebaseService.groups[index].averageRiskValue, firebaseService: self.firebaseService))
+                            .foregroundColor(self.getRiskColor.newGetRiskColor(riskScore: self.dataController.groups[index].averageRiskValue, ranges: dataController.riskRanges))
                             .padding(.leading, 15)
                     }
                     .frame(height: 75)
                     .padding(.bottom, 15)
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack(alignment: .leading, spacing: 5) {
-                            ForEach(Array(firebaseService.groups[index].members.enumerated()), id: \.offset) { i, element in
-//                            ForEach(0..<self.firebaseService.groups[index].members.count) { i in
+                            ForEach(Array(dataController.groups[index].members.enumerated()), id: \.offset) { i, element in
+//                            ForEach(0..<self.dataController.groups[index].members.count) { i in
                                 VStack(alignment: .leading, spacing: 0) {
                                     Capsule()
                                         .fill(Color(.gray))
@@ -158,8 +165,8 @@ struct DetailPodView: View {
                                         .padding(.top, 5)
                                     HStack {
                                         FullMemberProfileView(
-                                            groupId: self.firebaseService.groups[self.index].id,
-                                            member: self.firebaseService.groups[self.index].members[i]).environmentObject(self.firebaseService)
+                                            groupId: self.dataController.groups[self.index].id,
+                                            member: self.dataController.groups[self.index].members[i]).environmentObject(dataController)
                                     }.padding([.leading, .trailing], 15)
                                 }
                             }

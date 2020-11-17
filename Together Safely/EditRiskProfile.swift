@@ -10,7 +10,7 @@ import SwiftUI
 
 struct EditRiskProfile: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @EnvironmentObject var firebaseService: FirebaseService
+    @EnvironmentObject var dataController: DataController
     @State var questions = [UserQuestion]()
     @State var responses = [UserAnswer]()
         
@@ -66,7 +66,7 @@ struct EditRiskProfile: View {
             .navigationBarItems(leading: btnBack)
             .background(Image("backgroudImage").edgesIgnoringSafeArea(.all))
         .onAppear() {
-            self.firebaseService.getRiskFactorQuestions() { results in
+            self.dataController.getRiskFactorQuestions() { results in
                 self.questions = results
                 let mappedResponses = results.map({ (question) -> UserAnswer in
                     return UserAnswer(answer: question.userResponse, userQuestion: question.id ?? "")

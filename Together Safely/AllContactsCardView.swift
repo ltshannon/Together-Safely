@@ -16,12 +16,11 @@ enum PageType: Int {
 }
 
 struct AllContactsCardView: View {
-    
     var pageType:PageType
     @Binding var name:String
     var group: Groups
     @State var showingAlert = false
-    @EnvironmentObject var firebaseService: FirebaseService
+    @EnvironmentObject var dataController: DataController
     @Environment(\.presentationMode) var presentation
     @State private var arrayIndexs: [Int] = []
     @State private var members:[String] = []
@@ -29,8 +28,17 @@ struct AllContactsCardView: View {
     @State private var str: String = ""
     @State private var filteredItems: [TogetherContactType] = []
     @State private var filterString = ""
+    let user: FetchRequest<CDUser>
+    
+    init(pageType: PageType, name: Binding<String>, group: Groups) {
+        self.pageType = pageType
+        self._name = name
+        self.group = group
+        user = FetchRequest(entity: CDUser.entity(), sortDescriptors: [])
+    }
     
     var body: some View {
+        let member = user.wrappedValue.first
         VStack {
             TextField("Search", text: $filterString.onChange(applyFilter))
                 .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -65,8 +73,7 @@ struct AllContactsCardView: View {
                                             .frame(width: 40, height: 40)
                                             .clipShape(Circle())
                                             .overlay(Circle().stroke(
-                                                element.riskScore != nil ?
-                                                self.riskColor.getRiskColor(riskScore: element.riskScore!, firebaseService: self.firebaseService) :
+                                                element.riskScore != nil ? riskColor.newGetRiskColor(riskScore: member?.riskScore ?? 0, ranges: dataController.riskRanges) :
                                                 Color("Colorgray")
                                                 , lineWidth: 2))
                                             .padding(5)
@@ -86,7 +93,7 @@ struct AllContactsCardView: View {
                                         .font(Font.custom("Avenir-Medium", size: 18))
                                     if element.riskString != nil {
                                         Text(element.riskString!)
-                                            .foregroundColor(self.riskColor.getRiskColor(riskScore: element.riskScore!, firebaseService: self.firebaseService))
+                                            .foregroundColor(riskColor.newGetRiskColor(riskScore: member?.riskScore ?? 0, ranges: dataController.riskRanges))
                                             .font(Font.custom("Avenir-Medium", size: 14))
                                             .padding(.leading, 5)
                                     } else {
@@ -202,11 +209,11 @@ struct AllContactsCardView: View {
         let cleanedFilter = filterString.trimmingCharacters(in: .whitespacesAndNewlines)
 
         if cleanedFilter.isEmpty {
-            filteredItems = firebaseService.userContacts.sorted(by: {$0.contactInfo.name < $1.contactInfo.name})
+            filteredItems = dataController.userContacts.sorted(by: {$0.contactInfo.name < $1.contactInfo.name})
         } else {
             arrayIndexs.removeAll()
             members.removeAll()
-            filteredItems = firebaseService.userContacts.filter { element in
+            filteredItems = dataController.userContacts.filter { element in
                 element.contactInfo.name.localizedCaseInsensitiveContains(cleanedFilter)
             }
         }

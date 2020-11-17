@@ -9,9 +9,6 @@
 import SwiftUI
 
 struct CreatePodsView: View {
-    
-    @EnvironmentObject var firebaseService: FirebaseService
-    
     @State private var name: String = ""
     @State private var showSuccess = false
     @State private var showFailure = false

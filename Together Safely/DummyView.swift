@@ -13,18 +13,23 @@ import Contacts
 struct DummyView: View {
     
 //    @ObservedObject private var contactStore: ContactStore = ContactStore()
-    @StateObject var firebaseService: FirebaseService = FirebaseService()
 //    @StateObject var locationFetcher: LocationFetcher = LocationFetcher()
+    @EnvironmentObject var dataController: DataController
     @State var attitudeQuestion = UserDefaults.standard.value(forKey: "attitudeQuestion") as? Bool ?? false
     @State private var action1 = true
     @State private var action2 = true
     
     var body: some View {
         VStack {
-            HomeView().environmentObject(firebaseService).padding(.top, 10)
+            HomeView().environmentObject(dataController).padding(.top, 10)
         }
         .onAppear {
-            self.firebaseService.getServerData(byPhoneNumber: UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? "")
+            let userPhoneNumber =  UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? ""
+            dataController.getContacts(byPhoneNumber: userPhoneNumber) { error in
+                dataController.startListeners(phoneNumber: userPhoneNumber) { completion in
+                    print("Completed startListeners")
+                }
+            }
         }
             .background(Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all))
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in

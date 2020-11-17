@@ -152,6 +152,23 @@ extension Data {
 
 extension Color {
     
+    func newGetRiskColor(riskScore: Double, ranges: [[String:RiskHighLow]]) -> Color {
+        
+        for riskRange in ranges {
+            let element = riskRange.values
+            for range in element {
+                let min = range.min
+                let max = range.max
+                if riskScore >= min && riskScore <= max {
+                    if let value = UInt(range.color, radix: 16) {
+                        return Color(hex:Int(value))
+                    }
+                }
+            }
+        }
+        return Color("Colorgray")
+    }
+    
     func getRiskColor(riskScore: Double, firebaseService: FirebaseService) -> Color {
         
         for riskRange in firebaseService.riskRanges {
@@ -163,6 +180,18 @@ extension Color {
                     if let value = UInt(range.color, radix: 16) {
                         return Color(hex:Int(value))
                     }
+                }
+            }
+        }
+        return Color("Colorgray")
+    }
+    
+    func newGetColorFromString(str: String, colors: [[String:String]]) -> Color {
+        
+        for item in colors {
+            if let s = item[str] {
+                if let value = UInt(s, radix: 16) {
+                    return Color(hex:Int(value))
                 }
             }
         }

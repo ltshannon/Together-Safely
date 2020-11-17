@@ -10,7 +10,7 @@ import SwiftUI
 
 struct EditRiskProfile2: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @EnvironmentObject var firebaseService: FirebaseService
+    @EnvironmentObject var dataController: DataController
     @State var groups = [QuestionGroups]()
     @State private var arrayIndexs: [Int] = []
     @State var responses: [QuestionGroupsAnswer] = []
@@ -50,7 +50,7 @@ struct EditRiskProfile2: View {
             .navigationBarItems(leading: btnBack)
             .background(Image("backgroudImage").edgesIgnoringSafeArea(.all))
         .onAppear() {
-            self.firebaseService.getRiskQuestionGroups() { results in
+            self.dataController.getRiskQuestionGroups() { results in
                 self.groups = results
                 let answers = QuestionGroupsAnswers(groups: results)
                 self.responses = answers.answers

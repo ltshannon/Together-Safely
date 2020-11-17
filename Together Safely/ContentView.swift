@@ -7,9 +7,12 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct ContentView: View {
+    @StateObject var dataController: DataController
     @State var status = UserDefaults.standard.value(forKey: "status") as? Bool ?? false
+    @Environment(\.managedObjectContext) var managedObjectContext
     
     init() {
         let appearance = UINavigationBarAppearance()
@@ -19,6 +22,9 @@ struct ContentView: View {
         UINavigationBar.appearance().standardAppearance = appearance
         
         UINavigationBar.appearance().tintColor = .white
+        
+        let dataController = DataController()
+        _dataController = StateObject(wrappedValue: dataController)
     }
     
     var body: some View {
@@ -26,6 +32,7 @@ struct ContentView: View {
             NavigationView {
                 if self.status {
                     DummyView()
+                        .environmentObject(dataController)
                 } else {
 //                    StartLoginView().environmentObject(LocationFetcher())
                     StartLoginView()

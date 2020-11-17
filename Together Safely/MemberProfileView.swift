@@ -14,7 +14,7 @@ struct MemberProfileView: View {
     var groupId: String
     var riskScore: Double
     var riskRanges: [Dictionary<String,RiskHighLow>]
-    @EnvironmentObject var firebaseService: FirebaseService
+    @EnvironmentObject var dataController: DataController
     @State private var getRiskColor: Color = Color.white
     
     var body: some View {
@@ -40,7 +40,7 @@ struct MemberProfileView: View {
             }
             Circle()
                 .frame(width: 25, height: 25)
-                .foregroundColor(getRiskColor.getRiskColor(riskScore: riskScore, firebaseService: self.firebaseService))
+                .foregroundColor(getRiskColor.newGetRiskColor(riskScore: riskScore, ranges: dataController.riskRanges))
                 .overlay(Circle().stroke(Color.white, lineWidth: 3))
                 .offset(x: 25, y: 25)
         }

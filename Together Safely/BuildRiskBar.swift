@@ -15,7 +15,7 @@ struct BuildRiskBar: View {
 //    var medRiskCount: Int
 //    var lowRiskCount: Int
     var memberCount: Int
-    @EnvironmentObject var firebaseService: FirebaseService
+    @EnvironmentObject var dataController: DataController
     @State private var color: Color = Color.white
     
     var body: some View {
@@ -24,7 +24,7 @@ struct BuildRiskBar: View {
                 ForEach(dict.sorted(by: >), id: \.key) { key, value in
                     ZStack {
                         Rectangle()
-                            .foregroundColor(color.getColorFromString(str: key, firebaseService: self.firebaseService))
+                            .foregroundColor(color.newGetColorFromString(str: key, colors: dataController.riskColors))
                             .frame(width: (self.calculateWidthPercentage(riskCount: value, metricWidth: metrics.size.width)))
                         Text("\(value)")
                             .font(Font.custom("Avenir-Medium", size: 16))

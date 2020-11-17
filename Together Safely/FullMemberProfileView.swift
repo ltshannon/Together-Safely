@@ -12,25 +12,25 @@ struct FullMemberProfileView: View {
 
     var groupId: String
     var member: Member
-    @EnvironmentObject var firebaseService: FirebaseService
+    @EnvironmentObject var dataController: DataController
     @State private var getRiskColor: Color = Color.white
     @State private var getImageForPhone: Data = Data()
     
     var body: some View {
         HStack {
             MemberProfileView(
-                image: getImageForPhone.getImage(phoneName: self.member.phoneNumber, dict: self.firebaseService.contactInfo),
+                image: getImageForPhone.getImage(phoneName: self.member.phoneNumber, dict: dataController.contactInfo),
                 groupId: groupId,
                 riskScore: member.riskScore,
-                riskRanges: firebaseService.riskRanges).environmentObject(self.firebaseService)
+                riskRanges: dataController.riskRanges).environmentObject(dataController)
             VStack(alignment: .leading, spacing: 5) {
-                Text(self.getName(phoneName: self.member.phoneNumber, dict: self.firebaseService.contactInfo))
+                Text(self.getName(phoneName: self.member.phoneNumber, dict: self.dataController.contactInfo))
                 Text(member.status.text)
                     .font(Font.custom("Avenir-Medium", size: 14))
                     .foregroundColor(Color("Colorgray"))
                 Text(member.riskString)
                     .font(Font.custom("Avenir-Medium", size: 14))
-                    .foregroundColor(getRiskColor.getRiskColor(riskScore: member.riskScore, firebaseService: self.firebaseService))
+                    .foregroundColor(getRiskColor.newGetRiskColor(riskScore: member.riskScore, ranges: dataController.riskRanges))
             }
             Spacer()
             Text(member.status.emoji)

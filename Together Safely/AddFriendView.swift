@@ -10,15 +10,14 @@ import SwiftUI
 import Firebase
 
 struct AddFriendView: View {
-    
     var group: Groups
     @State var name:String = ""
-    @EnvironmentObject var firebaseService: FirebaseService
+    @EnvironmentObject var dataController: DataController
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
         VStack {
-            AllContactsCardView(pageType: .addFriends, name: self.$name, group: group).environmentObject(self.firebaseService)
+            AllContactsCardView(pageType: .addFriends, name: self.$name, group: group).environmentObject(dataController)
         }.padding(.bottom, 15)
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: btnBack)

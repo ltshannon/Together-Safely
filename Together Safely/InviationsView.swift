@@ -9,8 +9,7 @@
 import SwiftUI
 
 struct InviationsView: View {
-    
-    @EnvironmentObject var firebaseService: FirebaseService
+    @EnvironmentObject var dataController: DataController
     @State private var getImageForPhone: Data = Data()
     
     var body: some View {
@@ -29,19 +28,19 @@ struct InviationsView: View {
                 .fill(Color(.darkGray))
                 .frame(height: 2)
                 .padding(0)
-            if !firebaseService.invites.isEmpty {
+            if !dataController.invites.isEmpty {
                 ScrollView(.vertical, showsIndicators: false) {
-                    ForEach(Array(firebaseService.invites.enumerated()), id: \.offset) { index, invite in
-//                    ForEach(firebaseService.invites, id: \.self) { invite in
+                    ForEach(Array(dataController.invites.enumerated()), id: \.offset) { index, invite in
+//                    ForEach(dataController.invites, id: \.self) { invite in
                         VStack {
                             HStack {
                             MemberProfileView(
-                                image: self.getImageForPhone.getImage(phoneName: invite.adminPhone, dict: self.firebaseService.contactInfo),
+                                image: self.getImageForPhone.getImage(phoneName: invite.adminPhone, dict: self.dataController.contactInfo),
                                 groupId: invite.groupId,
                                 riskScore: invite.riskScore,
-                                riskRanges: self.firebaseService.riskRanges)
+                                riskRanges: self.dataController.riskRanges)
                             VStack(alignment: .leading) {
-                                Text(self.firebaseService.getNameForPhone(invite.adminPhone, dict: self.firebaseService.contactInfo))
+                                Text(self.dataController.getNameForPhone(invite.adminPhone, dict: self.dataController.contactInfo))
                                     .foregroundColor(Color("Colorblack"))
                                     .font(Font.custom("Avenir Next Medium", size: 18))
                                 Text("invited you to:")

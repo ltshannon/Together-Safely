@@ -13,13 +13,13 @@ struct DisplayPodsContactPod: View {
     
     var group: Groups
     @State var selection: Int? = nil
-    @EnvironmentObject var firebaseService: FirebaseService
+    @EnvironmentObject var dataController: DataController
     @State private var getRiskColor: Color = Color.white
     @State private var getImageForPhone: Data = Data()
     
     var body: some View {
         VStack {
-            NavigationLink(destination: AllContactsView(group: group).environmentObject(firebaseService), tag: 2, selection: $selection) {
+            NavigationLink(destination: AllContactsView(group: group).environmentObject(dataController), tag: 2, selection: $selection) {
                 Button(action: {
                     self.selection = 2
                 }) {
@@ -42,23 +42,23 @@ struct DisplayPodsContactPod: View {
                             .fill(Color(.darkGray))
                             .frame(height: 2)
                             .padding(0)
-//                        BuildRiskBar(highRiskCount: firebaseService.userContantRiskAverageDict["High Risk"] ?? 0, medRiskCount: firebaseService.userContantRiskAverageDict["Medium Risk"] ?? 0, lowRiskCount: firebaseService.userContantRiskAverageDict["Low Risk"] ?? 0, memberCount: firebaseService.userContantUsersCount).environmentObject(self.firebaseService).padding(15)
-                        BuildRiskBar(dict: firebaseService.userContantRiskAverageDict, memberCount: firebaseService.userContantUsersCount).environmentObject(self.firebaseService).padding(15)
+//                        BuildRiskBar(highRiskCount: dataController.userContantRiskAverageDict["High Risk"] ?? 0, medRiskCount: dataController.userContantRiskAverageDict["Medium Risk"] ?? 0, lowRiskCount: dataController.userContantRiskAverageDict["Low Risk"] ?? 0, memberCount: dataController.userContantUsersCount).environmentObject(self.dataController).padding(15)
+                        BuildRiskBar(dict: dataController.userContantRiskAverageDict, memberCount: dataController.userContantUsersCount).environmentObject(self.dataController).padding(15)
                         Spacer()
-                        Text(firebaseService.userContantRiskAverageString)
+                        Text(dataController.userContantRiskAverageString)
                             .font(Font.custom("Avenir-Medium", size: 16))
-                            .foregroundColor(self.getRiskColor.getRiskColor(riskScore: firebaseService.userContantRiskAverageValue, firebaseService: self.firebaseService))
+                            .foregroundColor(self.getRiskColor.newGetRiskColor(riskScore: dataController.userContantRiskAverageValue, ranges: dataController.riskRanges))
                             .padding(.leading, 15)
                         Spacer()
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
-                                ForEach(firebaseService.userContacts) { item in
+                                ForEach(dataController.userContacts) { item in
 //                                    if item.type == .userPhoneNumber {
                                         MemberProfileView(
-                                            image: self.getImageForPhone.getImage(phoneName: item.phoneNumber, dict: self.firebaseService.contactInfo),
+                                            image: self.getImageForPhone.getImage(phoneName: item.phoneNumber, dict: self.dataController.contactInfo),
                                             groupId: "",
                                             riskScore: item.riskScore != nil ? item.riskScore! : 0,
-                                            riskRanges: self.firebaseService.riskRanges)
+                                            riskRanges: self.dataController.riskRanges)
 //                                    }
                                 }
                             }

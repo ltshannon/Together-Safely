@@ -11,12 +11,12 @@ import SwiftUI
 struct AllContactsView: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @EnvironmentObject var firebaseService: FirebaseService
+    @EnvironmentObject var dataController: DataController
     @State var name:String = ""
     @State var group: Groups
     var body: some View {
         VStack {
-            AllContactsCardView(pageType: .addContacts, name: self.$name, group: group).environmentObject(self.firebaseService)
+            AllContactsCardView(pageType: .addContacts, name: self.$name, group: group).environmentObject(dataController)
         }
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: btnBack)

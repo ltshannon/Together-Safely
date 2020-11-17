@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17511" systemVersion="19H2" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CDGroupInvites" representedClassName="CDGroupInvites" syncable="YES" codeGenerationType="class">
+        <attribute name="inviteId" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="CDGroups" representedClassName="CDGroups" syncable="YES" codeGenerationType="class">
+        <attribute name="adminId" optional="YES" attributeType="String"/>
+        <attribute name="averageRisk" optional="YES" attributeType="String"/>
+        <attribute name="averageRiskValue" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="CDInvites" representedClassName="CDInvites" syncable="YES" codeGenerationType="class">
+        <attribute name="adminName" optional="YES" attributeType="String"/>
+        <attribute name="adminPhone" optional="YES" attributeType="String"/>
+        <attribute name="groupId" optional="YES" attributeType="String"/>
+        <attribute name="groupName" optional="YES" attributeType="String"/>
+        <attribute name="riskScore" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="CDListOfGroups" representedClassName="CDListOfGroups" syncable="YES" codeGenerationType="class">
+        <attribute name="groupId" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="CDMember" representedClassName="CDMember" syncable="YES" codeGenerationType="class">
+        <attribute name="adminId" optional="YES" attributeType="String"/>
+        <attribute name="emoji" optional="YES" attributeType="String"/>
+        <attribute name="memberName" optional="YES" attributeType="String"/>
+        <attribute name="phoneNumber" optional="YES" attributeType="String"/>
+        <attribute name="riskIndex" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="riskScore" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="riskString" optional="YES" attributeType="String"/>
+        <attribute name="textString" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="CDUser" representedClassName="CDUser" syncable="YES" codeGenerationType="class">
+        <attribute name="image" optional="YES" attributeType="Binary"/>
+        <attribute name="phoneNumber" optional="YES" attributeType="String"/>
+        <attribute name="riskScore" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="riskString" optional="YES" attributeType="String"/>
+        <attribute name="userName" optional="YES" attributeType="String"/>
+    </entity>
+    <elements>
+        <element name="CDGroupInvites" positionX="-63" positionY="-18" width="128" height="58"/>
+        <element name="CDGroups" positionX="-54" positionY="0" width="128" height="103"/>
+        <element name="CDInvites" positionX="-36" positionY="36" width="128" height="118"/>
+        <element name="CDListOfGroups" positionX="-18" positionY="45" width="128" height="58"/>
+        <element name="CDMember" positionX="0" positionY="81" width="128" height="163"/>
+        <element name="CDUser" positionX="-27" positionY="90" width="128" height="118"/>
+    </elements>
+</model>

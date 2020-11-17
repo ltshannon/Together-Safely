@@ -10,7 +10,7 @@ import SwiftUI
 import Contacts
 
 struct DisplayPodsView: View {
-    @EnvironmentObject var firebaseService: FirebaseService
+    @EnvironmentObject var dataController: DataController
     @State private var membersArray: [Int] = []
     @State var memberRiskColor: Color = Color("Colorgray")
     @State var group: Groups = Groups(id: "", adminId: "", name: "", members: [], riskTotals: [:], riskCompiledSring: [], riskCompiledValue: [], averageRisk: "", averageRiskValue: 0)
@@ -24,10 +24,9 @@ struct DisplayPodsView: View {
         VStack {
 //            if self.isVisible {
                 ScrollView(.vertical, showsIndicators: false) {
-                    if !firebaseService.groups.isEmpty {
-                        ForEach(Array(firebaseService.groups.enumerated()), id: \.offset) { index, group in
-//                        ForEach(firebaseService.groups, id: \.self) { group in
-                            NavigationLink(destination: DetailPodView(index: index).environmentObject(self.firebaseService)) {
+                    if !dataController.groups.isEmpty {
+                        ForEach(Array(dataController.groups.enumerated()), id: \.offset) { index, group in
+                            NavigationLink(destination: DetailPodView(index: index).environmentObject(dataController)) {
                                 VStack(alignment: .leading, spacing: 0) {
                                     VStack {
                                         HStack {
@@ -47,12 +46,12 @@ struct DisplayPodsView: View {
                                         .fill(Color(.darkGray))
                                         .frame(height: 2)
                                         .padding(0)
-//                                    BuildRiskBar(highRiskCount: group.riskTotals["High Risk"] ?? 0, medRiskCount: group.riskTotals["Medium Risk"] ?? 0, lowRiskCount: group.riskTotals["Low Risk"] ?? 0, memberCount: group.members.count).environmentObject(self.firebaseService).padding(15)
-                                    BuildRiskBar(dict: group.riskTotals, memberCount: group.members.count).environmentObject(self.firebaseService).padding(15)
+//                                    BuildRiskBar(highRiskCount: group.riskTotals["High Risk"] ?? 0, medRiskCount: group.riskTotals["Medium Risk"] ?? 0, lowRiskCount: group.riskTotals["Low Risk"] ?? 0, memberCount: group.members.count).environmentObject(self.dataController).padding(15)
+                                    BuildRiskBar(dict: group.riskTotals, memberCount: group.members.count).environmentObject(dataController).padding(15)
                                     Spacer()
                                     Text("Mostly \(group.averageRisk)")
                                         .font(Font.custom("Avenir-Medium", size: 16))
-                                        .foregroundColor(self.getRiskColor.getRiskColor(riskScore: group.averageRiskValue, firebaseService: self.firebaseService))
+                                        .foregroundColor(self.getRiskColor.newGetRiskColor(riskScore: group.averageRiskValue, ranges: dataController.riskRanges))
                                         .padding(.leading, 15)
                                     Spacer()
                                     ScrollView(.horizontal, showsIndicators: false) {
@@ -60,10 +59,10 @@ struct DisplayPodsView: View {
                                             ForEach(Array(group.members.enumerated()), id: \.offset) { index, element in
 //                                            ForEach(0..<group.members.count) { index in
                                                 MemberProfileView(
-                                                    image: self.getImageForPhone.getImage(phoneName: group.members[index].phoneNumber, dict: self.firebaseService.contactInfo),
+                                                    image: self.getImageForPhone.getImage(phoneName: group.members[index].phoneNumber, dict: dataController.contactInfo),
                                                     groupId: group.id,
                                                     riskScore: group.members[index].riskScore,
-                                                    riskRanges: self.firebaseService.riskRanges)
+                                                    riskRanges: dataController.riskRanges)
                                             }
                                         }
                                     }.padding(.leading, 5)
@@ -78,7 +77,7 @@ struct DisplayPodsView: View {
                     }
                     Spacer()
                     VStack {
-                        DisplayPodsContactPod(group: group).environmentObject(self.firebaseService)
+                        DisplayPodsContactPod(group: group).environmentObject(self.dataController)
                     }
                 }.padding(.bottom, 15)
 //            } else {

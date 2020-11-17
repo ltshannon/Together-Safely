@@ -8,11 +8,15 @@
 import SwiftUI
 
 struct HomeView: View {
-    @EnvironmentObject var firebaseService: FirebaseService
+    @EnvironmentObject var dataController: DataController
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State var index = 0
     @State private var action: Int? = 0
-    @State private var group: Groups = Groups(id: "", adminId: "", name: "", members: [], riskTotals: [:], riskCompiledSring: [], riskCompiledValue: [], averageRisk: "", averageRiskValue: 0)
+    let user: FetchRequest<CDUser>
+
+    init() {
+        user = FetchRequest(entity: CDUser.entity(), sortDescriptors: [])
+    }
     
     var body: some View {
         GeometryReader { metrics in
@@ -50,7 +54,7 @@ struct HomeView: View {
                                     Circle()
                                         .fill(Color("Colorred"))
                                         .frame(width: 18, height: 18)
-                                    Text("\(self.firebaseService.invites.count)")
+                                    Text("\(dataController.invites.count)")
                                         .font(.body)
                                         .fontWeight(.bold)
                                         .foregroundColor(.white)
@@ -68,7 +72,7 @@ struct HomeView: View {
                 }.padding(.top, 15)
                 Spacer()
                 if self.index == 0 {
-                    NavigationLink(destination: CreatePodView().environmentObject(self.firebaseService)) {
+                    NavigationLink(destination: CreatePodView().environmentObject(dataController)) {
                         HStack {
                             Spacer()
                             Text("Create Pod")
@@ -82,12 +86,12 @@ struct HomeView: View {
                         .padding(.trailing, 15)
                     }
                     Spacer()
-                    DisplayPodsView().environmentObject(self.firebaseService)
+                    DisplayPodsView().environmentObject(dataController)
                 } else {
-                    InviationsView().environmentObject(self.firebaseService)
+                    InviationsView().environmentObject(dataController)
                 }
             }
-            NavigationLink(destination: UserProfileView().environmentObject(self.firebaseService), tag: 1, selection: self.$action) {
+            NavigationLink(destination: UserProfileView().environmentObject(dataController), tag: 1, selection: self.$action) {
                 EmptyView()
             }
         }
@@ -98,8 +102,9 @@ struct HomeView: View {
                 Button(action: {
                     self.action = 1
                 }) {
-                    if self.firebaseService.user.image != nil {
-                        Image(uiImage: UIImage(data:self.firebaseService.user.image!)!)
+                    let member = user.wrappedValue.first
+                    if member?.image != nil {
+                        Image(uiImage: UIImage(data: (member?.image!)!)!)
                             .renderingMode(.original)
                             .resizable()
                             .aspectRatio(contentMode: .fill)

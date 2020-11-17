@@ -9,9 +9,8 @@
 import SwiftUI
 
 struct CreatePodView: View {
-    
     @State var name:String = ""
-    @EnvironmentObject var firebaseService: FirebaseService
+    @EnvironmentObject var dataController: DataController
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var podName: String = ""
     @State private var group: Groups = Groups(id: "", adminId: "", name: "", members: [], riskTotals: [:], riskCompiledSring: [], riskCompiledValue: [], averageRisk: "", averageRiskValue: 0)
@@ -24,7 +23,7 @@ struct CreatePodView: View {
                 .foregroundColor(Color("Colorblack"))
                 .padding([.leading, .trailing], 15)
                 .padding([.top, .bottom], 10)
-            AllContactsCardView(pageType: .createPod, name: self.$name, group: group).environmentObject(self.firebaseService)
+            AllContactsCardView(pageType: .createPod, name: self.$name, group: group).environmentObject(dataController)
         }.padding(.bottom, 15)
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: btnBack)

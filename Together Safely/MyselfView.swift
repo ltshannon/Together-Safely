@@ -10,7 +10,7 @@ import SwiftUI
 
 struct MyselfView: View {
 //    var contactStore: ContactStore
-    @EnvironmentObject var firebaseService: FirebaseService
+    @EnvironmentObject var dataController: DataController
     @State private var image = "\u{1F600}".image()
     @State var index = 0
     
@@ -78,7 +78,7 @@ struct MyselfView: View {
                 }
                  .padding(.trailing, 35)
                 Spacer()
-                DisplayPodsView().environmentObject(firebaseService)
+                DisplayPodsView().environmentObject(dataController)
             }
         }
         .navigationBarTitle("", displayMode: .inline)
