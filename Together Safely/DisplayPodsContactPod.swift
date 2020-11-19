@@ -43,7 +43,7 @@ struct DisplayPodsContactPod: View {
                             .frame(height: 2)
                             .padding(0)
 //                        BuildRiskBar(highRiskCount: dataController.userContantRiskAverageDict["High Risk"] ?? 0, medRiskCount: dataController.userContantRiskAverageDict["Medium Risk"] ?? 0, lowRiskCount: dataController.userContantRiskAverageDict["Low Risk"] ?? 0, memberCount: dataController.userContantUsersCount).environmentObject(self.dataController).padding(15)
-                        BuildRiskBar(dict: dataController.userContantRiskAverageDict, memberCount: dataController.userContantUsersCount).environmentObject(self.dataController).padding(15)
+                        BuildRiskBar(dict: dataController.userContantRiskAverageDict, memberCount: dataController.userContantUsersCount).environmentObject(dataController).padding(15)
                         Spacer()
                         Text(dataController.userContantRiskAverageString)
                             .font(Font.custom("Avenir-Medium", size: 16))

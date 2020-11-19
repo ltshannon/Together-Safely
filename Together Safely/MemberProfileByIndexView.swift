@@ -1,29 +1,38 @@
 //
-//  MemberProfileView.swift
+//  MemberProfileByIndexView.swift
 //  Together Safely
 //
-//  Created by Larry Shannon on 7/31/20.
+//  Created by Larry Shannon on 11/18/20.
 //  Copyright © 2020 Larry Shannon. All rights reserved.
 //
 
 import SwiftUI
 
-struct MemberProfileView: View {
-    
-    var image: Data?
-    var groupId: String
-    var riskScore: Double
-    var riskRanges: [Dictionary<String,RiskHighLow>]
-    @EnvironmentObject var dataController: DataController
+struct MemberProfileByIndexView: View {
+    var contacts: [[String:ContactInfo]]
+    let groupId: String
+    let index: Int
     @State private var getRiskColor: Color = Color.white
+    @State private var getImageForPhone: Data = Data()
+    var members: FetchRequest<CDMember>
     
     @FetchRequest(
         entity: CDRiskRanges.entity(),
         sortDescriptors: []
     ) var items: FetchedResults<CDRiskRanges>
+
+    init(contacts: [[String:ContactInfo]], groupId: String, index: Int) {
+        self.contacts = contacts
+        self.groupId = groupId
+        self.index = index
+
+        members = FetchRequest<CDMember>(entity: CDMember.entity(), sortDescriptors: [], predicate: NSPredicate(format: "groupId == %@", groupId))
+        
+    }
     
     var body: some View {
         ZStack {
+            let image = self.getImageForPhone.getImage(phoneName: members.wrappedValue.count > index ? members.wrappedValue[index].phoneNumber ?? "" : "", dict: contacts)
             if image != nil {
                 Image(uiImage: UIImage(data: image!)!)
                     .resizable()
@@ -45,7 +54,7 @@ struct MemberProfileView: View {
             }
             Circle()
                 .frame(width: 25, height: 25)
-                .foregroundColor(getRiskColor.V3GetRiskColor(riskScore: riskScore, ranges: items))
+                .foregroundColor(getRiskColor.V3GetRiskColor(riskScore: members.wrappedValue.count > index ? members.wrappedValue[index].riskScore : 0, ranges: items))
                 .overlay(Circle().stroke(Color.white, lineWidth: 3))
                 .offset(x: 25, y: 25)
         }
@@ -54,14 +63,3 @@ struct MemberProfileView: View {
     
 }
 
-/*
-struct MemberProfileView_Previews: PreviewProvider {
-    
-    var riskColor: Color = Color.Colorred
-    
-    static var previews: some View {
-
-        MemberProfileView(riskColor: riskColor)
-    }
-}
-*/

@@ -50,6 +50,7 @@
 		46F7E65224CF6E3D004EAF24 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F7E65124CF6E3D004EAF24 /* UserService.swift */; };
 		46F7E65424CF6FB4004EAF24 /* FirebaseStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F7E65324CF6FB4004EAF24 /* FirebaseStructs.swift */; };
 		46F7E69824D30C5D004EAF24 /* DisplayPodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F7E69724D30C5D004EAF24 /* DisplayPodsView.swift */; };
+		46FA0530256612C600A9532E /* MemberProfileByIndexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FA052F256612C600A9532E /* MemberProfileByIndexView.swift */; };
 		AD5F8048F423267E2FB8791C /* Pods_Together_Safely.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F402AD21FCC457A589F7E18 /* Pods_Together_Safely.framework */; };
 /* End PBXBuildFile section */
 
@@ -100,6 +101,7 @@
 		46F7E65124CF6E3D004EAF24 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		46F7E65324CF6FB4004EAF24 /* FirebaseStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStructs.swift; sourceTree = "<group>"; };
 		46F7E69724D30C5D004EAF24 /* DisplayPodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPodsView.swift; sourceTree = "<group>"; };
+		46FA052F256612C600A9532E /* MemberProfileByIndexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberProfileByIndexView.swift; sourceTree = "<group>"; };
 		6F402AD21FCC457A589F7E18 /* Pods_Together_Safely.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Together_Safely.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		939D650AFD0773D3E927F472 /* Pods-Together Safely.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Together Safely.release.xcconfig"; path = "Target Support Files/Pods-Together Safely/Pods-Together Safely.release.xcconfig"; sourceTree = "<group>"; };
 		EF5477256CB7D82AC5004BD9 /* Pods-Together Safely.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Together Safely.debug.xcconfig"; path = "Target Support Files/Pods-Together Safely/Pods-Together Safely.debug.xcconfig"; sourceTree = "<group>"; };
@@ -174,6 +176,8 @@
 				4609C91C24DCDDFD004BC76C /* DisplayPodsContactPod.swift */,
 				4635F3A524D5FE6A00A4A7E2 /* DetailPodView.swift */,
 				4609C91824DCBB3C004BC76C /* BuildRiskBar.swift */,
+				4660E6ED24D4B52C00C6B993 /* MemberProfileView.swift */,
+				46FA052F256612C600A9532E /* MemberProfileByIndexView.swift */,
 				46DE5E5524D7907D005912CD /* InviationsView.swift */,
 				46DE5E5D24D9E32F005912CD /* AllContactsCardView.swift */,
 				4635F3A324D5129E00A4A7E2 /* AllContactsView.swift */,
@@ -183,7 +187,6 @@
 				46DE5E5924D88F7C005912CD /* UserProfileView.swift */,
 				465BE90B24DB461B008DA1CD /* EditRiskProfile.swift */,
 				46806E5924F5C2A4000A177B /* EditRiskProfile2.swift */,
-				4660E6ED24D4B52C00C6B993 /* MemberProfileView.swift */,
 				4635F3A724D6104800A4A7E2 /* FullMemberProfileView.swift */,
 				46DE5E7F24D9FED9005912CD /* CheckboxView.swift */,
 				46252C5324C787F8005B592F /* MyselfView.swift */,
@@ -360,6 +363,7 @@
 				46F7E64824CCEC8F004EAF24 /* CoreDataManager.swift in Sources */,
 				4609C91D24DCDDFD004BC76C /* DisplayPodsContactPod.swift in Sources */,
 				46ACD59724C512590083F308 /* SpinnerView.swift in Sources */,
+				46FA0530256612C600A9532E /* MemberProfileByIndexView.swift in Sources */,
 				46ACD59224C5124A0083F308 /* HomeView.swift in Sources */,
 				46806E5A24F5C2A4000A177B /* EditRiskProfile2.swift in Sources */,
 				46F7E65024CF3D67004EAF24 /* DummyView.swift in Sources */,

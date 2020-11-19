@@ -9,22 +9,25 @@
 import SwiftUI
 
 struct BuildRiskBar: View {
-
     var dict: [String:Int]
 //    var highRiskCount: Int
 //    var medRiskCount: Int
 //    var lowRiskCount: Int
     var memberCount: Int
-    @EnvironmentObject var dataController: DataController
     @State private var color: Color = Color.white
     
+    @FetchRequest(
+        entity: CDRiskColors.entity(),
+        sortDescriptors: []
+    ) var items: FetchedResults<CDRiskColors>
+
     var body: some View {
         GeometryReader { metrics in
             HStack(spacing: 0) {
                 ForEach(dict.sorted(by: >), id: \.key) { key, value in
                     ZStack {
                         Rectangle()
-                            .foregroundColor(color.newGetColorFromString(str: key, colors: dataController.riskColors))
+                            .foregroundColor(color.V3GetColorFromString(str: key, colors: items))
                             .frame(width: (self.calculateWidthPercentage(riskCount: value, metricWidth: metrics.size.width)))
                         Text("\(value)")
                             .font(Font.custom("Avenir-Medium", size: 16))

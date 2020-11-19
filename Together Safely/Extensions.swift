@@ -152,6 +152,31 @@ extension Data {
 
 extension Color {
     
+    func V3GetRiskColor(riskScore: Double, ranges: FetchedResults<CDRiskRanges>) -> Color {
+        
+        var array: [[String:RiskHighLow]] = []
+
+        for item in ranges {
+            let result = try! JSONDecoder().decode([String:RiskHighLow].self, from: item.riskRanges ?? Data())
+            array.append(result)
+        }
+
+        for riskRange in array {
+            let element = riskRange.values
+            for range in element {
+                let min = range.min
+                let max = range.max
+                if riskScore >= min && riskScore <= max {
+                    if let value = UInt(range.color, radix: 16) {
+                        return Color(hex:Int(value))
+                    }
+                }
+            }
+        }
+
+        return Color("Colorgray")
+    }
+    
     func newGetRiskColor(riskScore: Double, ranges: [[String:RiskHighLow]]) -> Color {
         
         for riskRange in ranges {
@@ -195,6 +220,26 @@ extension Color {
                 }
             }
         }
+        return Color("Colorgray")
+    }
+    
+    func V3GetColorFromString(str: String, colors: FetchedResults<CDRiskColors>) -> Color {
+
+        var array: [[String : String]] = []
+
+        for item in colors {
+            let result = try! JSONDecoder().decode([String: String].self, from: item.riskColors ?? Data())
+            array.append(result)
+        }
+
+        for item in array {
+            if let s = item[str] {
+                if let value = UInt(s, radix: 16) {
+                    return Color(hex:Int(value))
+                }
+            }
+        }
+ 
         return Color("Colorgray")
     }
     

@@ -16,21 +16,31 @@ struct DisplayPodsView: View {
     @State var group: Groups = Groups(id: "", adminId: "", name: "", members: [], riskTotals: [:], riskCompiledSring: [], riskCompiledValue: [], averageRisk: "", averageRiskValue: 0)
     @State private var widthArray: Array = []
     @State private var getRiskColor: Color = Color.white
-    @State private var getImageForPhone: Data = Data()
     @State private var isVisible = false
+    @State private var result: [String: Int] = [:]
     
+    @FetchRequest(
+        entity: CDRiskRanges.entity(),
+        sortDescriptors: []
+    ) var items: FetchedResults<CDRiskRanges>
+    
+    @FetchRequest(
+        entity: CDGroups.entity(),
+        sortDescriptors: []
+    ) var cdGroups: FetchedResults<CDGroups>
+
     var body: some View {
 
         VStack {
 //            if self.isVisible {
                 ScrollView(.vertical, showsIndicators: false) {
-                    if !dataController.groups.isEmpty {
-                        ForEach(Array(dataController.groups.enumerated()), id: \.offset) { index, group in
+                    if cdGroups.count > 0 {
+                        ForEach(Array(cdGroups.enumerated()), id: \.offset) { index, group in
                             NavigationLink(destination: DetailPodView(index: index).environmentObject(dataController)) {
                                 VStack(alignment: .leading, spacing: 0) {
                                     VStack {
                                         HStack {
-                                            Text("\(group.name)")
+                                            Text("\(group.name ?? "")")
                                                 .font(Font.custom("Avenir-Medium", size: 18))
                                                 .padding(.leading, 20)
                                                 .foregroundColor(.white)
@@ -42,27 +52,28 @@ struct DisplayPodsView: View {
                                         }.padding([.top, .bottom], 15)
                                     }
                                         .background(Color("Color4")).edgesIgnoringSafeArea(.all)
+
                                     Capsule()
                                         .fill(Color(.darkGray))
                                         .frame(height: 2)
                                         .padding(0)
-//                                    BuildRiskBar(highRiskCount: group.riskTotals["High Risk"] ?? 0, medRiskCount: group.riskTotals["Medium Risk"] ?? 0, lowRiskCount: group.riskTotals["Low Risk"] ?? 0, memberCount: group.members.count).environmentObject(self.dataController).padding(15)
-                                    BuildRiskBar(dict: group.riskTotals, memberCount: group.members.count).environmentObject(dataController).padding(15)
+                                    if group.riskTotals != nil {
+                                        let result = try! JSONDecoder().decode([String: Int].self, from: group.riskTotals ?? Data())
+                                        BuildRiskBar(dict: result, memberCount: Int(group.groupCount)).padding(15)
+                                    }
+
                                     Spacer()
-                                    Text("Mostly \(group.averageRisk)")
+                                    Text("Mostly \(group.averageRisk ?? "")")
                                         .font(Font.custom("Avenir-Medium", size: 16))
-                                        .foregroundColor(self.getRiskColor.newGetRiskColor(riskScore: group.averageRiskValue, ranges: dataController.riskRanges))
+                                        .foregroundColor(self.getRiskColor.V3GetRiskColor(riskScore: group.averageRiskValue, ranges: items))
                                         .padding(.leading, 15)
+
                                     Spacer()
                                     ScrollView(.horizontal, showsIndicators: false) {
                                         HStack {
-                                            ForEach(Array(group.members.enumerated()), id: \.offset) { index, element in
-//                                            ForEach(0..<group.members.count) { index in
-                                                MemberProfileView(
-                                                    image: self.getImageForPhone.getImage(phoneName: group.members[index].phoneNumber, dict: dataController.contactInfo),
-                                                    groupId: group.id,
-                                                    riskScore: group.members[index].riskScore,
-                                                    riskRanges: dataController.riskRanges)
+                                     
+                                            ForEach(0..<Int(group.groupCount)) { index in
+                                                MemberProfileByIndexView(contacts: dataController.contactInfo, groupId: group.groupId ?? "", index: index)
                                             }
                                         }
                                     }.padding(.leading, 5)
@@ -88,6 +99,10 @@ struct DisplayPodsView: View {
         }.onDisappear() {
 //            self.isVisible = false
         }
+    }
+    
+    func getMmebers(index: Int) {
+
     }
     
 }

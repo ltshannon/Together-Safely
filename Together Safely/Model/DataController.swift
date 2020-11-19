@@ -31,16 +31,10 @@ class DataController: ObservableObject {
     private var groupsArray: [Groups] = []
     let context = DataController.appDelegate.persistentContainer.viewContext
     private var database = Firestore.firestore()
+    var isInitialized: Bool = false
     
     init() {
-        
-//        container = NSPersistentContainer(name: "Main")
 
-//        container.loadPersistentStores { storeDescription, error in
-//            if let error = error {
-//                fatalError("Fatal error loading store: \(error.localizedDescription)")
-//            }
-//        }
     }
     
     func login() {
@@ -68,6 +62,7 @@ class DataController: ObservableObject {
     }
     
     func getContacts(byPhoneNumber: String, completion: @escaping (Bool) -> Void) {
+        isInitialized = true
         let database = Firestore.firestore()
         do {
             let store = CNContactStore()
@@ -356,12 +351,13 @@ class DataController: ObservableObject {
                                 m.textString = member.status.text
                                 m.riskString = member.riskString
                                 m.riskScore = member.riskScore
-                            }
-                            do {
-                                try context.save()
-                            }
-                            catch {
-                                print("error writing members: \(error.localizedDescription)")
+                                m.groupId = document.documentID
+                                do {
+                                    try context.save()
+                                }
+                                catch {
+                                    print("error writing members: \(error.localizedDescription)")
+                                }
                             }
                                 
                             if groups.members.count > 0 {
@@ -396,12 +392,16 @@ class DataController: ObservableObject {
                                 }
                             }
                             if !found {
+
                                 self.groupsArray.append(groups)
                                 let g = CDGroups(context: context)
+                                g.groupId = groups.id
                                 g.name = groups.name
                                 g.adminId = groups.adminId
                                 g.averageRisk = groups.averageRisk
                                 g.averageRiskValue = groups.averageRiskValue
+                                g.riskTotals = try! JSONEncoder().encode(groups.riskTotals)
+                                g.groupCount = Int16(groups.members.count)
                                 do {
                                     try context.save()
                                 }
@@ -428,8 +428,8 @@ class DataController: ObservableObject {
             if let err = err {
                 completion(err)
             } else {
-                var dictionary: [[String:RiskHighLow]] = [[:]]
-                var colorDictionary: [[String:String]] = [[:]]
+                var dictionary: [[String:RiskHighLow]] = []
+                var colorDictionary: [[String:String]] = []
                 for document in querySnapshot!.documents {
                     let riskRange = RiskHighLow(snapshot: document.data())
                     var s = [String:RiskHighLow]()
@@ -439,9 +439,26 @@ class DataController: ObservableObject {
                     color[riskRange.name] = riskRange.color
                     colorDictionary.append(color)
                 }
-                print(dictionary)
+
                 self.riskRanges.removeAll()
                 self.riskColors.removeAll()
+                self.deleteEntity(name: "CDRiskColors")
+
+                for c in colorDictionary {
+                    let item = CDRiskColors(context: self.context)
+                    item.riskColors = try! JSONEncoder().encode(c)
+                }
+                for c in dictionary {
+                    let item = CDRiskRanges(context: self.context)
+                    item.riskRanges = try! JSONEncoder().encode(c)
+                }
+                do {
+                    try self.context.save()
+                }
+                catch {
+                    print("error writing riskColors: \(error.localizedDescription)")
+                }
+                
                 DispatchQueue.main.async {
                     self.riskRanges = dictionary
                     self.riskColors = colorDictionary

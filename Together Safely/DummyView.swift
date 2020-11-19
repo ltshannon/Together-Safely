@@ -25,9 +25,11 @@ struct DummyView: View {
         }
         .onAppear {
             let userPhoneNumber =  UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? ""
-            dataController.getContacts(byPhoneNumber: userPhoneNumber) { error in
-                dataController.startListeners(phoneNumber: userPhoneNumber) { completion in
-                    print("Completed startListeners")
+            if !dataController.isInitialized {
+                dataController.getContacts(byPhoneNumber: userPhoneNumber) { error in
+                    dataController.startListeners(phoneNumber: userPhoneNumber) { completion in
+                        print("Completed startListeners")
+                    }
                 }
             }
         }
