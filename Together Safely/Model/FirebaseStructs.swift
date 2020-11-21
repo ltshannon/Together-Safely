@@ -35,9 +35,10 @@ enum TogetherContactTypes: Comparable {
 
 struct TogetherContactType: Hashable, Identifiable {
     let id = UUID()
-    var contactInfo: CNContact
+    var name: String
     var type: TogetherContactTypes
     var phoneNumber: String
+    var imageData: Data?
     var riskScore: Double?
     var riskString: String?
 }

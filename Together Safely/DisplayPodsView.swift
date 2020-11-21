@@ -28,6 +28,11 @@ struct DisplayPodsView: View {
         entity: CDGroups.entity(),
         sortDescriptors: []
     ) var cdGroups: FetchedResults<CDGroups>
+    
+    @FetchRequest(
+        entity: CDContactInfo.entity(),
+        sortDescriptors: []
+    ) var contactInfo: FetchedResults<CDContactInfo>
 
     var body: some View {
 
@@ -71,9 +76,8 @@ struct DisplayPodsView: View {
                                     Spacer()
                                     ScrollView(.horizontal, showsIndicators: false) {
                                         HStack {
-                                     
                                             ForEach(0..<Int(group.groupCount)) { index in
-                                                MemberProfileByIndexView(contacts: dataController.contactInfo, groupId: group.groupId ?? "", index: index)
+                                                MemberProfileByIndexView(contacts: contactInfo, groupId: group.groupId ?? "", index: index)
                                             }
                                         }
                                     }.padding(.leading, 5)

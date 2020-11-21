@@ -61,6 +61,31 @@ class DataController: ObservableObject {
         }
     }
     
+    func getMobileNumber(numbers: [CNLabeledValue<CNPhoneNumber>]) -> String {
+        
+        for phone in numbers {
+            if let label = phone.label {
+                if label == CNLabelPhoneNumberMobile {
+                    var number = phone.value.stringValue
+                    number = number.deletingPrefix("+")
+                    number = number.deletingPrefix("1")
+                    number = format(with: "+1XXXXXXXXXX", phone: number)
+                    return number
+                }
+            }
+        }
+        for phone in numbers {
+            var number = phone.value.stringValue
+            number = number.deletingPrefix("+")
+            number = number.deletingPrefix("1")
+            number = format(with: "+1XXXXXXXXXX", phone: number)
+            return number
+        }
+        
+        return ""
+    }
+    
+    
     func getContacts(byPhoneNumber: String, completion: @escaping (Bool) -> Void) {
         isInitialized = true
         let database = Firestore.firestore()
@@ -81,21 +106,22 @@ class DataController: ObservableObject {
             print("Fetching contacts: succesfull with count = \(contacts.count)")
 
             var phoneNumbers: [String] = []
-            let userPhoneNumber =  UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? ""
+//            let userPhoneNumber =  UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? ""
             var cinfo: [[String:ContactInfo]] = []
+            self.deleteEntity(name: "CDContactInfo")
+            
             for contact in contacts {
-                for phone in contact.phoneNumbers {
-                    var number = phone.value.stringValue
-                    number = number.deletingPrefix("+")
-                    number = number.deletingPrefix("1")
-                    number = format(with: "+1XXXXXXXXXX", phone: number)
+                let number = getMobileNumber(numbers: contact.phoneNumbers)
+                if number.count > 0 {
                     let c: ContactInfo = ContactInfo(
                         image: contact.imageData,
                         name: "\(contact.givenName) " + "\(contact.familyName)"
                     )
          
                     cinfo.append([number:c])
-//                    if number.contains(userPhoneNumber) {
+
+
+
                     if number.contains(byPhoneNumber) {
                         userName = "\(contact.givenName) " + "\(contact.familyName)"
                         if let imageData = contact.imageData {
@@ -105,7 +131,8 @@ class DataController: ObservableObject {
                     phoneNumbers.append(number)
                 }
             }
-          self.contactInfo = cinfo
+
+            self.contactInfo = cinfo
              
             WebService.checkPhoneNumbers(phoneNumbers: phoneNumbers) { returnedNumbers in
 /*
@@ -122,21 +149,20 @@ class DataController: ObservableObject {
                 var userContacts: [TogetherContactType] = []
              
                 for contact in contacts {
-                    for phone in contact.phoneNumbers {
-                        var number = phone.value.stringValue
-                        number = number.deletingPrefix("+")
-                        number = number.deletingPrefix("1")
-                        number = format(with: "+1XXXXXXXXXX", phone: number)
-                        var c: TogetherContactType
+                        
+                    let number = self.getMobileNumber(numbers: contact.phoneNumbers)
+                    if number.count > 0 {
+                        let c: TogetherContactType
                         if returnedNumbers.invitablePhoneNumbers.contains(number) {
-                            c = TogetherContactType(contactInfo: contact, type: .invitablePhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
+                            c = TogetherContactType(name: contact.name, type: .invitablePhoneNumber, phoneNumber: number, imageData: contact.imageData, riskScore: nil, riskString: nil)
                         } else if returnedNumbers.invitedPhoneNumbers.contains(number) {
-                            c = TogetherContactType(contactInfo: contact, type: .invitedPhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
+                            c = TogetherContactType(name: contact.name, type: .invitedPhoneNumber, phoneNumber: number, imageData: contact.imageData, riskScore: nil, riskString: nil)
                         } else {
-                            c = TogetherContactType(contactInfo: contact, type: .userPhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
+                            c = TogetherContactType(name: contact.name, type: .userPhoneNumber, phoneNumber: number, imageData: contact.imageData, riskScore: nil, riskString: nil)
                         }
                         userContacts.append(c)
                     }
+
                 }
                 
                 userContacts.sort { return $0.type.sortOrder < $1.type.sortOrder }
@@ -188,7 +214,22 @@ class DataController: ObservableObject {
                                 userContactAverageRisk += score
                                 userContactCount += 1
                             }
+
+                            let item = CDContactInfo(context: self.context)
+                            item.name = self.userContacts[index].name
+                            item.type = Int16(self.userContacts[index].type.sortOrder)
+                            item.phoneNumber = self.userContacts[index].phoneNumber
+                            item.imageData = self.userContacts[index].imageData
+                            item.riskScore = self.userContacts[index].riskScore ?? 0
+                            item.riskString = self.userContacts[index].riskString ?? ""
                         }
+                        do {
+                            try self.context.save()
+                        }
+                        catch {
+                            print("error writing user: \(error.localizedDescription)")
+                        }
+                        
                         if userContactCount > 0 {
                             let average = userContactAverageRisk / userContactCount
                             self.userContantRiskAverageString = self.getRiskString(value: average)
@@ -238,6 +279,7 @@ class DataController: ObservableObject {
                     
                     self.deleteEntity(name: "CDUser")
                     let u = CDUser(context: context)
+                    u.id = user.id
                     u.userName = user.name
                     u.image = user.image
                     u.phoneNumber = user.phoneNumber

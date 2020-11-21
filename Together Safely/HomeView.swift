@@ -12,11 +12,12 @@ struct HomeView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State var index = 0
     @State private var action: Int? = 0
-    let user: FetchRequest<CDUser>
-
-    init() {
-        user = FetchRequest(entity: CDUser.entity(), sortDescriptors: [])
-    }
+    
+    @FetchRequest(
+        entity: CDUser.entity(),
+        sortDescriptors: []
+    ) var user: FetchedResults<CDUser>
+    
     
     var body: some View {
         GeometryReader { metrics in
@@ -102,9 +103,8 @@ struct HomeView: View {
                 Button(action: {
                     self.action = 1
                 }) {
-                    let member = user.wrappedValue.first
-                    if member?.image != nil {
-                        Image(uiImage: UIImage(data: (member?.image!)!)!)
+                    if user.first?.image != nil {
+                        Image(uiImage: UIImage(data: (user.first?.image!)!)!)
                             .renderingMode(.original)
                             .resizable()
                             .aspectRatio(contentMode: .fill)

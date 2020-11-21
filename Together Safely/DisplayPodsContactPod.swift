@@ -19,7 +19,7 @@ struct DisplayPodsContactPod: View {
     
     var body: some View {
         VStack {
-            NavigationLink(destination: AllContactsView(group: group).environmentObject(dataController), tag: 2, selection: $selection) {
+            NavigationLink(destination: AllContactsView(groupId: group.id).environmentObject(dataController), tag: 2, selection: $selection) {
                 Button(action: {
                     self.selection = 2
                 }) {

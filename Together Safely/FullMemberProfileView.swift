@@ -11,52 +11,60 @@ import SwiftUI
 struct FullMemberProfileView: View {
 
     var groupId: String
-    var member: Member
-    @EnvironmentObject var dataController: DataController
+    var index: Int
     @State private var getRiskColor: Color = Color.white
     @State private var getImageForPhone: Data = Data()
+    var items: FetchRequest<CDMember>
+    
+    @FetchRequest(
+        entity: CDContactInfo.entity(),
+        sortDescriptors: []
+    ) var contactInfo: FetchedResults<CDContactInfo>
+    
+    @FetchRequest(
+        entity: CDRiskRanges.entity(),
+        sortDescriptors: []
+    ) var riskRanges: FetchedResults<CDRiskRanges>
+    
+    init(groupId: String, index: Int) {
+        self.groupId = groupId
+        self.index = index
+
+        items = FetchRequest<CDMember>(entity: CDMember.entity(), sortDescriptors: [], predicate: NSPredicate(format: "groupId == %@", groupId))
+        
+    }
     
     var body: some View {
+        let member = items.wrappedValue[index]
         HStack {
-            MemberProfileView(
-                image: getImageForPhone.getImage(phoneName: self.member.phoneNumber, dict: dataController.contactInfo),
-                groupId: groupId,
-                riskScore: member.riskScore,
-                riskRanges: dataController.riskRanges).environmentObject(dataController)
+            MemberProfileByIndexView(contacts: contactInfo, groupId: groupId, index: index)
+
             VStack(alignment: .leading, spacing: 5) {
-                Text(self.getName(phoneName: self.member.phoneNumber, dict: self.dataController.contactInfo))
-                Text(member.status.text)
+                Text(self.getName(phoneName: member.phoneNumber ?? "", contacts: contactInfo))
+                Text(member.textString ?? "")
                     .font(Font.custom("Avenir-Medium", size: 14))
                     .foregroundColor(Color("Colorgray"))
-                Text(member.riskString)
+                Text(member.riskString ?? "")
                     .font(Font.custom("Avenir-Medium", size: 14))
-                    .foregroundColor(getRiskColor.newGetRiskColor(riskScore: member.riskScore, ranges: dataController.riskRanges))
+                    .foregroundColor(getRiskColor.V3GetRiskColor(riskScore: member.riskScore, ranges: riskRanges))
             }
             Spacer()
-            Text(member.status.emoji)
+            Text(member.emoji ?? "")
             .font(Font.custom("Avenir Next Medium", size: 45))
         }
     }
     
-    func getName(phoneName: String, dict: [[String:ContactInfo]]) -> String {
+    func getName(phoneName: String, contacts: FetchedResults<CDContactInfo>) -> String {
         
-        for d in dict {
-            if d[phoneName] != nil {
-                return(d[phoneName]!.name)
+        for item in contacts {
+            if item.phoneNumber == phoneName {
+                return item.name ?? phoneName
             }
         }
         return phoneName
     }
     
 }
-
-/*
-struct FullMemberProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        FullMemberProfileView()
-    }
-}
-*/
 
 extension String {
     func emojiToImage() -> UIImage? {

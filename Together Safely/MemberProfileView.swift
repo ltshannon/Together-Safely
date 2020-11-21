@@ -53,15 +53,3 @@ struct MemberProfileView: View {
     }
     
 }
-
-/*
-struct MemberProfileView_Previews: PreviewProvider {
-    
-    var riskColor: Color = Color.Colorred
-    
-    static var previews: some View {
-
-        MemberProfileView(riskColor: riskColor)
-    }
-}
-*/

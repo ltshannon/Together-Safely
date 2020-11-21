@@ -18,21 +18,31 @@ struct DetailPodView: View {
     @State private var emojiText: String = ""
     @State private var widthArray: Array = []
     @State private var getRiskColor: Color = Color.white
-    let user: FetchRequest<CDUser>
     
-    init(index: Int) {
-        self.index = index
-        user = FetchRequest(entity: CDUser.entity(), sortDescriptors: [])
-    }
+    @FetchRequest(
+        entity: CDGroups.entity(),
+        sortDescriptors: []
+    ) var cdGroups: FetchedResults<CDGroups>
+    
+    @FetchRequest(
+        entity: CDUser.entity(),
+        sortDescriptors: []
+    ) var user: FetchedResults<CDUser>
+    
+    @FetchRequest(
+        entity: CDRiskRanges.entity(),
+        sortDescriptors: []
+    ) var items: FetchedResults<CDRiskRanges>
     
     var body: some View {
-        let member = user.wrappedValue.first
+        let group = cdGroups[index]
+        
         VStack {
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
-                        if member?.image != nil {
-                            Image(uiImage: UIImage(data: (member?.image!)!)!)
+                        if user.first?.image != nil {
+                            Image(uiImage: UIImage(data: (user.first?.image!)!)!)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
 //                                .renderingMode(.original)
@@ -94,9 +104,9 @@ struct DetailPodView: View {
                                 if self.inputStr.count == 0 {
                                     return
                                 }
-                                WebService.setStatus(text: self.inputStr, emoji: self.emojiText, groupId: self.dataController.groups[self.index].id){ successful in
+                                WebService.setStatus(text: self.inputStr, emoji: self.emojiText, groupId: group.groupId ?? ""){ successful in
                                     if !successful {
-                                        print("Set status failed for groupId : \(self.dataController.groups[self.index].id))")
+                                        print("Set status failed for groupId : \(group.groupId ?? ""))")
                                     } else {
                                         self.inputStr = ""
                                     }
@@ -113,8 +123,8 @@ struct DetailPodView: View {
                 }
                 HStack {
                     Spacer()
-                    if dataController.user.id == self.dataController.groups[index].adminId {
-                        NavigationLink(destination: AddFriendView(group: self.dataController.groups[index]).environmentObject(dataController)) {
+                    if user.first?.id == group.adminId {
+                        NavigationLink(destination: AddFriendView(groupId: group.groupId ?? "").environmentObject(dataController)) {
                             Text("Add Friend")
                                 .font(Font.custom("Avenir-Medium", size: 22))
                                 .foregroundColor(.white)
@@ -130,7 +140,7 @@ struct DetailPodView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     VStack {
                         HStack {
-                            Text(self.dataController.groups[index].name)
+                            Text(group.name ?? "")
                                 .font(Font.custom("Avenir-Medium", size: 18))
                                 .padding(.leading, 20)
                                 .foregroundColor(.white)
@@ -145,30 +155,31 @@ struct DetailPodView: View {
                     VStack(alignment: .leading, spacing: 0) {
                         Spacer()
 //                        BuildRiskBar(highRiskCount: self.dataController.groups[index].riskTotals["High Risk"] ?? 0, medRiskCount: self.dataController.groups[index].riskTotals["Medium Risk"] ?? 0, lowRiskCount: self.dataController.groups[index].riskTotals["Low Risk"] ?? 0, memberCount: self.dataController.groups[index].members.count).environmentObject(dataController).padding(15)
-                        BuildRiskBar(dict: self.dataController.groups[index].riskTotals, memberCount: self.dataController.groups[index].members.count).environmentObject(dataController).padding(15)
+//                        BuildRiskBar(dict: self.dataController.groups[index].riskTotals, memberCount: self.dataController.groups[index].members.count).environmentObject(dataController).padding(15)
+                        if group.riskTotals != nil {
+                            let result = try! JSONDecoder().decode([String: Int].self, from: group.riskTotals ?? Data())
+                            BuildRiskBar(dict: result, memberCount: Int(group.groupCount)).padding(15)
+                        }
                         Spacer()
-                        Text("Mostly \(self.dataController.groups[index].averageRisk)")
+                        Text("Mostly \(group.averageRisk ?? "")")
                             .font(Font.custom("Avenir-Medium", size: 16))
-                            .foregroundColor(self.getRiskColor.newGetRiskColor(riskScore: self.dataController.groups[index].averageRiskValue, ranges: dataController.riskRanges))
+                            .foregroundColor(self.getRiskColor.V3GetRiskColor(riskScore: group.averageRiskValue, ranges: items))
                             .padding(.leading, 15)
                     }
                     .frame(height: 75)
                     .padding(.bottom, 15)
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack(alignment: .leading, spacing: 5) {
-                            ForEach(Array(dataController.groups[index].members.enumerated()), id: \.offset) { i, element in
-//                            ForEach(0..<self.dataController.groups[index].members.count) { i in
-                                VStack(alignment: .leading, spacing: 0) {
-                                    Capsule()
-                                        .fill(Color(.gray))
-                                        .frame(height: 1)
-                                        .padding(.top, 5)
-                                    HStack {
-                                        FullMemberProfileView(
-                                            groupId: self.dataController.groups[self.index].id,
-                                            member: self.dataController.groups[self.index].members[i]).environmentObject(dataController)
-                                    }.padding([.leading, .trailing], 15)
-                                }
+                            ForEach(0..<Int(group.groupCount)) { i in
+                                Capsule()
+                                    .fill(Color(.gray))
+                                    .frame(height: 1)
+                                    .padding(.top, 5)
+                                HStack {
+                                    FullMemberProfileView(
+                                        groupId: group.groupId ?? "",
+                                        index: i)
+                                }.padding([.leading, .trailing], 15)
                             }
                         }
                     }

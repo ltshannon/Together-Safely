@@ -78,8 +78,8 @@
             filePath = "Together Safely/Model/WebService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "278"
-            endingLineNumber = "278"
+            startingLineNumber = "261"
+            endingLineNumber = "261"
             landmarkName = "networkRequest(_:responseType:requestBody:completion:)"
             landmarkType = "7">
          </BreakpointContent>

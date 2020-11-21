@@ -13,10 +13,10 @@ struct AllContactsView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var dataController: DataController
     @State var name:String = ""
-    @State var group: Groups
+    @State var groupId: String
     var body: some View {
         VStack {
-            AllContactsCardView(pageType: .addContacts, name: self.$name, group: group).environmentObject(dataController)
+            AllContactsCardView(pageType: .addContacts, name: self.$name, groupId: groupId)
         }
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: btnBack)

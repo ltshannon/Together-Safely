@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct MemberProfileByIndexView: View {
-    var contacts: [[String:ContactInfo]]
+    var contacts: FetchedResults<CDContactInfo>
     let groupId: String
     let index: Int
     @State private var getRiskColor: Color = Color.white
@@ -21,7 +21,7 @@ struct MemberProfileByIndexView: View {
         sortDescriptors: []
     ) var items: FetchedResults<CDRiskRanges>
 
-    init(contacts: [[String:ContactInfo]], groupId: String, index: Int) {
+    init(contacts: FetchedResults<CDContactInfo>, groupId: String, index: Int) {
         self.contacts = contacts
         self.groupId = groupId
         self.index = index
@@ -32,7 +32,7 @@ struct MemberProfileByIndexView: View {
     
     var body: some View {
         ZStack {
-            let image = self.getImageForPhone.getImage(phoneName: members.wrappedValue.count > index ? members.wrappedValue[index].phoneNumber ?? "" : "", dict: contacts)
+            let image = self.getImageForPhone.newGetImage(phoneName: members.wrappedValue.count > index ? members.wrappedValue[index].phoneNumber ?? "" : "", contacts: contacts)
             if image != nil {
                 Image(uiImage: UIImage(data: image!)!)
                     .resizable()

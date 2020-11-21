@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17511" systemVersion="19H2" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CDContactInfo" representedClassName="CDContactInfo" syncable="YES" codeGenerationType="class">
+        <attribute name="imageData" optional="YES" attributeType="Binary"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="phoneNumber" optional="YES" attributeType="String"/>
+        <attribute name="riskScore" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="riskString" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
     <entity name="CDGroupInvites" representedClassName="CDGroupInvites" syncable="YES" codeGenerationType="class">
         <attribute name="inviteId" optional="YES" attributeType="String"/>
     </entity>
@@ -40,6 +48,7 @@
         <attribute name="riskRanges" optional="YES" attributeType="Binary"/>
     </entity>
     <entity name="CDUser" representedClassName="CDUser" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="image" optional="YES" attributeType="Binary"/>
         <attribute name="phoneNumber" optional="YES" attributeType="String"/>
         <attribute name="riskScore" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -47,13 +56,14 @@
         <attribute name="userName" optional="YES" attributeType="String"/>
     </entity>
     <elements>
+        <element name="CDContactInfo" positionX="-27" positionY="99" width="128" height="133"/>
         <element name="CDGroupInvites" positionX="-63" positionY="-18" width="128" height="58"/>
         <element name="CDGroups" positionX="-54" positionY="0" width="128" height="148"/>
         <element name="CDInvites" positionX="-36" positionY="36" width="128" height="118"/>
         <element name="CDListOfGroups" positionX="-18" positionY="45" width="128" height="58"/>
         <element name="CDMember" positionX="0" positionY="81" width="128" height="178"/>
         <element name="CDRiskColors" positionX="-27" positionY="99" width="128" height="58"/>
-        <element name="CDUser" positionX="-27" positionY="90" width="128" height="118"/>
         <element name="CDRiskRanges" positionX="-27" positionY="99" width="128" height="58"/>
+        <element name="CDUser" positionX="-27" positionY="90" width="128" height="133"/>
     </elements>
 </model>

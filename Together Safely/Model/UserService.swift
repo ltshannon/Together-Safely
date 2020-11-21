@@ -124,11 +124,11 @@ class FirebaseService: ObservableObject {
                         number = format(with: "+1XXXXXXXXXX", phone: number)
                         var c: TogetherContactType
                         if returnedNumbers.invitablePhoneNumbers.contains(number) {
-                            c = TogetherContactType(contactInfo: contact, type: .invitablePhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
+                            c = TogetherContactType(name: contact.name, type: .invitablePhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
                         } else if returnedNumbers.invitedPhoneNumbers.contains(number) {
-                            c = TogetherContactType(contactInfo: contact, type: .invitedPhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
+                            c = TogetherContactType(name: contact.name, type: .invitedPhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
                         } else {
-                            c = TogetherContactType(contactInfo: contact, type: .userPhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
+                            c = TogetherContactType(name: contact.name, type: .userPhoneNumber, phoneNumber: number, riskScore: nil, riskString: nil)
                         }
                         userContacts.append(c)
                     }

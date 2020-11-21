@@ -148,6 +148,16 @@ extension Data {
         return nil
     }
     
+    func newGetImage(phoneName: String, contacts: FetchedResults<CDContactInfo>) -> Data? {
+
+        for item in contacts {
+            if item.phoneNumber == phoneName {
+                return item.imageData
+            }
+        }
+        return nil
+    }
+    
 }
 
 extension Color {

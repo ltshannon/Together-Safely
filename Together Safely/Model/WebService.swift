@@ -172,24 +172,7 @@ class WebService {
         }
     }
     
-    static func createInvite(contact: CNContact, completion: @escaping (Bool) -> Void)  {
-        var phoneNumber = ""
-        for phone in contact.phoneNumbers {
-            if let label = phone.label {
-                if label == CNLabelPhoneNumberMobile {
-                    var number = phone.value.stringValue
-                    number = format(with: "+1XXXXXXXXXX", phone: number)
-                    phoneNumber = number
-                    break
-                }
-            }
-        }
-        
-        if phoneNumber.count == 0 {
-            print("createInvite no phoneNumber found for contact")
-            completion(false)
-        }
-        
+    static func createInvite(phoneNumber: String, completion: @escaping (Bool) -> Void)  {
         let requestBody = try? JSONSerialization.data(withJSONObject: ["phoneNumber" : phoneNumber], options: [])
         networkRequest(.inviteUser, responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
             completion(error == nil)

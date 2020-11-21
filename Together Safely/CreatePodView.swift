@@ -23,7 +23,7 @@ struct CreatePodView: View {
                 .foregroundColor(Color("Colorblack"))
                 .padding([.leading, .trailing], 15)
                 .padding([.top, .bottom], 10)
-            AllContactsCardView(pageType: .createPod, name: self.$name, group: group).environmentObject(dataController)
+            AllContactsCardView(pageType: .createPod, name: self.$name, groupId: "")
         }.padding(.bottom, 15)
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: btnBack)

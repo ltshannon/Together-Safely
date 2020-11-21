@@ -16,11 +16,11 @@ enum PageType: Int {
 }
 
 struct AllContactsCardView: View {
+    
     var pageType:PageType
-    @Binding var name:String
-    var group: Groups
+    @Binding var name: String
+    let groupId: String
     @State var showingAlert = false
-    @EnvironmentObject var dataController: DataController
     @Environment(\.presentationMode) var presentation
     @State private var arrayIndexs: [Int] = []
     @State private var members:[String] = []
@@ -28,17 +28,27 @@ struct AllContactsCardView: View {
     @State private var str: String = ""
     @State private var filteredItems: [TogetherContactType] = []
     @State private var filterString = ""
-    let user: FetchRequest<CDUser>
+    @State private var userContacts: [TogetherContactType] = []
     
-    init(pageType: PageType, name: Binding<String>, group: Groups) {
+    @FetchRequest(
+        entity: CDRiskRanges.entity(),
+        sortDescriptors: []
+    ) var items: FetchedResults<CDRiskRanges>
+    
+    @FetchRequest(
+        entity: CDContactInfo.entity(),
+        sortDescriptors: []
+    ) var itemsContacts: FetchedResults<CDContactInfo>
+    
+    init(pageType: PageType, name: Binding<String>, groupId: String) {
         self.pageType = pageType
         self._name = name
-        self.group = group
-        user = FetchRequest(entity: CDUser.entity(), sortDescriptors: [])
+        self.groupId = groupId
+//        user = FetchRequest(entity: CDUser.entity(), sortDescriptors: [])
     }
     
     var body: some View {
-        let member = user.wrappedValue.first
+
         VStack {
             TextField("Search", text: $filterString.onChange(applyFilter))
                 .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -65,15 +75,15 @@ struct AllContactsCardView: View {
                         VStack {
                             HStack {
                                 ZStack {
-                                    if element.contactInfo.imageData != nil {
-                                        Image(uiImage: UIImage(data: element.contactInfo.imageData!)!)
+                                    if element.imageData != nil {
+                                        Image(uiImage: UIImage(data: element.imageData!)!)
                                             .resizable()
                                             .aspectRatio(contentMode: .fill)
 //                                            .renderingMode(.original)
                                             .frame(width: 40, height: 40)
                                             .clipShape(Circle())
                                             .overlay(Circle().stroke(
-                                                element.riskScore != nil ? riskColor.newGetRiskColor(riskScore: member?.riskScore ?? 0, ranges: dataController.riskRanges) :
+                                                element.riskScore != nil ? riskColor.V3GetRiskColor(riskScore: element.riskScore ?? 0, ranges: items) :
                                                 Color("Colorgray")
                                                 , lineWidth: 2))
                                             .padding(5)
@@ -88,12 +98,12 @@ struct AllContactsCardView: View {
                                     }
                                 }
                                 VStack(alignment: .leading) {
-                                    Text("\(element.contactInfo.name)")
+                                    Text("\(element.name)")
                                         .foregroundColor(Color("Colorblack"))
                                         .font(Font.custom("Avenir-Medium", size: 18))
                                     if element.riskString != nil {
                                         Text(element.riskString!)
-                                            .foregroundColor(riskColor.newGetRiskColor(riskScore: member?.riskScore ?? 0, ranges: dataController.riskRanges))
+                                            .foregroundColor(riskColor.V3GetRiskColor(riskScore: element.riskScore ?? 0, ranges: items))
                                             .font(Font.custom("Avenir-Medium", size: 14))
                                             .padding(.leading, 5)
                                     } else {
@@ -110,9 +120,9 @@ struct AllContactsCardView: View {
                                 if self.pageType == .addContacts {
                                     if self.filteredItems[index].type == .invitablePhoneNumber {
                                         Button(action: {
-                                            WebService.createInvite(contact: element.contactInfo) { successful in
+                                            WebService.createInvite(phoneNumber: element.phoneNumber) { successful in
                                                 if !successful {
-                                                    print("createInvite failed for: \(element.contactInfo.givenName)")
+                                                    print("createInvite failed for: \(element.name)")
                                                 }
                                                 self.presentation.wrappedValue.dismiss()
                                             }
@@ -144,7 +154,8 @@ struct AllContactsCardView: View {
                     }
                 }
                 .onAppear {
-                    self.applyFilter()
+                    convertCDContactInfo()
+                    applyFilter()
                     UITableView.appearance().separatorStyle = .none
                 }
 //                    .padding([.leading, .trailing, .bottom, .top], 15)
@@ -183,7 +194,7 @@ struct AllContactsCardView: View {
             } else if pageType == .addFriends {
                 Button(action: {
                     for member in self.members {
-                        WebService.inviteUserToGroup(groupId: self.group.id, phoneNumber: member) { successful in
+                        WebService.inviteUserToGroup(groupId: self.groupId, phoneNumber: member) { successful in
                             if !successful {
                                 print("inviteUserToGroup failed for: \(member)")
                             }
@@ -209,12 +220,12 @@ struct AllContactsCardView: View {
         let cleanedFilter = filterString.trimmingCharacters(in: .whitespacesAndNewlines)
 
         if cleanedFilter.isEmpty {
-            filteredItems = dataController.userContacts.sorted(by: {$0.contactInfo.name < $1.contactInfo.name})
+            filteredItems = userContacts.sorted(by: {$0.name < $1.name})
         } else {
             arrayIndexs.removeAll()
             members.removeAll()
-            filteredItems = dataController.userContacts.filter { element in
-                element.contactInfo.name.localizedCaseInsensitiveContains(cleanedFilter)
+            filteredItems = userContacts.filter { element in
+                element.name.localizedCaseInsensitiveContains(cleanedFilter)
             }
         }
     }
@@ -231,27 +242,35 @@ struct AllContactsCardView: View {
         members.removeAll()
         
         for index in arrayIndexs {
-            for phone in filteredItems[index].contactInfo.phoneNumbers {
-                if let label = phone.label {
-                    if label == CNLabelPhoneNumberMobile {
-                        var number = phone.value.stringValue
-                        number = number.deletingPrefix("+")
-                        number = number.deletingPrefix("1")
-                        number = format(with: "+1XXXXXXXXXX", phone: number)
-                        members.append(number)
-                    }
-                }
-            }
+            members.append(filteredItems[index].phoneNumber)
         }
         print("arrayIndexs: \(arrayIndexs)")
         print("members: \(members)")
     }
-}
-
-/*
-struct AllContactsCardView_Previews: PreviewProvider {
-    static var previews: some View {
-        AllContactsCardView(pageType: .addContacts)
+    
+    func convertCDContactInfo() {
+        
+        userContacts.removeAll()
+        
+        for item in itemsContacts {
+            print("\(item.name!)")
+            var type: TogetherContactTypes
+            
+            switch item.type {
+            case 0:
+                type = .userPhoneNumber
+            case 1:
+                type = .invitedPhoneNumber
+            case 2:
+                type = .invitablePhoneNumber
+            default:
+                type = .userPhoneNumber
+            }
+            let c = TogetherContactType(name: item.name ?? "", type: type, phoneNumber: item.phoneNumber ?? "", imageData: item.imageData ?? nil, riskScore: item.riskScore, riskString: item.riskString ?? "")
+            
+            userContacts.append(c)
+            print(c)
+        }
+        
     }
 }
-*/
