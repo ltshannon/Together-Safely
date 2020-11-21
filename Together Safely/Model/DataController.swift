@@ -108,7 +108,7 @@ class DataController: ObservableObject {
             var phoneNumbers: [String] = []
 //            let userPhoneNumber =  UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? ""
             var cinfo: [[String:ContactInfo]] = []
-            self.deleteEntity(name: "CDContactInfo")
+
             
             for contact in contacts {
                 let number = getMobileNumber(numbers: contact.phoneNumbers)
@@ -223,6 +223,7 @@ class DataController: ObservableObject {
                             item.riskScore = self.userContacts[index].riskScore ?? 0
                             item.riskString = self.userContacts[index].riskString ?? ""
                         }
+                        self.deleteEntity(name: "CDContactInfo")
                         do {
                             try self.context.save()
                         }
@@ -236,6 +237,19 @@ class DataController: ObservableObject {
                             self.userContantRiskAverageValue = average
                             self.userContantRiskAverageDict = dict
                             self.userContantUsersCount = Int(userContactCount)
+                            self.deleteEntity(name: "CDRiskAverage")
+                            let u = CDRiskAverage(context: self.context)
+                            u.userContantUsersCount = Int16(self.userContantUsersCount)
+                            u.userContantRiskAverageDict = try! JSONEncoder().encode(self.userContantRiskAverageDict)
+                            u.userContantRiskAverageValue = self.userContantRiskAverageValue
+                            u.userContantRiskAverageString = self.userContantRiskAverageString
+                            do {
+                                try self.context.save()
+                            }
+                            catch {
+                                print("error writing user: \(error.localizedDescription)")
+                            }
+
                         }
                     }
                     completion(true)

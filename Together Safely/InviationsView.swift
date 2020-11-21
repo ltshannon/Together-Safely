@@ -35,10 +35,7 @@ struct InviationsView: View {
                         VStack {
                             HStack {
                             MemberProfileView(
-                                image: self.getImageForPhone.getImage(phoneName: invite.adminPhone, dict: self.dataController.contactInfo),
-                                groupId: invite.groupId,
-                                riskScore: invite.riskScore,
-                                riskRanges: self.dataController.riskRanges)
+                                image: self.getImageForPhone.getImage(phoneName: invite.adminPhone, dict: self.dataController.contactInfo), riskScore: invite.riskScore)
                             VStack(alignment: .leading) {
                                 Text(self.dataController.getNameForPhone(invite.adminPhone, dict: self.dataController.contactInfo))
                                     .foregroundColor(Color("Colorblack"))

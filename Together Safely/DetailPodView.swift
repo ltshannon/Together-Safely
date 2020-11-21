@@ -12,7 +12,6 @@ struct DetailPodView: View {
     
 //    var group: Groups
     var index: Int
-    @EnvironmentObject var dataController: DataController
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var inputStr: String = ""
     @State private var emojiText: String = ""
@@ -124,7 +123,7 @@ struct DetailPodView: View {
                 HStack {
                     Spacer()
                     if user.first?.id == group.adminId {
-                        NavigationLink(destination: AddFriendView(groupId: group.groupId ?? "").environmentObject(dataController)) {
+                        NavigationLink(destination: AddFriendView(groupId: group.groupId ?? "")) {
                             Text("Add Friend")
                                 .font(Font.custom("Avenir-Medium", size: 22))
                                 .foregroundColor(.white)

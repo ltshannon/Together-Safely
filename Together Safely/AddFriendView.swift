@@ -12,7 +12,6 @@ import Firebase
 struct AddFriendView: View {
     var groupId: String
     @State var name:String = ""
-    @EnvironmentObject var dataController: DataController
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {

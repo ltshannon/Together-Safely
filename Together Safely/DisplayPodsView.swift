@@ -10,7 +10,7 @@ import SwiftUI
 import Contacts
 
 struct DisplayPodsView: View {
-    @EnvironmentObject var dataController: DataController
+
     @State private var membersArray: [Int] = []
     @State var memberRiskColor: Color = Color("Colorgray")
     @State var group: Groups = Groups(id: "", adminId: "", name: "", members: [], riskTotals: [:], riskCompiledSring: [], riskCompiledValue: [], averageRisk: "", averageRiskValue: 0)
@@ -41,7 +41,7 @@ struct DisplayPodsView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     if cdGroups.count > 0 {
                         ForEach(Array(cdGroups.enumerated()), id: \.offset) { index, group in
-                            NavigationLink(destination: DetailPodView(index: index).environmentObject(dataController)) {
+                            NavigationLink(destination: DetailPodView(index: index)) {
                                 VStack(alignment: .leading, spacing: 0) {
                                     VStack {
                                         HStack {
@@ -92,7 +92,7 @@ struct DisplayPodsView: View {
                     }
                     Spacer()
                     VStack {
-                        DisplayPodsContactPod(group: group).environmentObject(self.dataController)
+                        DisplayPodsContactPod(group: group)
                     }
                 }.padding(.bottom, 15)
 //            } else {

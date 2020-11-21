@@ -11,10 +11,7 @@ import SwiftUI
 struct MemberProfileView: View {
     
     var image: Data?
-    var groupId: String
     var riskScore: Double
-    var riskRanges: [Dictionary<String,RiskHighLow>]
-    @EnvironmentObject var dataController: DataController
     @State private var getRiskColor: Color = Color.white
     
     @FetchRequest(

@@ -41,6 +41,12 @@
         <attribute name="riskString" optional="YES" attributeType="String"/>
         <attribute name="textString" optional="YES" attributeType="String"/>
     </entity>
+    <entity name="CDRiskAverage" representedClassName="CDRiskAverage" syncable="YES" codeGenerationType="class">
+        <attribute name="userContantRiskAverageDict" optional="YES" attributeType="Binary"/>
+        <attribute name="userContantRiskAverageString" optional="YES" attributeType="String"/>
+        <attribute name="userContantRiskAverageValue" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="userContantUsersCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
     <entity name="CDRiskColors" representedClassName="CDRiskColors" syncable="YES" codeGenerationType="class">
         <attribute name="riskColors" optional="YES" attributeType="Binary"/>
     </entity>
@@ -65,5 +71,6 @@
         <element name="CDRiskColors" positionX="-27" positionY="99" width="128" height="58"/>
         <element name="CDRiskRanges" positionX="-27" positionY="99" width="128" height="58"/>
         <element name="CDUser" positionX="-27" positionY="90" width="128" height="133"/>
+        <element name="CDRiskAverage" positionX="-18" positionY="117" width="128" height="103"/>
     </elements>
 </model>

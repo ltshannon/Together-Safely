@@ -11,7 +11,6 @@ import SwiftUI
 struct AllContactsView: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @EnvironmentObject var dataController: DataController
     @State var name:String = ""
     @State var groupId: String
     var body: some View {

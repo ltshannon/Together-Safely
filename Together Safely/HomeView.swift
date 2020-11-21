@@ -87,7 +87,7 @@ struct HomeView: View {
                         .padding(.trailing, 15)
                     }
                     Spacer()
-                    DisplayPodsView().environmentObject(dataController)
+                    DisplayPodsView()
                 } else {
                     InviationsView().environmentObject(dataController)
                 }
