@@ -18,7 +18,7 @@ class DataController: ObservableObject {
     @Published var riskColors: [[String:String]] = []
     @Published var userContacts: [TogetherContactType] = []
     @Published var contactInfo: [[String:ContactInfo]] = []
-    @Published var groups: [Groups] = []
+//    @Published var groups: [Groups] = []
     @Published var invites: [Invite] = []
     @Published var user: User = User(snapshot: [:])
     @Published var userContantRiskAverageString = ""
@@ -28,7 +28,7 @@ class DataController: ObservableObject {
     private var userName: String = ""
     private var userImage: Data?
     private var allUsers: [User] = []
-    private var groupsArray: [Groups] = []
+//    private var groupsArray: [Groups] = []
     let context = DataController.appDelegate.persistentContainer.viewContext
     private var database = Firestore.firestore()
     var isInitialized: Bool = false
@@ -273,14 +273,14 @@ class DataController: ObservableObject {
         
         database.collection("users").whereField("phoneNumber", isEqualTo: phoneNumber)
             .addSnapshotListener { [self] querySnapshot, error in
-                guard let documents = querySnapshot?.documents else {
+                guard let userDocuments = querySnapshot?.documents else {
                     print("Error fetching documents: users")
                     return
                 }
                 
                 localDate = dateFormatter.string(from: Date())
                 print("Received Firebase data for users document: \(localDate)")
-                if documents.count == 1 {
+                if userDocuments.count == 1 {
                     let doc = querySnapshot!.documents[0]
                     var user = User(snapshot: doc.data())
                     user.id = doc.documentID
@@ -335,14 +335,14 @@ class DataController: ObservableObject {
                                                 i.groupId = invite.groupId
                                                 i.groupName = invite.groupName
                                                 i.riskScore = invite.riskScore
-                                                do {
-                                                    try context.save()
-                                                }
-                                                catch {
-                                                    print("error writing invite: \(error.localizedDescription)")
-                                                }
                                                 break
                                             }
+                                        }
+                                        do {
+                                            try context.save()
+                                        }
+                                        catch {
+                                            print("error writing invite: \(error.localizedDescription)")
                                         }
                                     } else {
                                         print("Group document for group id: \(invite) not found")
@@ -364,12 +364,12 @@ class DataController: ObservableObject {
                     localDate = dateFormatter.string(from: Date())
                     print("Received Firebase data for \(user.groups.count) groups at: \(localDate)")
                     deleteEntity(name: "CDListOfGroups")
-                    deleteEntity(name: "CDMember")
-                    deleteEntity(name: "CDGroups")
+//                    deleteEntity(name: "CDMember")
+//                    deleteEntity(name: "CDGroups")
                     for group in user.groups {
                         let groupListen = database.collection("groups").document(group)
                             .addSnapshotListener { [self] documentSnapshot, error in
-                            guard let document = documentSnapshot else {
+                            guard let groupDocument = documentSnapshot else {
                                 print("Error fetching document")
                                 return
                             }
@@ -385,7 +385,7 @@ class DataController: ObservableObject {
                             localDate = dateFormatter.string(from: Date())
                             print("Received Firebase data for group document: \(group) at: \(localDate)")
                                 
-                            var groups = Groups(snapshot: document.data() ?? [:])
+                            var groups = Groups(snapshot: groupDocument.data() ?? [:])
                                 
                             print("")
                             var dict: [String : Int] = [:]
@@ -400,6 +400,21 @@ class DataController: ObservableObject {
                                     dict[groups.members[index].riskString] = 1
                                 }
                                 groupAverageRisk += member.riskScore
+                                let fetchRequest: NSFetchRequest<CDMember> = CDMember.fetchRequest()
+                                if let result = try? context.fetch(fetchRequest) {
+                                    for object in result {
+//                                        print("\n member: \(object.phoneNumber ?? "") \(object.groupId ?? "")")
+                                        if object.phoneNumber == member.phoneNumber && object.groupId == groupDocument.documentID {
+                                            print("deleting member \(member.phoneNumber) \(object.groupId ?? "") ")
+                                            context.delete(object)
+                                            do {
+                                                try context.save()
+                                            } catch {
+                                                print("failed to delete member: \(groupDocument.documentID)  \(error.localizedDescription)")
+                                            }
+                                        }
+                                    }
+                                }
                                 let m = CDMember(context: context)
                                 m.adminId = member.adminId
                                 m.phoneNumber = member.phoneNumber
@@ -407,7 +422,7 @@ class DataController: ObservableObject {
                                 m.textString = member.status.text
                                 m.riskString = member.riskString
                                 m.riskScore = member.riskScore
-                                m.groupId = document.documentID
+                                m.groupId = groupDocument.documentID
                                 do {
                                     try context.save()
                                 }
@@ -430,51 +445,73 @@ class DataController: ObservableObject {
                                 groups.riskCompiledSring.append(dict.key)
                                 groups.riskCompiledValue.append(dict.value)
                             }
-/*
-                            print("document.documentID: \(document.documentID)")
-                            print("groups.id: \(groups.id)")
-                            print("groups.adminId: \(groups.adminId)")
-                            if let userId = user.id {
-                                print("user.id: \(userId)")
-                            }
-*/
-                            var found = false
-                            groups.id = document.documentID
-                            for (index, _) in groupsArray.enumerated() {
-                                if self.groupsArray[index].id == document.documentID {
-                                    self.groupsArray[index] = groups
-                                    found = true
-                                    break
-                                }
-                            }
-                            if !found {
 
-                                self.groupsArray.append(groups)
-                                let g = CDGroups(context: context)
-                                g.groupId = groups.id
-                                g.name = groups.name
-                                g.adminId = groups.adminId
-                                g.averageRisk = groups.averageRisk
-                                g.averageRiskValue = groups.averageRiskValue
-                                g.riskTotals = try! JSONEncoder().encode(groups.riskTotals)
-                                g.groupCount = Int16(groups.members.count)
-                                do {
-                                    try context.save()
-                                }
-                                catch {
-                                    print("error writing user: \(error.localizedDescription)")
-                                }
-                            }
-                            DispatchQueue.main.async {
-                                self.groups = self.groupsArray
-                            }
+//                            var found = false
+                            groups.id = groupDocument.documentID
+//                            for (index, _) in groupsArray.enumerated() {
+//                                if self.groupsArray[index].id == groupDocument.documentID {
+//                                    self.groupsArray[index] = groups
+//                                    found = true
+                            
+                                    let fetchRequest: NSFetchRequest<CDGroups> = CDGroups.fetchRequest()
+                                    if let result = try? context.fetch(fetchRequest) {
+                                        print("\n checking groups:")
+                                        for object in result {
+                                            print("\(object.groupId ?? "") \(object.name ?? "")")
+                                            if object.groupId == groupDocument.documentID {
+                                                print("deleting group: \(groups.id) from CD")
+                                                context.delete(object)
+                                                do {
+                                                    try context.save()
+                                                } catch {
+                                                    print("failed to delete group: \(groupDocument.documentID)  \(error.localizedDescription)")
+                                                }
+                                            }
+                                        }
+                                        print("")
+                                    }
+//                                }
+//                            }
+//                            if !found {
+//                                self.groupsArray.append(groups)
+//                            }
+ 
+                            addGroupToCD(group: groups)
+                                
+//                            DispatchQueue.main.async {
+//                                self.groups = self.groupsArray
+//                            }
                         }
+
                         groupListeners.append(groupListen)
                     }
                     completion(true)
                 }
         }
 
+    }
+    
+    func addGroupToCD(group: Groups) {
+        
+        print("\n add groups:")
+        let g = CDGroups(context: context)
+//        for gg in self.groupsArray {
+            print("\(group.id) \(group.name)")
+            g.groupId = group.id
+            g.name = group.name
+            g.adminId = group.adminId
+            g.averageRisk = group.averageRisk
+            g.averageRiskValue = group.averageRiskValue
+            g.riskTotals = try! JSONEncoder().encode(group.riskTotals)
+            g.groupCount = Int16(group.members.count)
+//        }
+
+        do {
+            try context.save()
+        }
+        catch {
+            print("error writing user: \(error.localizedDescription)")
+        }
     }
 
     func getRiskRanges(completion: @escaping (Error?) -> Void) {

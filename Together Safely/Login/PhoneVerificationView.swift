@@ -11,6 +11,7 @@ import Firebase
 
 struct PhoneVerificationView: View {
     
+    @EnvironmentObject var dataController: DataController
     @Binding var id: String
     @State private var show = false
     @State private var code: String = ""
@@ -47,7 +48,7 @@ struct PhoneVerificationView: View {
                     .padding(.bottom, keyboardHeight)
                     .onReceive(Publishers.keyboardHeight) { self.keyboardHeight = $0 }
                 Spacer()
-                NavigationLink(destination: RiskProfileView(), isActive: $show) {
+                NavigationLink(destination: RiskProfileView().environmentObject(dataController), isActive: $show) {
                     Button(action: {
                         UserDefaults.standard.set(self.code, forKey: "verificationCode")
                         let credential = PhoneAuthProvider.provider().credential(withVerificationID: self.id, verificationCode: self.code)

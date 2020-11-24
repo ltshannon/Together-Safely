@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct StartLoginView: View {
+    
+    @EnvironmentObject var dataController: DataController
     @State private var show = false
     private var headerTextSize:CGFloat = 40
     private var bodyTextSize:CGFloat = 22
@@ -38,7 +40,7 @@ struct StartLoginView: View {
                     .foregroundColor(.white)
                 Spacer()
 //                NavigationLink(destination: PhoneLoginView().environmentObject(locationFetcher), isActive: $show) {
-                NavigationLink(destination: PhoneLoginView(), isActive: $show) {
+                NavigationLink(destination: PhoneLoginView().environmentObject(dataController), isActive: $show) {
                     Button(action: {
                         self.show.toggle()
                     }) {

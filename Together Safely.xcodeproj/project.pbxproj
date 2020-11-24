@@ -33,6 +33,8 @@
 		46ACD59924C512590083F308 /* PhoneLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ACD59524C512590083F308 /* PhoneLoginView.swift */; };
 		46ACD59A24C512590083F308 /* PhoneVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ACD59624C512590083F308 /* PhoneVerificationView.swift */; };
 		46AE7E5C2559C5DF000769C6 /* Main.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 46AE7E5A2559C5DF000769C6 /* Main.xcdatamodeld */; };
+		46C4AE6B256C37880016FAE7 /* ReadMembersForDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C4AE6A256C37880016FAE7 /* ReadMembersForDisplayView.swift */; };
+		46C790FB256C360100BCA8D3 /* ReadMembersForDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C790FA256C360100BCA8D3 /* ReadMembersForDetailView.swift */; };
 		46DE5E5024D64AE2005912CD /* CreatePodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E4F24D64AE2005912CD /* CreatePodsView.swift */; };
 		46DE5E5424D76EF2005912CD /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E5324D76EF2005912CD /* AddFriendView.swift */; };
 		46DE5E5624D7907D005912CD /* InviationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E5524D7907D005912CD /* InviationsView.swift */; };
@@ -84,6 +86,8 @@
 		46ACD59524C512590083F308 /* PhoneLoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneLoginView.swift; sourceTree = "<group>"; };
 		46ACD59624C512590083F308 /* PhoneVerificationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneVerificationView.swift; sourceTree = "<group>"; };
 		46AE7E5B2559C5DF000769C6 /* Main.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Main.xcdatamodel; sourceTree = "<group>"; };
+		46C4AE6A256C37880016FAE7 /* ReadMembersForDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadMembersForDisplayView.swift; sourceTree = "<group>"; };
+		46C790FA256C360100BCA8D3 /* ReadMembersForDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadMembersForDetailView.swift; sourceTree = "<group>"; };
 		46DE5E4F24D64AE2005912CD /* CreatePodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePodsView.swift; sourceTree = "<group>"; };
 		46DE5E5324D76EF2005912CD /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
 		46DE5E5524D7907D005912CD /* InviationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviationsView.swift; sourceTree = "<group>"; };
@@ -134,6 +138,7 @@
 				46ACD59524C512590083F308 /* PhoneLoginView.swift */,
 				46ACD59624C512590083F308 /* PhoneVerificationView.swift */,
 				46ACD59324C512590083F308 /* SpinnerView.swift */,
+				46EB271A253D299100A849AE /* RiskProfileView.swift */,
 				46F7E64924CE1EA2004EAF24 /* LocationServiceNotEnableView.swift */,
 				46F7E64524CCEC1E004EAF24 /* LocationManager.swift */,
 			);
@@ -169,7 +174,6 @@
 				46252C5624C78888005B592F /* Extensions.swift */,
 				46ACD58124C510800083F308 /* ContentView.swift */,
 				46F7E64F24CF3D67004EAF24 /* DummyView.swift */,
-				46EB271A253D299100A849AE /* RiskProfileView.swift */,
 				46ACD59124C5124A0083F308 /* HomeView.swift */,
 				4635F3A124D510E900A4A7E2 /* HeaderView.swift */,
 				46F7E69724D30C5D004EAF24 /* DisplayPodsView.swift */,
@@ -179,6 +183,8 @@
 				4660E6ED24D4B52C00C6B993 /* MemberProfileView.swift */,
 				46FA052F256612C600A9532E /* MemberProfileByIndexView.swift */,
 				4635F3A724D6104800A4A7E2 /* FullMemberProfileView.swift */,
+				46C790FA256C360100BCA8D3 /* ReadMembersForDetailView.swift */,
+				46C4AE6A256C37880016FAE7 /* ReadMembersForDisplayView.swift */,
 				46DE5E5524D7907D005912CD /* InviationsView.swift */,
 				46DE5E5D24D9E32F005912CD /* AllContactsCardView.swift */,
 				4635F3A324D5129E00A4A7E2 /* AllContactsView.swift */,
@@ -355,8 +361,10 @@
 				46F7E64E24CE80CC004EAF24 /* GetContactsManager.swift in Sources */,
 				4660E6EE24D4B52C00C6B993 /* MemberProfileView.swift in Sources */,
 				46252C3024C63882005B592F /* StartLoginView.swift in Sources */,
+				46C790FB256C360100BCA8D3 /* ReadMembersForDetailView.swift in Sources */,
 				46A0C56825622F27002EE9C7 /* SceneDelegate.swift in Sources */,
 				4635F3A824D6104800A4A7E2 /* FullMemberProfileView.swift in Sources */,
+				46C4AE6B256C37880016FAE7 /* ReadMembersForDisplayView.swift in Sources */,
 				46F7E64A24CE1EA2004EAF24 /* LocationServiceNotEnableView.swift in Sources */,
 				46ACD59924C512590083F308 /* PhoneLoginView.swift in Sources */,
 				46AE7E5C2559C5DF000769C6 /* Main.xcdatamodeld in Sources */,

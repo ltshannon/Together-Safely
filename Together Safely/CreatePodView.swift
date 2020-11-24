@@ -10,7 +10,6 @@ import SwiftUI
 
 struct CreatePodView: View {
     @State var name:String = ""
-    @EnvironmentObject var dataController: DataController
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var podName: String = ""
     @State private var group: Groups = Groups(id: "", adminId: "", name: "", members: [], riskTotals: [:], riskCompiledSring: [], riskCompiledValue: [], averageRisk: "", averageRiskValue: 0)

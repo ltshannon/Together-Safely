@@ -28,11 +28,6 @@ struct DisplayPodsView: View {
         entity: CDGroups.entity(),
         sortDescriptors: []
     ) var cdGroups: FetchedResults<CDGroups>
-    
-    @FetchRequest(
-        entity: CDContactInfo.entity(),
-        sortDescriptors: []
-    ) var contactInfo: FetchedResults<CDContactInfo>
 
     var body: some View {
 
@@ -41,7 +36,7 @@ struct DisplayPodsView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     if cdGroups.count > 0 {
                         ForEach(Array(cdGroups.enumerated()), id: \.offset) { index, group in
-                            NavigationLink(destination: DetailPodView(index: index)) {
+                            NavigationLink(destination: DetailPodView(groupId: group.groupId ?? "")) {
                                 VStack(alignment: .leading, spacing: 0) {
                                     VStack {
                                         HStack {
@@ -76,17 +71,21 @@ struct DisplayPodsView: View {
                                     Spacer()
                                     ScrollView(.horizontal, showsIndicators: false) {
                                         HStack {
+                                            ReadMembersForDisplayView(groupId: group.groupId ?? "")
+/*
                                             ForEach(0..<Int(group.groupCount)) { index in
                                                 MemberProfileByIndexView(contacts: contactInfo, groupId: group.groupId ?? "", index: index)
                                             }
+*/
                                         }
-                                    }.padding(.leading, 5)
+                                    }
+                                        .padding(.leading, 5)
                                 }
                                     .background(Color.white)
                                     .cornerRadius(20)
                                     .shadow(color: .gray, radius: 2, x: 0, y: 2)
-                                .padding([.leading, .trailing], 15)
-                                .padding(.bottom, 5)
+                                    .padding([.leading, .trailing], 15)
+                                    .padding(.bottom, 5)
                             }
                         }
                     }
@@ -103,10 +102,6 @@ struct DisplayPodsView: View {
         }.onDisappear() {
 //            self.isVisible = false
         }
-    }
-    
-    func getMmebers(index: Int) {
-
     }
     
 }

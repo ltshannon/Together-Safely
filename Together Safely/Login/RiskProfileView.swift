@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct RiskProfileView: View {
+    
+    @EnvironmentObject var dataController: DataController
     let imageSize: CGFloat = 100
     @State private var selectedIsolated = false
     @State private var selectedModerate = false
@@ -106,7 +108,7 @@ struct RiskProfileView: View {
             Spacer()
             HStack {
                 Spacer()
-                NavigationLink(destination: DummyView(), isActive: $action) {
+                NavigationLink(destination: DummyView().environmentObject(dataController), isActive: $action) {
                 Button(action: {
                     self.showingAlert = !selectedIsolated && !selectedModerate && !selectedActive
                     if !self.showingAlert {

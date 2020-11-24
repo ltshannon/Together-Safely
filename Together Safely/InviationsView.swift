@@ -12,6 +12,11 @@ struct InviationsView: View {
     @EnvironmentObject var dataController: DataController
     @State private var getImageForPhone: Data = Data()
     
+    @FetchRequest(
+        entity: CDInvites.entity(),
+        sortDescriptors: []
+    ) var items: FetchedResults<CDInvites>
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             VStack {
@@ -30,27 +35,28 @@ struct InviationsView: View {
                 .padding(0)
             if !dataController.invites.isEmpty {
                 ScrollView(.vertical, showsIndicators: false) {
-                    ForEach(Array(dataController.invites.enumerated()), id: \.offset) { index, invite in
+//                    ForEach(Array(dataController.invites.enumerated()), id: \.offset) { index, invite in
 //                    ForEach(dataController.invites, id: \.self) { invite in
+                    ForEach(items) { invite in
                         VStack {
                             HStack {
                             MemberProfileView(
-                                image: self.getImageForPhone.getImage(phoneName: invite.adminPhone, dict: self.dataController.contactInfo), riskScore: invite.riskScore)
+                                image: self.getImageForPhone.getImage(phoneName: invite.adminPhone ?? "", dict: self.dataController.contactInfo), riskScore: invite.riskScore)
                             VStack(alignment: .leading) {
-                                Text(self.dataController.getNameForPhone(invite.adminPhone, dict: self.dataController.contactInfo))
+                                Text(self.dataController.getNameForPhone(invite.adminPhone ?? "", dict: self.dataController.contactInfo))
                                     .foregroundColor(Color("Colorblack"))
                                     .font(Font.custom("Avenir Next Medium", size: 18))
                                 Text("invited you to:")
                                     .font(Font.custom("Avenir Next Medium Italic", size: 14))
                                     .foregroundColor(Color("Colorgray"))
-                                Text(invite.groupName)
+                                Text(invite.groupName ?? "")
                                     .foregroundColor(Color("Color13"))
                                     .font(Font.custom("Avenir Next Medium", size: 16))
                             }.padding(.trailing, 10)
                             Spacer()
                                 VStack {
                                     Button(action: {
-                                        WebService.acceptInviteToGroup(groupId: invite.groupId) { successful in
+                                        WebService.acceptInviteToGroup(groupId: invite.groupId ?? "") { successful in
                                             if successful {
                                                 print("success")
                                             } else {
@@ -70,7 +76,7 @@ struct InviationsView: View {
                                         .cornerRadius(8)
                                     }
                                     Button(action: {
-                                        WebService.declineInviteToGroup(groupId: invite.groupId) { successful in
+                                        WebService.declineInviteToGroup(groupId: invite.groupId ?? "") { successful in
                                             if successful {
                                                 
                                             } else {

@@ -10,11 +10,9 @@ import SwiftUI
 
 struct FullMemberProfileView: View {
 
-    var groupId: String
-    var index: Int
+    var member: Member
     @State private var getRiskColor: Color = Color.white
     @State private var getImageForPhone: Data = Data()
-    var items: FetchRequest<CDMember>
     
     @FetchRequest(
         entity: CDContactInfo.entity(),
@@ -25,31 +23,23 @@ struct FullMemberProfileView: View {
         entity: CDRiskRanges.entity(),
         sortDescriptors: []
     ) var riskRanges: FetchedResults<CDRiskRanges>
-    
-    init(groupId: String, index: Int) {
-        self.groupId = groupId
-        self.index = index
 
-        items = FetchRequest<CDMember>(entity: CDMember.entity(), sortDescriptors: [], predicate: NSPredicate(format: "groupId == %@", groupId))
-        
-    }
-    
     var body: some View {
-        let member = items.wrappedValue[index]
+
         HStack {
-            MemberProfileByIndexView(contacts: contactInfo, groupId: groupId, index: index)
+            MemberProfileByIndexView(contacts: contactInfo, phoneNumber: member.phoneNumber, riskScore: member.riskScore)
 
             VStack(alignment: .leading, spacing: 5) {
-                Text(self.getName(phoneName: member.phoneNumber ?? "", contacts: contactInfo))
-                Text(member.textString ?? "")
+                Text(self.getName(phoneName: member.phoneNumber, contacts: contactInfo))
+                Text(member.status.text)
                     .font(Font.custom("Avenir-Medium", size: 14))
                     .foregroundColor(Color("Colorgray"))
-                Text(member.riskString ?? "")
+                Text(member.riskString)
                     .font(Font.custom("Avenir-Medium", size: 14))
                     .foregroundColor(getRiskColor.V3GetRiskColor(riskScore: member.riskScore, ranges: riskRanges))
             }
             Spacer()
-            Text(member.emoji ?? "")
+            Text(member.status.emoji)
             .font(Font.custom("Avenir Next Medium", size: 45))
         }
     }

@@ -11,6 +11,7 @@ import Firebase
 
 struct PhoneLoginView: View {
     
+    @EnvironmentObject var dataController: DataController
     @State private var phoneNumber: String = ""
     @State private var show = false
     @State private var msg = ""
@@ -55,7 +56,7 @@ struct PhoneLoginView: View {
                     .onReceive(Publishers.keyboardHeight) { self.keyboardHeight = $0 }
                 Spacer()
 //                NavigationLink(destination: PhoneVerificationView(id: $returnId).environmentObject(locationFetcher), isActive: $show) {
-                NavigationLink(destination: PhoneVerificationView(id: $returnId), isActive: $show) {
+                NavigationLink(destination: PhoneVerificationView(id: $returnId).environmentObject(dataController), isActive: $show) {
                     Button(action: {
                         if self.phoneNumber.count != 10 {
                             self.msg = "Enter a 10 digit number"

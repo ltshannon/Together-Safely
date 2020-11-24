@@ -44,7 +44,6 @@ struct AllContactsCardView: View {
         self.pageType = pageType
         self._name = name
         self.groupId = groupId
-//        user = FetchRequest(entity: CDUser.entity(), sortDescriptors: [])
     }
     
     var body: some View {

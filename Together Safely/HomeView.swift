@@ -18,7 +18,6 @@ struct HomeView: View {
         sortDescriptors: []
     ) var user: FetchedResults<CDUser>
     
-    
     var body: some View {
         GeometryReader { metrics in
         VStack {
@@ -73,7 +72,7 @@ struct HomeView: View {
                 }.padding(.top, 15)
                 Spacer()
                 if self.index == 0 {
-                    NavigationLink(destination: CreatePodView().environmentObject(dataController)) {
+                    NavigationLink(destination: CreatePodView()) {
                         HStack {
                             Spacer()
                             Text("Create Pod")
@@ -92,7 +91,7 @@ struct HomeView: View {
                     InviationsView().environmentObject(dataController)
                 }
             }
-            NavigationLink(destination: UserProfileView().environmentObject(dataController), tag: 1, selection: self.$action) {
+            NavigationLink(destination: UserProfileView(), tag: 1, selection: self.$action) {
                 EmptyView()
             }
         }

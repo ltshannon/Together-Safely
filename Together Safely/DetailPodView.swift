@@ -10,18 +10,13 @@ import SwiftUI
 
 struct DetailPodView: View {
     
-//    var group: Groups
-    var index: Int
+    var groupId: String
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var inputStr: String = ""
     @State private var emojiText: String = ""
     @State private var widthArray: Array = []
     @State private var getRiskColor: Color = Color.white
-    
-    @FetchRequest(
-        entity: CDGroups.entity(),
-        sortDescriptors: []
-    ) var cdGroups: FetchedResults<CDGroups>
+    var groups: FetchRequest<CDGroups>
     
     @FetchRequest(
         entity: CDUser.entity(),
@@ -33,10 +28,17 @@ struct DetailPodView: View {
         sortDescriptors: []
     ) var items: FetchedResults<CDRiskRanges>
     
-    var body: some View {
-        let group = cdGroups[index]
+    init(groupId: String) {
+        self.groupId = groupId
+
+        groups = FetchRequest<CDGroups>(entity: CDGroups.entity(), sortDescriptors: [], predicate: NSPredicate(format: "groupId == %@", groupId))
         
+    }
+    
+    var body: some View {
+
         VStack {
+
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
@@ -103,9 +105,9 @@ struct DetailPodView: View {
                                 if self.inputStr.count == 0 {
                                     return
                                 }
-                                WebService.setStatus(text: self.inputStr, emoji: self.emojiText, groupId: group.groupId ?? ""){ successful in
+                                WebService.setStatus(text: self.inputStr, emoji: self.emojiText, groupId: groups.wrappedValue.first?.groupId ?? ""){ successful in
                                     if !successful {
-                                        print("Set status failed for groupId : \(group.groupId ?? ""))")
+                                        print("Set status failed for groupId : \(groups.wrappedValue.first?.groupId ?? ""))")
                                     } else {
                                         self.inputStr = ""
                                     }
@@ -115,15 +117,13 @@ struct DetailPodView: View {
                                     .foregroundColor(Color.black)
                                     .font(Font.custom("Avenir-Medium", size: 18))
                             }
-
                         }
-
                     }
                 }
                 HStack {
                     Spacer()
-                    if user.first?.id == group.adminId {
-                        NavigationLink(destination: AddFriendView(groupId: group.groupId ?? "")) {
+                    if user.first?.id == groups.wrappedValue.first?.adminId ?? "" {
+                        NavigationLink(destination: AddFriendView(groupId: groups.wrappedValue.first?.groupId ?? "")) {
                             Text("Add Friend")
                                 .font(Font.custom("Avenir-Medium", size: 22))
                                 .foregroundColor(.white)
@@ -139,7 +139,7 @@ struct DetailPodView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     VStack {
                         HStack {
-                            Text(group.name ?? "")
+                            Text(groups.wrappedValue.first?.name ?? "")
                                 .font(Font.custom("Avenir-Medium", size: 18))
                                 .padding(.leading, 20)
                                 .foregroundColor(.white)
@@ -155,20 +155,22 @@ struct DetailPodView: View {
                         Spacer()
 //                        BuildRiskBar(highRiskCount: self.dataController.groups[index].riskTotals["High Risk"] ?? 0, medRiskCount: self.dataController.groups[index].riskTotals["Medium Risk"] ?? 0, lowRiskCount: self.dataController.groups[index].riskTotals["Low Risk"] ?? 0, memberCount: self.dataController.groups[index].members.count).environmentObject(dataController).padding(15)
 //                        BuildRiskBar(dict: self.dataController.groups[index].riskTotals, memberCount: self.dataController.groups[index].members.count).environmentObject(dataController).padding(15)
-                        if group.riskTotals != nil {
-                            let result = try! JSONDecoder().decode([String: Int].self, from: group.riskTotals ?? Data())
-                            BuildRiskBar(dict: result, memberCount: Int(group.groupCount)).padding(15)
+                        if groups.wrappedValue.first?.riskTotals != nil {
+                            let result = try! JSONDecoder().decode([String: Int].self, from: groups.wrappedValue.first?.riskTotals ?? Data())
+                            BuildRiskBar(dict: result, memberCount: Int(groups.wrappedValue.first?.groupCount ?? 0) ).padding(15)
                         }
                         Spacer()
-                        Text("Mostly \(group.averageRisk ?? "")")
+                        Text("Mostly \(groups.wrappedValue.first?.averageRisk ?? "")")
                             .font(Font.custom("Avenir-Medium", size: 16))
-                            .foregroundColor(self.getRiskColor.V3GetRiskColor(riskScore: group.averageRiskValue, ranges: items))
+                            .foregroundColor(self.getRiskColor.V3GetRiskColor(riskScore: groups.wrappedValue.first?.averageRiskValue ?? 0, ranges: items))
                             .padding(.leading, 15)
                     }
                     .frame(height: 75)
                     .padding(.bottom, 15)
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack(alignment: .leading, spacing: 5) {
+                            ReadMembersForDetailView(groupId: groups.wrappedValue.first?.groupId ?? "")
+/*
                             ForEach(0..<Int(group.groupCount)) { i in
                                 Capsule()
                                     .fill(Color(.gray))
@@ -180,6 +182,7 @@ struct DetailPodView: View {
                                         index: i)
                                 }.padding([.leading, .trailing], 15)
                             }
+*/
                         }
                     }
                 }
@@ -187,6 +190,7 @@ struct DetailPodView: View {
                     .cornerRadius(20)
                     .shadow(color: .gray, radius: 2, x: 0, y: 2)
             }
+
         }
             .padding([.leading, .trailing, .bottom], 15)
             .navigationBarBackButtonHidden(true)

@@ -10,29 +10,31 @@ import SwiftUI
 
 struct MemberProfileByIndexView: View {
     var contacts: FetchedResults<CDContactInfo>
-    let groupId: String
-    let index: Int
+    let phoneNumber: String
+    let riskScore: Double
     @State private var getRiskColor: Color = Color.white
     @State private var getImageForPhone: Data = Data()
-    var members: FetchRequest<CDMember>
+//    var members: FetchRequest<CDMember>
     
     @FetchRequest(
         entity: CDRiskRanges.entity(),
         sortDescriptors: []
-    ) var items: FetchedResults<CDRiskRanges>
+    ) var riskRanges: FetchedResults<CDRiskRanges>
 
-    init(contacts: FetchedResults<CDContactInfo>, groupId: String, index: Int) {
+    /*
+    init(contacts: FetchedResults<CDContactInfo>, phoneNumber: String, riskScore: Int) {
         self.contacts = contacts
-        self.groupId = groupId
-        self.index = index
+        self.phoneNumber = phoneNumber
+        self.riskScore = riskScore
 
         members = FetchRequest<CDMember>(entity: CDMember.entity(), sortDescriptors: [], predicate: NSPredicate(format: "groupId == %@", groupId))
         
     }
+*/
     
     var body: some View {
         ZStack {
-            let image = self.getImageForPhone.newGetImage(phoneName: members.wrappedValue.count > index ? members.wrappedValue[index].phoneNumber ?? "" : "", contacts: contacts)
+            let image = self.getImageForPhone.newGetImage(phoneName: phoneNumber, contacts: contacts)
             if image != nil {
                 Image(uiImage: UIImage(data: image!)!)
                     .resizable()
@@ -54,7 +56,7 @@ struct MemberProfileByIndexView: View {
             }
             Circle()
                 .frame(width: 25, height: 25)
-                .foregroundColor(getRiskColor.V3GetRiskColor(riskScore: members.wrappedValue.count > index ? members.wrappedValue[index].riskScore : 0, ranges: items))
+                .foregroundColor(getRiskColor.V3GetRiskColor(riskScore: riskScore, ranges: riskRanges))
                 .overlay(Circle().stroke(Color.white, lineWidth: 3))
                 .offset(x: 25, y: 25)
         }

@@ -62,9 +62,9 @@ struct DisplayPodsContactPod: View {
                             BuildRiskBar(dict: result, memberCount: Int(risk.first!.userContantUsersCount)).padding(15)
                         }
                         Spacer()
-                        Text("Mostly \(risk.first!.userContantRiskAverageString ?? "")")
+                        Text("Mostly \(risk.first?.userContantRiskAverageString ?? "")")
                             .font(Font.custom("Avenir-Medium", size: 16))
-                            .foregroundColor(self.getRiskColor.V3GetRiskColor(riskScore: risk.first!.userContantRiskAverageValue, ranges: riskRanges))
+                            .foregroundColor(self.getRiskColor.V3GetRiskColor(riskScore: risk.first?.userContantRiskAverageValue ?? 0, ranges: riskRanges))
                             .padding(.leading, 15)
                         Spacer()
                         ScrollView(.horizontal, showsIndicators: false) {

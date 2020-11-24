@@ -10,6 +10,7 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
+    
     @StateObject var dataController: DataController
     @State var status = UserDefaults.standard.value(forKey: "status") as? Bool ?? false
     @Environment(\.managedObjectContext) var managedObjectContext
@@ -36,6 +37,7 @@ struct ContentView: View {
                 } else {
 //                    StartLoginView().environmentObject(LocationFetcher())
                     StartLoginView()
+                        .environmentObject(dataController)
                 }
             }
             .navigationBarTitle("", displayMode: .inline)

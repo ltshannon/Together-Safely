@@ -10,29 +10,31 @@ import SwiftUI
 
 struct UserProfileView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @EnvironmentObject var dataController: DataController
     @State private var getRiskColor: Color = Color.white
     @State private var image: Image = Image("")
-    let user: FetchRequest<CDUser>
     
-    init() {
-        user = FetchRequest(entity: CDUser.entity(), sortDescriptors: [])
-    }
+    @FetchRequest(
+        entity: CDUser.entity(),
+        sortDescriptors: []
+    ) var user: FetchedResults<CDUser>
+    
+    @FetchRequest(
+        entity: CDRiskRanges.entity(),
+        sortDescriptors: []
+    ) var items: FetchedResults<CDRiskRanges>
     
     var body: some View {
-        let member = user.wrappedValue.first
         
         VStack(alignment: .leading, spacing: 0) {
             ZStack {
                 VStack(alignment: .center, spacing: 0) {
                     Spacer()
-                    let member = user.wrappedValue.first
-                    Text(member?.userName ?? "")
+                    Text(user.first?.userName ?? "")
                         .font(Font.custom("Avenir-Medium", size: 18))
                         .foregroundColor(Color("Colordarkgreen"))
-                    Text(member?.riskString ?? "")
+                    Text(user.first?.riskString ?? "")
                         .font(Font.custom("Avenir-Medium", size: 16))
-                        .foregroundColor(getRiskColor.newGetRiskColor(riskScore: member?.riskScore ?? 0, ranges: dataController.riskRanges))
+                        .foregroundColor(getRiskColor.V3GetRiskColor(riskScore: user.first?.riskScore ?? 0, ranges: items))
                         .padding(.bottom, 15)
                 }
                 .frame(minWidth: 300, maxWidth: .infinity)
@@ -41,11 +43,10 @@ struct UserProfileView: View {
                 .cornerRadius(20)
                 .shadow(color: .gray, radius: 2, x: 0, y: 2)
                 ZStack {
-                    if member?.image != nil {
-                        Image(uiImage: UIImage(data: (member?.image!)!)!)
+                    if user.first?.image != nil {
+                        Image(uiImage: UIImage(data: (user.first?.image!)!)!)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-//                            .renderingMode(.original)
                             .frame(width: 100, height: 100)
                             .clipShape(Circle())
                             .overlay(Circle().stroke(Color.black, lineWidth: 1))
@@ -62,12 +63,12 @@ struct UserProfileView: View {
                     }
                     Circle()
                         .frame(width: 25, height: 25)
-                        .foregroundColor(getRiskColor.newGetRiskColor(riskScore: member?.riskScore ?? 0, ranges: dataController.riskRanges))
+                        .foregroundColor(getRiskColor.V3GetRiskColor(riskScore: user.first?.riskScore ?? 0, ranges: items))
                         .overlay(Circle().stroke(Color.white, lineWidth: 3))
                         .offset(x: 25, y: 25)
                 }.offset(x: 0, y: -50)
             }
-// Commented out Risk Factors 10/18/2020
+// Commented out Risk Factors 10/18/2020 LTS
             Spacer()
 /*
             VStack(alignment: .leading, spacing: 0) {
