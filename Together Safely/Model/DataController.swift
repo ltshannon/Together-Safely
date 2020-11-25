@@ -373,6 +373,7 @@ class DataController: ObservableObject {
                                 print("Error fetching document")
                                 return
                             }
+                            
                             let l = CDListOfGroups(context: context)
                             l.groupId = group
                             do {
@@ -420,7 +421,7 @@ class DataController: ObservableObject {
                                 m.phoneNumber = member.phoneNumber
                                 m.emoji = member.status.emoji
                                 m.textString = member.status.text
-                                m.riskString = member.riskString
+                                m.riskString = groups.members[index].riskString
                                 m.riskScore = member.riskScore
                                 m.groupId = groupDocument.documentID
                                 do {

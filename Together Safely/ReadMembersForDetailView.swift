@@ -15,8 +15,9 @@ struct ReadMembersForDetailView: View {
     init(groupId: String) {
         self.groupId = groupId
 
-        members = FetchRequest<CDMember>(entity: CDMember.entity(), sortDescriptors: [], predicate: NSPredicate(format: "groupId == %@", groupId))
-        
+        members = FetchRequest<CDMember>(entity: CDMember.entity(),
+                                         sortDescriptors: [NSSortDescriptor(keyPath: \CDMember.memberName, ascending: true)],
+                                         predicate: NSPredicate(format: "groupId == %@", groupId))
     }
     
     var body: some View {

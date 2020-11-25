@@ -26,7 +26,7 @@ struct DisplayPodsView: View {
     
     @FetchRequest(
         entity: CDGroups.entity(),
-        sortDescriptors: []
+        sortDescriptors: [NSSortDescriptor(keyPath: \CDGroups.name, ascending: true)]
     ) var cdGroups: FetchedResults<CDGroups>
 
     var body: some View {
@@ -35,7 +35,7 @@ struct DisplayPodsView: View {
 //            if self.isVisible {
                 ScrollView(.vertical, showsIndicators: false) {
                     if cdGroups.count > 0 {
-                        ForEach(Array(cdGroups.enumerated()), id: \.offset) { index, group in
+                        ForEach(cdGroups) { group in
                             NavigationLink(destination: DetailPodView(groupId: group.groupId ?? "")) {
                                 VStack(alignment: .leading, spacing: 0) {
                                     VStack {
