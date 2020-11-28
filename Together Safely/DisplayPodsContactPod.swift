@@ -11,7 +11,7 @@ import Contacts
 
 struct DisplayPodsContactPod: View {
     
-    var group: Groups
+    var groupId: String
     @State var selection: Int? = nil
     @State private var getRiskColor: Color = Color.white
     @State private var getImageForPhone: Data = Data()
@@ -33,7 +33,7 @@ struct DisplayPodsContactPod: View {
     
     var body: some View {
         VStack {
-            NavigationLink(destination: AllContactsView(groupId: group.id), tag: 2, selection: $selection) {
+            NavigationLink(destination: AllContactsView(groupId: groupId), tag: 2, selection: $selection) {
                 Button(action: {
                     self.selection = 2
                 }) {

@@ -204,9 +204,9 @@ extension Color {
         return Color("Colorgray")
     }
     
-    func getRiskColor(riskScore: Double, firebaseService: FirebaseService) -> Color {
+    func getRiskColor(riskScore: Double, dataController: DataController) -> Color {
         
-        for riskRange in firebaseService.riskRanges {
+        for riskRange in dataController.riskRanges {
             let element = riskRange.values
             for range in element {
                 let min = range.min
@@ -253,9 +253,9 @@ extension Color {
         return Color("Colorgray")
     }
     
-    func getColorFromString(str: String, firebaseService: FirebaseService) -> Color {
+    func getColorFromString(str: String, dataController: DataController) -> Color {
         
-        for item in firebaseService.riskColors {
+        for item in dataController.riskColors {
             if let s = item[str] {
                 if let value = UInt(s, radix: 16) {
                     return Color(hex:Int(value))

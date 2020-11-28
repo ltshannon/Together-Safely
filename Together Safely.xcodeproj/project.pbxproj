@@ -533,7 +533,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Together Safely/Together Safely.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_ASSET_PATHS = "\"Together Safely/Preview Content\"";
 				DEVELOPMENT_TEAM = J4837STP57;
 				ENABLE_PREVIEWS = YES;
@@ -543,6 +543,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.togethersafelyapp.social;
 				PRODUCT_NAME = "Together Safe";
 				SWIFT_VERSION = 5.0;
@@ -557,7 +558,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Together Safely/Together Safely.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_ASSET_PATHS = "\"Together Safely/Preview Content\"";
 				DEVELOPMENT_TEAM = J4837STP57;
 				ENABLE_PREVIEWS = YES;
@@ -567,6 +568,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.togethersafelyapp.social;
 				PRODUCT_NAME = "Together Safe";
 				SWIFT_VERSION = 5.0;

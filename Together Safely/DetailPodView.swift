@@ -45,7 +45,6 @@ struct DetailPodView: View {
                             Image(uiImage: UIImage(data: (user.first?.image!)!)!)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
-//                                .renderingMode(.original)
                                 .frame(width: 45, height: 45)
                                 .clipShape(Circle())
                                 .overlay(Circle().stroke(Color.black, lineWidth: 1))
@@ -74,10 +73,7 @@ struct DetailPodView: View {
                             TextFieldWrapperView(text: self.$emojiText)
                                 .background(Color.white)
                                 .frame(width: 30, height: 30)
-//                                .font(Font.custom("Avenir-Medium", size: 18))
                                 .padding(5)
-//                                .clipShape(RoundedRectangle(cornerRadius: 20))
-//                                .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: 1))
                                 .cornerRadius(20)
                                 .background(Color.white)
 
@@ -86,19 +82,7 @@ struct DetailPodView: View {
                                 .font(Font.custom("AvenirNext-Italic", size: 18))
                                 .foregroundColor(Color("Colorblack"))
                                 .padding(5)
-//                                .overlay(Rectangle().stroke(Color.gray, lineWidth: 1))
-//                                .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.gray))
                                 .background(Color.white)
-/*
-                            CustomTextfield(text: self.$inputStr, keyType: UIKeyboardType.default, placeHolder: "e.g. let's meet for coffee")
-                                .frame(height: 30)
-                                .font(Font.custom("AvenirNext-Italic", size: 18))
-                                .foregroundColor(Color("Colorblack"))
-                                .padding(5)
-                                .background(Color.white)
-//                                .overlay(Rectangle().stroke(Color.gray, lineWidth: 1))
-//                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
-*/
 
                             Button (action: {
                                 if self.inputStr.count == 0 {
@@ -152,8 +136,7 @@ struct DetailPodView: View {
                         .padding(0)
                     VStack(alignment: .leading, spacing: 0) {
                         Spacer()
-//                        BuildRiskBar(highRiskCount: self.dataController.groups[index].riskTotals["High Risk"] ?? 0, medRiskCount: self.dataController.groups[index].riskTotals["Medium Risk"] ?? 0, lowRiskCount: self.dataController.groups[index].riskTotals["Low Risk"] ?? 0, memberCount: self.dataController.groups[index].members.count).environmentObject(dataController).padding(15)
-//                        BuildRiskBar(dict: self.dataController.groups[index].riskTotals, memberCount: self.dataController.groups[index].members.count).environmentObject(dataController).padding(15)
+
                         if groups.wrappedValue.first?.riskTotals != nil {
                             let result = try! JSONDecoder().decode([String: Int].self, from: groups.wrappedValue.first?.riskTotals ?? Data())
                             BuildRiskBar(dict: result, memberCount: Int(groups.wrappedValue.first?.groupCount ?? 0) ).padding(15)
@@ -169,19 +152,6 @@ struct DetailPodView: View {
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack(alignment: .leading, spacing: 5) {
                             ReadMembersForDetailView(groupId: groups.wrappedValue.first?.groupId ?? "")
-/*
-                            ForEach(0..<Int(group.groupCount)) { i in
-                                Capsule()
-                                    .fill(Color(.gray))
-                                    .frame(height: 1)
-                                    .padding(.top, 5)
-                                HStack {
-                                    FullMemberProfileView(
-                                        groupId: group.groupId ?? "",
-                                        index: i)
-                                }.padding([.leading, .trailing], 15)
-                            }
-*/
                         }
                     }
                 }
@@ -307,6 +277,5 @@ extension  UITextField{
     @objc func NextButtonTapped(button:UIBarButtonItem) -> Void {
        self.resignFirstResponder()
     }
-
-
+    
 }

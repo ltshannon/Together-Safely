@@ -11,13 +11,7 @@ import Contacts
 
 struct DisplayPodsView: View {
 
-    @State private var membersArray: [Int] = []
-    @State var memberRiskColor: Color = Color("Colorgray")
-    @State var group: Groups = Groups(id: "", adminId: "", name: "", members: [], riskTotals: [:], riskCompiledSring: [], riskCompiledValue: [], averageRisk: "", averageRiskValue: 0)
-    @State private var widthArray: Array = []
     @State private var getRiskColor: Color = Color.white
-    @State private var isVisible = false
-    @State private var result: [String: Int] = [:]
     
     @FetchRequest(
         entity: CDRiskRanges.entity(),
@@ -27,20 +21,20 @@ struct DisplayPodsView: View {
     @FetchRequest(
         entity: CDGroups.entity(),
         sortDescriptors: [NSSortDescriptor(keyPath: \CDGroups.name, ascending: true)]
-    ) var cdGroups: FetchedResults<CDGroups>
+    ) var groups: FetchedResults<CDGroups>
 
     var body: some View {
 
         VStack {
 //            if self.isVisible {
                 ScrollView(.vertical, showsIndicators: false) {
-                    if cdGroups.count > 0 {
-                        ForEach(cdGroups) { group in
-                            NavigationLink(destination: DetailPodView(groupId: group.groupId ?? "")) {
+                    if groups.count > 0 {
+                        ForEach((0...groups.count-1), id: \.self) { index in
+                            NavigationLink(destination: DetailPodView(groupId: groups[index].groupId ?? "")) {
                                 VStack(alignment: .leading, spacing: 0) {
                                     VStack {
                                         HStack {
-                                            Text("\(group.name ?? "")")
+                                            Text("\(groups[index].name ?? "")")
                                                 .font(Font.custom("Avenir-Medium", size: 18))
                                                 .padding(.leading, 20)
                                                 .foregroundColor(.white)
@@ -57,24 +51,24 @@ struct DisplayPodsView: View {
                                         .fill(Color(.darkGray))
                                         .frame(height: 2)
                                         .padding(0)
-                                    if group.riskTotals != nil {
-                                        let result = try! JSONDecoder().decode([String: Int].self, from: group.riskTotals ?? Data())
-                                        BuildRiskBar(dict: result, memberCount: Int(group.groupCount)).padding(15)
+                                    if groups[index].riskTotals != nil {
+                                        let result = try! JSONDecoder().decode([String: Int].self, from: groups[index].riskTotals ?? Data())
+                                        BuildRiskBar(dict: result, memberCount: Int(groups[index].groupCount)).padding(15)
                                     }
 
                                     Spacer()
-                                    Text("Mostly \(group.averageRisk ?? "")")
+                                    Text("Mostly \(groups[index].averageRisk ?? "")")
                                         .font(Font.custom("Avenir-Medium", size: 16))
-                                        .foregroundColor(self.getRiskColor.V3GetRiskColor(riskScore: group.averageRiskValue, ranges: items))
+                                        .foregroundColor(self.getRiskColor.V3GetRiskColor(riskScore: groups[index].averageRiskValue, ranges: items))
                                         .padding(.leading, 15)
 
                                     Spacer()
                                     ScrollView(.horizontal, showsIndicators: false) {
                                         HStack {
-                                            ReadMembersForDisplayView(groupId: group.groupId ?? "")
+                                            ReadMembersForDisplayView(groupId: groups[index].groupId ?? "")
 /*
-                                            ForEach(0..<Int(group.groupCount)) { index in
-                                                MemberProfileByIndexView(contacts: contactInfo, groupId: group.groupId ?? "", index: index)
+                                            ForEach(0..<Int(groups[index].groupCount)) { index in
+                                                MemberProfileByIndexView(contacts: contactInfo, groupId: groups[index].groupId ?? "", index: index)
                                             }
 */
                                         }
@@ -91,7 +85,7 @@ struct DisplayPodsView: View {
                     }
                     Spacer()
                     VStack {
-                        DisplayPodsContactPod(group: group)
+                        DisplayPodsContactPod(groupId: "")
                     }
                 }.padding(.bottom, 15)
 //            } else {
@@ -132,10 +126,4 @@ extension View {
         ModifiedContent(content: self, modifier: CornerRadiusStyle(radius: radius, corners: corners))
     }
 }
-/*
-struct DisplayPodsView_Previews: PreviewProvider {
-    static var previews: some View {
-        DisplayPodsView()
-    }
-}
-*/
+
