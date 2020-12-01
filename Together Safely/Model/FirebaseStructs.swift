@@ -85,6 +85,7 @@ struct Groups: Identifiable, Codable, Hashable {
     var riskCompiledValue: [Int]
     var averageRisk: String
     var averageRiskValue: Double
+    var newMessageCnt: Int
 }
 
 struct Member: Identifiable, Codable, Hashable {
@@ -96,6 +97,7 @@ struct Member: Identifiable, Codable, Hashable {
     var riskString: String
     var riskIndex: Int
     var memberName: String
+    var newMessageCnt: Int
 }
 
 struct Status: Codable, Hashable {
@@ -142,13 +144,13 @@ struct ContactInfo: Hashable {
 }
 
 struct Choice: Codable, Identifiable, Hashable {
-    let id = UUID()
+    var id = UUID()
     let text: String
     let value: Double
 }
 
 struct Questions: Codable, Identifiable {
-    let id = UUID()
+    var id = UUID()
     let choices: [Choice]
     let text: String
     let type: String
@@ -261,6 +263,7 @@ extension Groups {
             let member = Member(uID: uid, phone: phoneNumber, risk: riskScore, stat: status)
             self.members.append(member)
         }
+        newMessageCnt = 0
     }
 }
 
@@ -274,6 +277,7 @@ extension Member {
         self.riskString = ""
         self.riskIndex = 99999
         self.memberName = ""
+        self.newMessageCnt = 0
     }
 }
 

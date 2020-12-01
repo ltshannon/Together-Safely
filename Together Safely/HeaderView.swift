@@ -16,9 +16,3 @@ struct HeaderView: View {
             .foregroundColor(.white)
     }
 }
-
-struct HeaderView_Previews: PreviewProvider {
-    static var previews: some View {
-        HeaderView()
-    }
-}

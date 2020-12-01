@@ -22,21 +22,21 @@ struct ReadMembersForDetailView: View {
     
     var body: some View {
         
-        ForEach(members.wrappedValue) { member in
+        ForEach((0...members.wrappedValue.count-1), id: \.self) { index in
             Capsule()
                 .fill(Color(.gray))
                 .frame(height: 1)
                 .padding(.top, 5)
-            HStack {
-                FullMemberProfileView(member: makeMember(member: member))
-            }
+                HStack {
+                    FullMemberProfileView(member: makeMember(member: members.wrappedValue[index]))
+                }
                 .padding([.leading, .trailing], 15)
         }
     }
     
     func makeMember(member: CDMember) -> Member {
         
-        let m = Member(id: member.groupId ?? "", adminId: member.adminId ?? "", phoneNumber: member.phoneNumber ?? "", riskScore: member.riskScore, status: Status(emoji: member.emoji ?? "", text: member.textString ?? ""), riskString: member.riskString ?? "", riskIndex: Int(member.riskIndex), memberName: member.memberName ?? "")
+        let m = Member(id: member.groupId ?? "", adminId: member.adminId ?? "", phoneNumber: member.phoneNumber ?? "", riskScore: member.riskScore, status: Status(emoji: member.emoji ?? "", text: member.textString ?? ""), riskString: member.riskString ?? "", riskIndex: Int(member.riskIndex), memberName: member.memberName ?? "", newMessageCnt: Int(member.newMessageCnt))
         
         return m
         

@@ -20,17 +20,6 @@ struct MemberProfileByIndexView: View {
         entity: CDRiskRanges.entity(),
         sortDescriptors: []
     ) var riskRanges: FetchedResults<CDRiskRanges>
-
-    /*
-    init(contacts: FetchedResults<CDContactInfo>, phoneNumber: String, riskScore: Int) {
-        self.contacts = contacts
-        self.phoneNumber = phoneNumber
-        self.riskScore = riskScore
-
-        members = FetchRequest<CDMember>(entity: CDMember.entity(), sortDescriptors: [], predicate: NSPredicate(format: "groupId == %@", groupId))
-        
-    }
-*/
     
     var body: some View {
         ZStack {

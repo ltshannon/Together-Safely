@@ -12,7 +12,7 @@ struct CreatePodView: View {
     @State var name:String = ""
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var podName: String = ""
-    @State private var group: Groups = Groups(id: "", adminId: "", name: "", members: [], riskTotals: [:], riskCompiledSring: [], riskCompiledValue: [], averageRisk: "", averageRiskValue: 0)
+    @State private var group: Groups = Groups(id: "", adminId: "", name: "", members: [], riskTotals: [:], riskCompiledSring: [], riskCompiledValue: [], averageRisk: "", averageRiskValue: 0, newMessageCnt: 0)
     
     var body: some View {
         VStack {

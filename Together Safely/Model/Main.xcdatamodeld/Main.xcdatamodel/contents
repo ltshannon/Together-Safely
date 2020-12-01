@@ -18,6 +18,7 @@
         <attribute name="groupCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="groupId" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="newMessageCnt" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="riskTotals" optional="YES" attributeType="Binary"/>
     </entity>
     <entity name="CDInvites" representedClassName="CDInvites" syncable="YES" codeGenerationType="class">
@@ -35,11 +36,18 @@
         <attribute name="emoji" optional="YES" attributeType="String"/>
         <attribute name="groupId" optional="YES" attributeType="String"/>
         <attribute name="memberName" optional="YES" attributeType="String"/>
+        <attribute name="newMessageCnt" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="phoneNumber" optional="YES" attributeType="String"/>
         <attribute name="riskIndex" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="riskScore" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="riskString" optional="YES" attributeType="String"/>
         <attribute name="textString" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="CDMessages" representedClassName="CDMessages" syncable="YES" codeGenerationType="class">
+        <attribute name="groupId" optional="YES" attributeType="String"/>
+        <attribute name="phoneNumber" optional="YES" attributeType="String"/>
+        <attribute name="textString" optional="YES" attributeType="String"/>
+        <attribute name="timeStamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
     <entity name="CDRiskAverage" representedClassName="CDRiskAverage" syncable="YES" codeGenerationType="class">
         <attribute name="userContantRiskAverageDict" optional="YES" attributeType="Binary"/>
@@ -64,13 +72,14 @@
     <elements>
         <element name="CDContactInfo" positionX="-27" positionY="99" width="128" height="133"/>
         <element name="CDGroupInvites" positionX="-63" positionY="-18" width="128" height="58"/>
-        <element name="CDGroups" positionX="-54" positionY="0" width="128" height="148"/>
+        <element name="CDGroups" positionX="-54" positionY="0" width="128" height="163"/>
         <element name="CDInvites" positionX="-36" positionY="36" width="128" height="118"/>
         <element name="CDListOfGroups" positionX="-18" positionY="45" width="128" height="58"/>
-        <element name="CDMember" positionX="0" positionY="81" width="128" height="178"/>
+        <element name="CDMember" positionX="0" positionY="81" width="128" height="193"/>
+        <element name="CDMessages" positionX="-27" positionY="108" width="128" height="103"/>
+        <element name="CDRiskAverage" positionX="-18" positionY="117" width="128" height="103"/>
         <element name="CDRiskColors" positionX="-27" positionY="99" width="128" height="58"/>
         <element name="CDRiskRanges" positionX="-27" positionY="99" width="128" height="58"/>
         <element name="CDUser" positionX="-27" positionY="90" width="128" height="133"/>
-        <element name="CDRiskAverage" positionX="-18" positionY="117" width="128" height="103"/>
     </elements>
 </model>

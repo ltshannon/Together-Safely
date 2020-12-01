@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4609C91924DCBB3C004BC76C /* BuildRiskBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4609C91824DCBB3C004BC76C /* BuildRiskBar.swift */; };
 		4609C91D24DCDDFD004BC76C /* DisplayPodsContactPod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4609C91C24DCDDFD004BC76C /* DisplayPodsContactPod.swift */; };
+		461ED0F625734F9C00C919DC /* DetailMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 461ED0F525734F9C00C919DC /* DetailMemberView.swift */; };
 		46252C3024C63882005B592F /* StartLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46252C2F24C63882005B592F /* StartLoginView.swift */; };
 		46252C3224C67CE3005B592F /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46252C3124C67CE3005B592F /* WebService.swift */; };
 		46252C5424C787F8005B592F /* MyselfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46252C5324C787F8005B592F /* MyselfView.swift */; };
@@ -59,6 +60,7 @@
 /* Begin PBXFileReference section */
 		4609C91824DCBB3C004BC76C /* BuildRiskBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildRiskBar.swift; sourceTree = "<group>"; };
 		4609C91C24DCDDFD004BC76C /* DisplayPodsContactPod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPodsContactPod.swift; sourceTree = "<group>"; };
+		461ED0F525734F9C00C919DC /* DetailMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailMemberView.swift; sourceTree = "<group>"; };
 		46252C2C24C54F7F005B592F /* Together Safely.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Together Safely.entitlements"; sourceTree = "<group>"; };
 		46252C2F24C63882005B592F /* StartLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartLoginView.swift; sourceTree = "<group>"; };
 		46252C3124C67CE3005B592F /* WebService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebService.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 				4635F3A124D510E900A4A7E2 /* HeaderView.swift */,
 				46F7E69724D30C5D004EAF24 /* DisplayPodsView.swift */,
 				4635F3A524D5FE6A00A4A7E2 /* DetailPodView.swift */,
+				461ED0F525734F9C00C919DC /* DetailMemberView.swift */,
 				4609C91C24DCDDFD004BC76C /* DisplayPodsContactPod.swift */,
 				4609C91824DCBB3C004BC76C /* BuildRiskBar.swift */,
 				4660E6ED24D4B52C00C6B993 /* MemberProfileView.swift */,
@@ -372,6 +375,7 @@
 				4609C91D24DCDDFD004BC76C /* DisplayPodsContactPod.swift in Sources */,
 				46ACD59724C512590083F308 /* SpinnerView.swift in Sources */,
 				46FA0530256612C600A9532E /* MemberProfileByIndexView.swift in Sources */,
+				461ED0F625734F9C00C919DC /* DetailMemberView.swift in Sources */,
 				46ACD59224C5124A0083F308 /* HomeView.swift in Sources */,
 				46806E5A24F5C2A4000A177B /* EditRiskProfile2.swift in Sources */,
 				46F7E65024CF3D67004EAF24 /* DummyView.swift in Sources */,
@@ -533,7 +537,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Together Safely/Together Safely.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 32;
+				CURRENT_PROJECT_VERSION = 33;
 				DEVELOPMENT_ASSET_PATHS = "\"Together Safely/Preview Content\"";
 				DEVELOPMENT_TEAM = J4837STP57;
 				ENABLE_PREVIEWS = YES;
@@ -558,7 +562,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Together Safely/Together Safely.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 32;
+				CURRENT_PROJECT_VERSION = 33;
 				DEVELOPMENT_ASSET_PATHS = "\"Together Safely/Preview Content\"";
 				DEVELOPMENT_TEAM = J4837STP57;
 				ENABLE_PREVIEWS = YES;

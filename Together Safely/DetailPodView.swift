@@ -16,7 +16,10 @@ struct DetailPodView: View {
     @State private var emojiText: String = ""
     @State private var widthArray: Array = []
     @State private var getRiskColor: Color = Color.white
+    @State private var showingChildView = false
+    @State private var phoneNumbers: [String] = []
     var groups: FetchRequest<CDGroups>
+    var members: FetchRequest<CDMember>
     
     @FetchRequest(
         entity: CDUser.entity(),
@@ -32,6 +35,10 @@ struct DetailPodView: View {
         self.groupId = groupId
 
         groups = FetchRequest<CDGroups>(entity: CDGroups.entity(), sortDescriptors: [], predicate: NSPredicate(format: "groupId == %@", groupId))
+        
+        members = FetchRequest<CDMember>(entity: CDMember.entity(),
+                                         sortDescriptors: [NSSortDescriptor(keyPath: \CDMember.phoneNumber, ascending: true)],
+                                         predicate: NSPredicate(format: "groupId == %@", groupId))
         
     }
     
@@ -151,9 +158,14 @@ struct DetailPodView: View {
                     .padding(.bottom, 15)
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack(alignment: .leading, spacing: 5) {
-                            ReadMembersForDetailView(groupId: groups.wrappedValue.first?.groupId ?? "")
+                            ReadMembersForDetailView(groupId: groupId)
                         }
                     }
+                    NavigationLink(destination: DetailMemberView(groupId: groupId, phoneNumber: phoneNumbers),
+                                   isActive: self.$showingChildView)
+                    { EmptyView() }
+                        .frame(width: 0, height: 0)
+                        .disabled(true)
                 }
                     .background(Color.white)
                     .cornerRadius(20)
@@ -163,8 +175,17 @@ struct DetailPodView: View {
         }
             .padding([.leading, .trailing, .bottom], 15)
             .navigationBarBackButtonHidden(true)
-            .navigationBarItems(leading: btnBack)
+            .navigationBarItems(leading: btnBack, trailing: btnDetail)
             .background(Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all))
+        .onAppear() {
+            phoneNumbers.removeAll()
+            for member in members.wrappedValue {
+                if let number = member.phoneNumber {
+                    print(number)
+                    phoneNumbers.append(number)
+                }
+            }
+        }
     }
     
     var btnBack : some View { Button(action: {
@@ -180,7 +201,24 @@ struct DetailPodView: View {
                     .foregroundColor(.white)
             }
           }
-      }
+    }
+ 
+    var btnDetail : some View { Button(action: {
+        self.showingChildView = true
+        }) {
+            HStack {
+//                Text("Details")
+//                    .font(Font.custom("Avenir-Medium", size: 18))
+//                    .foregroundColor(.white)
+                Image(systemName: "text.bubble")
+                    .aspectRatio(contentMode: .fit)
+                    .font(Font.custom("Avenir-Medium", size: 25))
+                    .foregroundColor(.white)
+                    .padding(.top, 18)
+            }
+        }
+    }
+
 }
 
 struct TextFieldWrapperView: UIViewRepresentable {

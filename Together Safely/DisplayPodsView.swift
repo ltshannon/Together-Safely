@@ -39,6 +39,15 @@ struct DisplayPodsView: View {
                                                 .padding(.leading, 20)
                                                 .foregroundColor(.white)
                                             Spacer()
+                                            ZStack {
+                                                Circle()
+                                                    .fill(Color("Colorred"))
+                                                    .frame(width: 25, height: 25)
+                                                Text("\(groups[index].newMessageCnt)")
+                                                    .font(.body)
+                                                    .fontWeight(.bold)
+                                                    .foregroundColor(.white)
+                                            }.padding(.leading, 5).padding(.trailing, 10)
                                             Image(systemName: "chevron.right")
                                                 .font(Font.custom("Avenir-Medium", size: 18))
                                                 .padding(.trailing, 20)
@@ -66,11 +75,6 @@ struct DisplayPodsView: View {
                                     ScrollView(.horizontal, showsIndicators: false) {
                                         HStack {
                                             ReadMembersForDisplayView(groupId: groups[index].groupId ?? "")
-/*
-                                            ForEach(0..<Int(groups[index].groupCount)) { index in
-                                                MemberProfileByIndexView(contacts: contactInfo, groupId: groups[index].groupId ?? "", index: index)
-                                            }
-*/
                                         }
                                     }
                                         .padding(.leading, 5)

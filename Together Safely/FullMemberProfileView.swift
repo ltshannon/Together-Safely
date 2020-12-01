@@ -39,6 +39,16 @@ struct FullMemberProfileView: View {
                     .foregroundColor(getRiskColor.V3GetRiskColor(riskScore: member.riskScore, ranges: riskRanges))
             }
             Spacer()
+            ZStack {
+                Circle()
+                    .fill(Color("Colorred"))
+                    .frame(width: 25, height: 25)
+                Text("\(member.newMessageCnt)")
+                    .font(.body)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+            }
+            Spacer()
             Text(member.status.emoji)
             .font(Font.custom("Avenir Next Medium", size: 45))
         }
