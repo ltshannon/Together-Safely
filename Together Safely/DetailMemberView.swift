@@ -10,16 +10,22 @@ import SwiftUI
 
 struct DetailMemberView: View {
     
+    var title: String
     var groupId: String
     var phoneNumber: [String]
+    var members: FetchRequest<CDMember>
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var messages: FetchRequest<CDMessages>
+    var group: FetchRequest<CDGroups>
     let userPhoneNumber =  UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? ""
     @State private var textMsg = ""
+    let context = DataController.appDelegate.persistentContainer.viewContext
     
-    init(groupId: String, phoneNumber: [String]) {
+    init(title: String, groupId: String, phoneNumber: [String], members: FetchRequest<CDMember>) {
+        self.title = title
         self.groupId = groupId
         self.phoneNumber = phoneNumber
+        self.members = members
         
         var predicate: NSPredicate
         var predicates: [NSPredicate] = []
@@ -36,6 +42,9 @@ struct DetailMemberView: View {
         messages = FetchRequest<CDMessages>(entity: CDMessages.entity(),
                                             sortDescriptors: [NSSortDescriptor(keyPath: \CDMessages.timeStamp, ascending: true)],
                                          predicate: finalPredicate)
+        
+        group = FetchRequest<CDGroups>(entity: CDGroups.entity(), sortDescriptors: [], predicate: NSPredicate(format: "groupId == %@", groupId))
+        
     }
     
     var body: some View {
@@ -100,14 +109,22 @@ struct DetailMemberView: View {
             .padding()
         }
             .padding([.leading, .trailing, .bottom], 15)
+            .navigationTitle(title)
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: btnBack)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all))
-    }
-    
-    func foo() {
-        
+            .onDisappear() {
+                for member in members.wrappedValue {
+                    member.newMessageCnt = 0
+                }
+                do {
+                    try context.save()
+                }
+                catch {
+                    print("error writing members: \(error.localizedDescription)")
+                }
+            }
     }
     
     var btnBack : some View { Button(action: {

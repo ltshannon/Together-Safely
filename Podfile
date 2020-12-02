@@ -9,6 +9,8 @@ pod 'Firebase'
 pod 'Firebase/Auth'
 pod 'Firebase/Database'
 pod 'FirebaseFirestoreSwift'
+pod 'Firebase/Core'
+pod 'Firebase/Messaging'
 
   # Pods for Together
 

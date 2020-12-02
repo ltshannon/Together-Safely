@@ -18,8 +18,9 @@ struct DetailPodView: View {
     @State private var getRiskColor: Color = Color.white
     @State private var showingChildView = false
     @State private var phoneNumbers: [String] = []
-    var groups: FetchRequest<CDGroups>
+    var group: FetchRequest<CDGroups>
     var members: FetchRequest<CDMember>
+    let context = DataController.appDelegate.persistentContainer.viewContext
     
     @FetchRequest(
         entity: CDUser.entity(),
@@ -34,7 +35,7 @@ struct DetailPodView: View {
     init(groupId: String) {
         self.groupId = groupId
 
-        groups = FetchRequest<CDGroups>(entity: CDGroups.entity(), sortDescriptors: [], predicate: NSPredicate(format: "groupId == %@", groupId))
+        group = FetchRequest<CDGroups>(entity: CDGroups.entity(), sortDescriptors: [], predicate: NSPredicate(format: "groupId == %@", groupId))
         
         members = FetchRequest<CDMember>(entity: CDMember.entity(),
                                          sortDescriptors: [NSSortDescriptor(keyPath: \CDMember.phoneNumber, ascending: true)],
@@ -95,9 +96,9 @@ struct DetailPodView: View {
                                 if self.inputStr.count == 0 {
                                     return
                                 }
-                                WebService.setStatus(text: self.inputStr, emoji: self.emojiText, groupId: groups.wrappedValue.first?.groupId ?? ""){ successful in
+                                WebService.setStatus(text: self.inputStr, emoji: self.emojiText, groupId: group.wrappedValue.first?.groupId ?? ""){ successful in
                                     if !successful {
-                                        print("Set status failed for groupId : \(groups.wrappedValue.first?.groupId ?? ""))")
+                                        print("Set status failed for groupId : \(group.wrappedValue.first?.groupId ?? ""))")
                                     } else {
                                         self.inputStr = ""
                                     }
@@ -112,8 +113,8 @@ struct DetailPodView: View {
                 }
                 HStack {
                     Spacer()
-                    if user.first?.id == groups.wrappedValue.first?.adminId ?? "" {
-                        NavigationLink(destination: AddFriendView(groupId: groups.wrappedValue.first?.groupId ?? "")) {
+                    if user.first?.id == group.wrappedValue.first?.adminId ?? "" {
+                        NavigationLink(destination: AddFriendView(groupId: group.wrappedValue.first?.groupId ?? "")) {
                             Text("Add Friend")
                                 .font(Font.custom("Avenir-Medium", size: 22))
                                 .foregroundColor(.white)
@@ -129,7 +130,7 @@ struct DetailPodView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     VStack {
                         HStack {
-                            Text(groups.wrappedValue.first?.name ?? "")
+                            Text(group.wrappedValue.first?.name ?? "")
                                 .font(Font.custom("Avenir-Medium", size: 18))
                                 .padding(.leading, 20)
                                 .foregroundColor(.white)
@@ -144,14 +145,14 @@ struct DetailPodView: View {
                     VStack(alignment: .leading, spacing: 0) {
                         Spacer()
 
-                        if groups.wrappedValue.first?.riskTotals != nil {
-                            let result = try! JSONDecoder().decode([String: Int].self, from: groups.wrappedValue.first?.riskTotals ?? Data())
-                            BuildRiskBar(dict: result, memberCount: Int(groups.wrappedValue.first?.groupCount ?? 0) ).padding(15)
+                        if group.wrappedValue.first?.riskTotals != nil {
+                            let result = try! JSONDecoder().decode([String: Int].self, from: group.wrappedValue.first?.riskTotals ?? Data())
+                            BuildRiskBar(dict: result, memberCount: Int(group.wrappedValue.first?.groupCount ?? 0) ).padding(15)
                         }
                         Spacer()
-                        Text("Mostly \(groups.wrappedValue.first?.averageRisk ?? "")")
+                        Text("Mostly \(group.wrappedValue.first?.averageRisk ?? "")")
                             .font(Font.custom("Avenir-Medium", size: 16))
-                            .foregroundColor(self.getRiskColor.V3GetRiskColor(riskScore: groups.wrappedValue.first?.averageRiskValue ?? 0, ranges: items))
+                            .foregroundColor(self.getRiskColor.V3GetRiskColor(riskScore: group.wrappedValue.first?.averageRiskValue ?? 0, ranges: items))
                             .padding(.leading, 15)
                     }
                     .frame(height: 75)
@@ -161,7 +162,7 @@ struct DetailPodView: View {
                             ReadMembersForDetailView(groupId: groupId)
                         }
                     }
-                    NavigationLink(destination: DetailMemberView(groupId: groupId, phoneNumber: phoneNumbers),
+                    NavigationLink(destination: DetailMemberView(title: group.wrappedValue.first?.name ?? "", groupId: groupId, phoneNumber: phoneNumbers, members: members),
                                    isActive: self.$showingChildView)
                     { EmptyView() }
                         .frame(width: 0, height: 0)
@@ -184,6 +185,16 @@ struct DetailPodView: View {
                     print(number)
                     phoneNumbers.append(number)
                 }
+            }
+        }
+        .onDisappear() {
+            group.wrappedValue.first?.newMessageCnt = 0
+            
+            do {
+                try context.save()
+            }
+            catch {
+                print("error writing members: \(error.localizedDescription)")
             }
         }
     }

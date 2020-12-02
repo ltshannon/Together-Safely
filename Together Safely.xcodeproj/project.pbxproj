@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B213BA89CEED9D3B7C5CA94 /* Pods_Together_Safely.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E7E06007AECA602DFF6C210 /* Pods_Together_Safely.framework */; };
 		4609C91924DCBB3C004BC76C /* BuildRiskBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4609C91824DCBB3C004BC76C /* BuildRiskBar.swift */; };
 		4609C91D24DCDDFD004BC76C /* DisplayPodsContactPod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4609C91C24DCDDFD004BC76C /* DisplayPodsContactPod.swift */; };
 		461ED0F625734F9C00C919DC /* DetailMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 461ED0F525734F9C00C919DC /* DetailMemberView.swift */; };
@@ -54,10 +55,10 @@
 		46F7E65424CF6FB4004EAF24 /* FirebaseStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F7E65324CF6FB4004EAF24 /* FirebaseStructs.swift */; };
 		46F7E69824D30C5D004EAF24 /* DisplayPodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F7E69724D30C5D004EAF24 /* DisplayPodsView.swift */; };
 		46FA0530256612C600A9532E /* MemberProfileByIndexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FA052F256612C600A9532E /* MemberProfileByIndexView.swift */; };
-		AD5F8048F423267E2FB8791C /* Pods_Together_Safely.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F402AD21FCC457A589F7E18 /* Pods_Together_Safely.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2E7E06007AECA602DFF6C210 /* Pods_Together_Safely.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Together_Safely.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4609C91824DCBB3C004BC76C /* BuildRiskBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildRiskBar.swift; sourceTree = "<group>"; };
 		4609C91C24DCDDFD004BC76C /* DisplayPodsContactPod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPodsContactPod.swift; sourceTree = "<group>"; };
 		461ED0F525734F9C00C919DC /* DetailMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailMemberView.swift; sourceTree = "<group>"; };
@@ -108,9 +109,8 @@
 		46F7E65324CF6FB4004EAF24 /* FirebaseStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStructs.swift; sourceTree = "<group>"; };
 		46F7E69724D30C5D004EAF24 /* DisplayPodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPodsView.swift; sourceTree = "<group>"; };
 		46FA052F256612C600A9532E /* MemberProfileByIndexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberProfileByIndexView.swift; sourceTree = "<group>"; };
-		6F402AD21FCC457A589F7E18 /* Pods_Together_Safely.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Together_Safely.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		939D650AFD0773D3E927F472 /* Pods-Together Safely.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Together Safely.release.xcconfig"; path = "Target Support Files/Pods-Together Safely/Pods-Together Safely.release.xcconfig"; sourceTree = "<group>"; };
-		EF5477256CB7D82AC5004BD9 /* Pods-Together Safely.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Together Safely.debug.xcconfig"; path = "Target Support Files/Pods-Together Safely/Pods-Together Safely.debug.xcconfig"; sourceTree = "<group>"; };
+		97617F039CCA0ECFD5AB3CBD /* Pods-Together Safely.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Together Safely.release.xcconfig"; path = "Target Support Files/Pods-Together Safely/Pods-Together Safely.release.xcconfig"; sourceTree = "<group>"; };
+		9DA6068FDE5A9C839C606A7D /* Pods-Together Safely.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Together Safely.debug.xcconfig"; path = "Target Support Files/Pods-Together Safely/Pods-Together Safely.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,21 +118,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD5F8048F423267E2FB8791C /* Pods_Together_Safely.framework in Frameworks */,
+				1B213BA89CEED9D3B7C5CA94 /* Pods_Together_Safely.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2163AB74FCFC1864679E9111 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				6F402AD21FCC457A589F7E18 /* Pods_Together_Safely.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		46252C5524C78806005B592F /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -153,7 +145,7 @@
 				46ACD57C24C510800083F308 /* Together Safely */,
 				46ACD57B24C510800083F308 /* Products */,
 				8484AD2D3FC30157F08A3D12 /* Pods */,
-				2163AB74FCFC1864679E9111 /* Frameworks */,
+				9F275A5DBEF7DDAA4CBAC57B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -234,10 +226,18 @@
 		8484AD2D3FC30157F08A3D12 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				EF5477256CB7D82AC5004BD9 /* Pods-Together Safely.debug.xcconfig */,
-				939D650AFD0773D3E927F472 /* Pods-Together Safely.release.xcconfig */,
+				9DA6068FDE5A9C839C606A7D /* Pods-Together Safely.debug.xcconfig */,
+				97617F039CCA0ECFD5AB3CBD /* Pods-Together Safely.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		9F275A5DBEF7DDAA4CBAC57B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2E7E06007AECA602DFF6C210 /* Pods_Together_Safely.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -247,11 +247,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 46ACD58E24C510810083F308 /* Build configuration list for PBXNativeTarget "Together Safely" */;
 			buildPhases = (
-				29E0ACD6E5A3C2A0E59B9FEB /* [CP] Check Pods Manifest.lock */,
+				4994BE04B9C4332CFF562C20 /* [CP] Check Pods Manifest.lock */,
 				46ACD57624C510800083F308 /* Sources */,
 				46ACD57724C510800083F308 /* Frameworks */,
 				46ACD57824C510800083F308 /* Resources */,
-				ECCE71FFAF7BDCEB2EEEA9C3 /* [CP] Embed Pods Frameworks */,
+				5DCBE4427F2C88C3A552FE18 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -310,7 +310,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		29E0ACD6E5A3C2A0E59B9FEB /* [CP] Check Pods Manifest.lock */ = {
+		4994BE04B9C4332CFF562C20 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -332,7 +332,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		ECCE71FFAF7BDCEB2EEEA9C3 /* [CP] Embed Pods Frameworks */ = {
+		5DCBE4427F2C88C3A552FE18 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -532,12 +532,12 @@
 		};
 		46ACD58F24C510810083F308 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EF5477256CB7D82AC5004BD9 /* Pods-Together Safely.debug.xcconfig */;
+			baseConfigurationReference = 9DA6068FDE5A9C839C606A7D /* Pods-Together Safely.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Together Safely/Together Safely.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEVELOPMENT_ASSET_PATHS = "\"Together Safely/Preview Content\"";
 				DEVELOPMENT_TEAM = J4837STP57;
 				ENABLE_PREVIEWS = YES;
@@ -557,12 +557,12 @@
 		};
 		46ACD59024C510810083F308 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 939D650AFD0773D3E927F472 /* Pods-Together Safely.release.xcconfig */;
+			baseConfigurationReference = 97617F039CCA0ECFD5AB3CBD /* Pods-Together Safely.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Together Safely/Together Safely.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEVELOPMENT_ASSET_PATHS = "\"Together Safely/Preview Content\"";
 				DEVELOPMENT_TEAM = J4837STP57;
 				ENABLE_PREVIEWS = YES;

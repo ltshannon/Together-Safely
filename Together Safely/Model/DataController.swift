@@ -13,12 +13,11 @@ import FirebaseAuth
 import Contacts
 
 class DataController: ObservableObject {
-//    let container: NSPersistentContainer
+
     @Published var riskRanges: [[String:RiskHighLow]] = []
     @Published var riskColors: [[String:String]] = []
     @Published var userContacts: [TogetherContactType] = []
     @Published var contactInfo: [[String:ContactInfo]] = []
-//    @Published var groups: [Groups] = []
     @Published var invites: [Invite] = []
     @Published var user: User = User(snapshot: [:])
     @Published var userContantRiskAverageString = ""
@@ -28,7 +27,6 @@ class DataController: ObservableObject {
     private var userName: String = ""
     private var userImage: Data?
     private var allUsers: [User] = []
-//    private var groupsArray: [Groups] = []
     let context = DataController.appDelegate.persistentContainer.viewContext
     private var database = Firestore.firestore()
     var isInitialized: Bool = false
@@ -87,6 +85,7 @@ class DataController: ObservableObject {
     
     
     func getContacts(byPhoneNumber: String, completion: @escaping (Bool) -> Void) {
+        
         isInitialized = true
         let database = Firestore.firestore()
         do {
@@ -262,7 +261,7 @@ class DataController: ObservableObject {
     }
 
     func startListeners(phoneNumber: String, completion: @escaping (Bool) -> Void) {
-//        let viewContext = container.viewContext
+
         let database = Firestore.firestore()
         var groupListeners: [ListenerRegistration?] = []
     
@@ -687,7 +686,7 @@ class DataController: ObservableObject {
         }
     }
     
-    fileprivate static var appDelegate: AppDelegate = {
+    static var appDelegate: AppDelegate = {
         UIApplication.shared.delegate as! AppDelegate
     }()
     
