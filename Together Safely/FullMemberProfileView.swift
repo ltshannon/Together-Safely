@@ -13,6 +13,7 @@ struct FullMemberProfileView: View {
     var member: Member
     @State private var getRiskColor: Color = Color.white
     @State private var getImageForPhone: Data = Data()
+    @State private var name: String = ""
     
     @FetchRequest(
         entity: CDContactInfo.entity(),
@@ -30,7 +31,7 @@ struct FullMemberProfileView: View {
             MemberProfileByIndexView(contacts: contactInfo, phoneNumber: member.phoneNumber, riskScore: member.riskScore)
 
             VStack(alignment: .leading, spacing: 5) {
-                Text(self.getName(phoneName: member.phoneNumber, contacts: contactInfo))
+                Text(name.getName(phoneName: member.phoneNumber, contacts: contactInfo))
                 Text(member.status.text)
                     .font(Font.custom("Avenir-Medium", size: 14))
                     .foregroundColor(Color("Colorgray"))
@@ -52,16 +53,6 @@ struct FullMemberProfileView: View {
             Text(member.status.emoji)
             .font(Font.custom("Avenir Next Medium", size: 45))
         }
-    }
-    
-    func getName(phoneName: String, contacts: FetchedResults<CDContactInfo>) -> String {
-        
-        for item in contacts {
-            if item.phoneNumber == phoneName {
-                return item.name ?? phoneName
-            }
-        }
-        return phoneName
     }
     
 }

@@ -20,6 +20,7 @@ struct DetailMemberView: View {
     let userPhoneNumber =  UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? ""
     @State private var textMsg = ""
     let context = DataController.appDelegate.persistentContainer.viewContext
+    @State private var name: String = ""
     
     init(title: String, groupId: String, phoneNumber: [String], members: FetchRequest<CDMember>) {
         self.title = title
@@ -47,6 +48,11 @@ struct DetailMemberView: View {
         
     }
     
+    @FetchRequest(
+        entity: CDContactInfo.entity(),
+        sortDescriptors: []
+    ) var contactInfo: FetchedResults<CDContactInfo>
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Spacer()
@@ -56,8 +62,12 @@ struct DetailMemberView: View {
                         ForEach((0...messages.wrappedValue.count-1), id: \.self) { index in
                             let messagePhone = messages.wrappedValue[index].phoneNumber ?? ""
                             VStack(alignment: .leading, spacing: 0) {
-                                Text(messages.wrappedValue[index].phoneNumber ?? "")
+                                Text("")
+//                                Text(messages.wrappedValue[index].phoneNumber ?? "")
+//                                    .font(Font.custom("Avenir-Medium", size: 15))
+                                Text(name.getName(phoneName: messages.wrappedValue[index].phoneNumber ?? "", contacts: contactInfo))
                                     .font(Font.custom("Avenir-Medium", size: 15))
+                                    .padding(.bottom, 5)
                                 Text(messages.wrappedValue[index].textString ?? "")
                                     .padding()
                                     .font(Font.custom("Avenir-Medium", size: 15))

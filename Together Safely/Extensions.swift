@@ -127,6 +127,16 @@ extension String {
         }
         return pureNumber
     }
+    
+    func getName(phoneName: String, contacts: FetchedResults<CDContactInfo>) -> String {
+        
+        for item in contacts {
+            if item.phoneNumber == phoneName {
+                return item.name ?? phoneName
+            }
+        }
+        return phoneName
+    }
 
 }
 
