@@ -11,6 +11,8 @@ import SwiftUI
 struct ReadMembersForDetailView: View {
     var groupId: String
     var members: FetchRequest<CDMember>
+    @State private var showingAlert = false
+    @State private var errorString = ""
     
     init(groupId: String) {
         self.groupId = groupId
@@ -22,15 +24,45 @@ struct ReadMembersForDetailView: View {
     
     var body: some View {
         
-        ForEach((0...members.wrappedValue.count-1), id: \.self) { index in
+        VStack(alignment: .leading, spacing: 5) {
             Capsule()
                 .fill(Color(.gray))
                 .frame(height: 1)
                 .padding(.top, 5)
-                HStack {
-                    FullMemberProfileView(member: makeMember(member: members.wrappedValue[index]))
+            List {
+                ForEach(members.wrappedValue, id: \.self) { member in
+                    HStack {
+                        FullMemberProfileView(member: makeMember(member: member))
+                    }
+                        .padding([.leading, .trailing], 15)
                 }
-                .padding([.leading, .trailing], 15)
+                    .onDelete(perform: delete)
+                    .alert(isPresented: $showingAlert) {
+                        Alert(title: Text("Error deleting user"), message: Text(errorString), dismissButton: .default(Text("Ok")))
+                }
+            }
+        }
+    }
+    
+    func delete(at offsets: IndexSet) {
+        if let index = offsets.first {
+            if let phoneNumber = members.wrappedValue[index].phoneNumber {
+        print(offsets.first ?? 99999)
+        WebService.removeUser(groupId: groupId, phoneNumber: phoneNumber){ successful, error in
+            if !successful {
+                print("Leave group in ReadMembersForDetailView failed for groupId : \(groupId))")
+                if let error = error {
+                    switch error {
+                    case .serverError(let msg):
+                        errorString = msg
+                        showingAlert = true
+                    default:
+                        errorString = ""
+                    }
+                }
+            } 
+        }
+            }
         }
     }
     

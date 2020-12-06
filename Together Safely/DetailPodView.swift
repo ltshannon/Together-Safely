@@ -157,11 +157,11 @@ struct DetailPodView: View {
                     }
                     .frame(height: 75)
                     .padding(.bottom, 15)
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack(alignment: .leading, spacing: 5) {
+//                    ScrollView(.vertical, showsIndicators: false) {
+//                        VStack(alignment: .leading, spacing: 5) {
                             ReadMembersForDetailView(groupId: groupId)
-                        }
-                    }
+//                        }
+//                    }
                     NavigationLink(destination: DetailMemberView(title: group.wrappedValue.first?.name ?? "", groupId: groupId, phoneNumber: phoneNumbers, members: members),
                                    isActive: self.$showingChildView)
                     { EmptyView() }

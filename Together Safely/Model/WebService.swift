@@ -26,6 +26,8 @@ enum Endpoint {
     case deleteGroup(groupId: String)
     case location
     case riskScore
+    case leaveGroup(groupId: String)
+    case removeUser(groupId: String)
     
     var baseUrlString: String {
         //TODO: move this into its own ENUM at some point in order to switch between staging/dev/prod server environments
@@ -48,7 +50,9 @@ enum Endpoint {
              .checkPhoneNumbers,
              .inviteUser,
              .location,
-             .riskScore:
+             .riskScore,
+             .leaveGroup,
+             .removeUser:
             return .post
         case .deleteGroup:
             return .delete
@@ -88,6 +92,10 @@ enum Endpoint {
             return "users/location"
         case .riskScore:
             return "users/riskScore"
+        case .leaveGroup(groupId: let groupId):
+            return "groups/\(groupId)/leave"
+        case .removeUser(groupId: let groupId):
+            return "groups/\(groupId)/removeUser"
         }
     }
 }
@@ -231,6 +239,20 @@ class WebService {
             completion(error == nil)
         }
     }
+    
+    static func leaveGroup(groupId: String, completion: @escaping (Bool, NetworkingError?) -> Void)  {
+        let requestBody = try? JSONSerialization.data(withJSONObject: [], options: [])
+        networkRequest(.leaveGroup(groupId: groupId), responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
+            completion(error == nil, error)
+        }
+    }
+    
+    static func removeUser(groupId: String, phoneNumber: String, completion: @escaping (Bool, NetworkingError?) -> Void)  {
+        let requestBody = try? JSONSerialization.data(withJSONObject: ["userToRemove" : phoneNumber], options: [])
+        networkRequest(.removeUser(groupId: groupId), responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
+            completion(error == nil, error)
+        }
+    }
 }
 
 private extension WebService {
@@ -272,8 +294,6 @@ private extension WebService {
                             completion(nil, .serverError(message: result.message))
                             return
                         }
-                    
-                        
                     } catch let error {
                         completion(nil, .serializationError(message: error.localizedDescription))
                         return

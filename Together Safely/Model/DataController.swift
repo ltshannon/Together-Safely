@@ -350,6 +350,28 @@ class DataController: ObservableObject {
                             }
                         }
                     }
+                    
+                    // Check to see if group has been deleted
+                    print("Check to see if group has been deleted")
+                    let fetchRequest: NSFetchRequest<CDGroups> = CDGroups.fetchRequest()
+                    if let result = try? context.fetch(fetchRequest) {
+                        if result.count > 0 {
+                            for i in 0...result.count-1 {
+                                if let number = result[i].groupId {
+                                    if !user.groups.contains(number) {
+                                        print("deleting group: \(number)")
+                                        context.delete(result[i])
+                                    }
+                                }
+                            }
+                        }
+                        do {
+                            try context.save()
+                        }
+                        catch {
+                            print("error writing members: \(error.localizedDescription)")
+                        }
+                    }
 
                     localDate = dateFormatter.string(from: Date())
                     for listener in groupListeners {
@@ -363,10 +385,18 @@ class DataController: ObservableObject {
                     localDate = dateFormatter.string(from: Date())
                     print("Received Firebase data for \(user.groups.count) groups at: \(localDate)")
                     deleteEntity(name: "CDListOfGroups")
-//                    deleteEntity(name: "CDMember")
-//                    deleteEntity(name: "CDGroups")
+
                     for group in user.groups {
-//                        let groupListen = database.collection("groups").document(group)
+                        
+                        let l = CDListOfGroups(context: context)
+                        l.groupId = group
+                        do {
+                            try context.save()
+                        }
+                        catch {
+                            print("error writing user: \(error.localizedDescription)")
+                        }
+                        
                         let groupListen = database.collection("groups").whereField("id", isEqualTo: group)
                             .addSnapshotListener { [self] documentSnapshot, error in
                             guard let groupDocument = documentSnapshot else {
@@ -375,15 +405,7 @@ class DataController: ObservableObject {
                             }
                             
                             var messageCnt = 0
-                            let l = CDListOfGroups(context: context)
-                            l.groupId = group
-                            do {
-                                try context.save()
-                            }
-                            catch {
-                                print("error writing user: \(error.localizedDescription)")
-                            }
-                                
+
                             localDate = dateFormatter.string(from: Date())
                             print("Received Firebase data for group document: \(group) at: \(localDate)")
                                 
@@ -392,7 +414,7 @@ class DataController: ObservableObject {
                             }
                             let doc = groupDocument.documents[0]
                             var groups = Groups(snapshot: doc.data())
-                                
+/*
                             documentSnapshot!.documentChanges.forEach { diff in
                                 print()
                                 print("Group: \(groups.name) \(group)")
@@ -402,50 +424,46 @@ class DataController: ObservableObject {
                                         print("Add or modified")
                                 }
                             }
-                                
+*/
                             print("")
                             var dict: [String : Int] = [:]
                             var groupAverageRisk = 0.0
+                            var arrayPhone: [String] = []
 
-                            for (index, member) in groups.members.enumerated() {
-                                groups.members[index].riskString = self.getRiskString(value: member.riskScore)
-                                if let total = dict[groups.members[index].riskString] {
-                                    dict[groups.members[index].riskString] = total + 1
-                                }
-                                else {
-                                    dict[groups.members[index].riskString] = 1
-                                }
-                                groupAverageRisk += member.riskScore
+                            let fetchRequest: NSFetchRequest<CDMember> = CDMember.fetchRequest()
+                            fetchRequest.predicate = NSPredicate(format: "groupId == %@", groups.id)
                                 
-                                let fetchRequest: NSFetchRequest<CDMember> = CDMember.fetchRequest()
-                                
-                                fetchRequest.predicate = NSPredicate(format: "phoneNumber == %@ AND groupId == %@", argumentArray: [member.phoneNumber, groups.id])
-                                
-                                if let result = try? context.fetch(fetchRequest) {
-                                    print("groups.id: \(groups.id)")
-                                    print("doc.documentID: \(doc.documentID)")
-                                    print("result.count: \(result.count)")
-
-                                    if result.count == 1 {
-                                        result[0].adminId = member.adminId
-                                        result[0].phoneNumber = member.phoneNumber
-                                        if result[0].textString != member.status.text {
+                            if let result = try? context.fetch(fetchRequest) {
+                                for (index, member) in groups.members.enumerated() {
+                                    arrayPhone.append(member.phoneNumber)
+                                    groups.members[index].riskString = self.getRiskString(value: member.riskScore)
+                                    if let total = dict[groups.members[index].riskString] {
+                                        dict[groups.members[index].riskString] = total + 1
+                                    }
+                                    else {
+                                        dict[groups.members[index].riskString] = 1
+                                    }
+                                    groupAverageRisk += member.riskScore
+                                    
+                                    if let i = getMember(phoneNumber: member.phoneNumber, members: result) {
+                                        result[i].adminId = member.adminId
+                                        result[i].phoneNumber = member.phoneNumber
+                                        if result[i].textString != member.status.text {
                                             let messages = CDMessages(context: context)
                                             messages.groupId = groups.id
                                             messages.phoneNumber = member.phoneNumber
                                             messages.textString = member.status.text
                                             messages.timeStamp = Date()
-                                            let count = result[0].newMessageCnt + 1
-                                            result[0].newMessageCnt = count
+                                            let count = result[i].newMessageCnt + 1
+                                            result[i].newMessageCnt = count
                                         }
-                                        messageCnt += Int(result[0].newMessageCnt)
-                                        result[0].emoji = member.status.emoji
-                                        result[0].textString = member.status.text
-                                        result[0].riskString = groups.members[index].riskString
-                                        result[0].riskScore = member.riskScore
-                                        result[0].groupId = groups.id
-                                    }
-                                    else {
+                                        messageCnt += Int(result[i].newMessageCnt)
+                                        result[i].emoji = member.status.emoji
+                                        result[i].textString = member.status.text
+                                        result[i].riskString = groups.members[index].riskString
+                                        result[i].riskScore = member.riskScore
+                                        result[i].groupId = groups.id
+                                    } else {
                                         let m = CDMember(context: context)
                                         m.adminId = member.adminId
                                         m.phoneNumber = member.phoneNumber
@@ -455,12 +473,24 @@ class DataController: ObservableObject {
                                         m.riskScore = member.riskScore
                                         m.groupId = groups.id
                                     }
-                                    do {
-                                        try context.save()
+                                }
+                                print("groups.id: \(groups.id) name: \(groups.name)")
+                                if result.count > 0 {
+                                    for i in 0...result.count-1 {
+//                                        print("result[\(i)]: \(result[i].phoneNumber ?? "")")
+                                        if let number = result[i].phoneNumber {
+                                            if !arrayPhone.contains(number) {
+                                                print("deleting member: \(number)")
+                                                context.delete(result[i])
+                                            }
+                                        }
                                     }
-                                    catch {
-                                        print("error writing members: \(error.localizedDescription)")
-                                    }
+                                }
+                                do {
+                                    try context.save()
+                                }
+                                catch {
+                                    print("error writing members: \(error.localizedDescription)")
                                 }
                             }
                                 
@@ -483,23 +513,21 @@ class DataController: ObservableObject {
 
 
                             groups.id = doc.documentID
-                            let fetchRequest: NSFetchRequest<CDGroups> = CDGroups.fetchRequest()
-                            if let result = try? context.fetch(fetchRequest) {
-                                print("\n checking groups:")
-                                for object in result {
-                                    print("\(object.groupId ?? "") \(object.name ?? "")")
-                                    if object.groupId == doc.documentID {
-                                        print("deleting group: \(groups.id) from CD")
-                                        context.delete(object)
-                                        do {
-                                            try context.save()
-                                        } catch {
-                                            print("failed to delete group: \(doc.documentID)  \(error.localizedDescription)")
-                                        }
+                            let fetchRequest2: NSFetchRequest<CDGroups> = CDGroups.fetchRequest()
+                            fetchRequest2.predicate = NSPredicate(format: "groupId == %@", doc.documentID)
+                            if let result = try? context.fetch(fetchRequest2) {
+                                if result.count == 1 {
+                                    print("\(result[0].groupId ?? "") \(result[0].name ?? "")")
+                                    print("deleting group: \(groups.id) from CD")
+                                    context.delete(result[0])
+                                    do {
+                                        try context.save()
+                                    } catch {
+                                        print("failed to delete group: \(doc.documentID)  \(error.localizedDescription)")
                                     }
                                 }
-                                print("")
                             }
+                            print("")
                             addGroupToCD(group: groups)
                         }
                         groupListeners.append(groupListen)
@@ -507,6 +535,17 @@ class DataController: ObservableObject {
                     completion(true)
                 }
         }
+    }
+    
+    func getMember(phoneNumber: String, members: [CDMember]) -> Int? {
+        
+        for (index, element) in members.enumerated() {
+            if element.phoneNumber == phoneNumber {
+                return index
+            }
+        }
+        
+        return nil
     }
     
     func addGroupToCD(group: Groups) {
