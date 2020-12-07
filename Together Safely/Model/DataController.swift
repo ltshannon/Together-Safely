@@ -83,7 +83,6 @@ class DataController: ObservableObject {
         return ""
     }
     
-    
     func getContacts(byPhoneNumber: String, completion: @escaping (Bool) -> Void) {
         
         isInitialized = true
@@ -118,8 +117,6 @@ class DataController: ObservableObject {
                     )
          
                     cinfo.append([number:c])
-
-
 
                     if number.contains(byPhoneNumber) {
                         userName = "\(contact.givenName) " + "\(contact.familyName)"
@@ -248,13 +245,11 @@ class DataController: ObservableObject {
                             catch {
                                 print("error writing user: \(error.localizedDescription)")
                             }
-
                         }
                     }
                     completion(true)
                 }
             }
-             
         } catch {
             print("Fetching contacts: failed with %@", error.localizedDescription)
         }
@@ -283,12 +278,11 @@ class DataController: ObservableObject {
                     let doc = querySnapshot!.documents[0]
                     var user = User(snapshot: doc.data())
                     user.id = doc.documentID
+                    UserDefaults.standard.set(user.id, forKey: "userId")
                     user.riskString = self.getRiskString(value: user.riskScore)
                     user.name = self.userName
                     user.image = self.userImage
-                    DispatchQueue.main.async {
-                        self.user = user
-                    }
+                    self.user = user
                     
                     self.deleteEntity(name: "CDUser")
                     let u = CDUser(context: context)
@@ -408,23 +402,41 @@ class DataController: ObservableObject {
 
                             localDate = dateFormatter.string(from: Date())
                             print("Received Firebase data for group document: \(group) at: \(localDate)")
-                                
+                            print(groupDocument)
+
                             if groupDocument.count == 0 {
-                                fatalError()
+                                documentSnapshot!.documentChanges.forEach { diff in
+                                    print("Data: \(diff.document.data())")
+                                    if (diff.type == .removed) {
+                                        let fetchRequest2: NSFetchRequest<CDMember> = CDMember.fetchRequest()
+                                        fetchRequest2.predicate = NSPredicate(format: "groupId == %@", group)
+                                        if let result2 = try? context.fetch(fetchRequest2) {
+                                            for result in result2 {
+                                                context.delete(result)
+                                            }
+                                        }
+                                        let fetchRequest: NSFetchRequest<CDGroups> = CDGroups.fetchRequest()
+                                        fetchRequest.predicate = NSPredicate(format: "groupId == %@", group)
+                                        if let result = try? context.fetch(fetchRequest) {
+                                            if result.count == 1 {
+                                                print("\(result[0].groupId ?? "") \(result[0].name ?? "")")
+                                                print("deleting group: \(group) from CD")
+                                                context.delete(result[0])
+                                            }
+                                        }
+                                        do {
+                                            try context.save()
+                                        } catch {
+                                            print("failed to delete group & members: \(group)  \(error.localizedDescription)")
+                                        }
+                                    }
+                                }
+                                return
                             }
+
                             let doc = groupDocument.documents[0]
                             var groups = Groups(snapshot: doc.data())
-/*
-                            documentSnapshot!.documentChanges.forEach { diff in
-                                print()
-                                print("Group: \(groups.name) \(group)")
-                                print("Data: \(diff.document.data())")
-                                print("type: \(diff.type == .added ? "Add" : diff.type == .modified ? "Modified" :  diff.type == .removed ? "Removed" : "nothing")")
-                                if (diff.type == .added || diff.type == .modified) {
-                                        print("Add or modified")
-                                }
-                            }
-*/
+
                             print("")
                             var dict: [String : Int] = [:]
                             var groupAverageRisk = 0.0

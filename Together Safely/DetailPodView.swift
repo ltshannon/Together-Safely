@@ -159,7 +159,7 @@ struct DetailPodView: View {
                     .padding(.bottom, 15)
 //                    ScrollView(.vertical, showsIndicators: false) {
 //                        VStack(alignment: .leading, spacing: 5) {
-                            ReadMembersForDetailView(groupId: groupId)
+                    ReadMembersForDetailView(groupId: groupId, adminId: group.wrappedValue.first?.adminId ?? "")
 //                        }
 //                    }
                     NavigationLink(destination: DetailMemberView(title: group.wrappedValue.first?.name ?? "", groupId: groupId, phoneNumber: phoneNumbers, members: members),

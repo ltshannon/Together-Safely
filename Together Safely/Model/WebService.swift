@@ -247,6 +247,12 @@ class WebService {
         }
     }
     
+    static func deleteGroup(groupId: String, completion: @escaping (Bool, NetworkingError?) -> Void)  {
+        networkRequest(.deleteGroup(groupId: groupId), responseType: GenericMessageResponse.self, requestBody: nil) { (response, error) in
+            completion(error == nil, error)
+        }
+    }
+    
     static func removeUser(groupId: String, phoneNumber: String, completion: @escaping (Bool, NetworkingError?) -> Void)  {
         let requestBody = try? JSONSerialization.data(withJSONObject: ["userToRemove" : phoneNumber], options: [])
         networkRequest(.removeUser(groupId: groupId), responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in

@@ -10,12 +10,15 @@ import SwiftUI
 
 struct ReadMembersForDetailView: View {
     var groupId: String
+    var adminId: String
     var members: FetchRequest<CDMember>
     @State private var showingAlert = false
+    @State private var showingAlert2 = false
     @State private var errorString = ""
     
-    init(groupId: String) {
+    init(groupId: String, adminId: String) {
         self.groupId = groupId
+        self.adminId = adminId
 
         members = FetchRequest<CDMember>(entity: CDMember.entity(),
                                          sortDescriptors: [NSSortDescriptor(keyPath: \CDMember.memberName, ascending: true)],
@@ -29,6 +32,9 @@ struct ReadMembersForDetailView: View {
                 .fill(Color(.gray))
                 .frame(height: 1)
                 .padding(.top, 5)
+                .alert(isPresented: $showingAlert) {
+                    Alert(title: Text("Error deleting user"), message: Text(errorString), dismissButton: .default(Text("Ok")))
+                }
             List {
                 ForEach(members.wrappedValue, id: \.self) { member in
                     HStack {
@@ -37,31 +43,66 @@ struct ReadMembersForDetailView: View {
                         .padding([.leading, .trailing], 15)
                 }
                     .onDelete(perform: delete)
-                    .alert(isPresented: $showingAlert) {
-                        Alert(title: Text("Error deleting user"), message: Text(errorString), dismissButton: .default(Text("Ok")))
-                }
+                    .alert(isPresented:$showingAlert2) {
+                        Alert(title: Text("Are you sure you want to delete this pod?"), message: Text("There is no undo"), primaryButton: .destructive(Text("Delete")) {
+                            WebService.deleteGroup(groupId: groupId){ successful, error in
+                                if !successful {
+                                    print("Deleting group in ReadMembersForDetailView failed for groupId : \(groupId))")
+                                    if let error = error {
+                                        switch error {
+                                        case .serverError(let msg):
+                                            errorString = msg
+                                            showingAlert = true
+                                        default:
+                                            errorString = ""
+                                        }
+                                    }
+                                }
+                            }
+                        }, secondaryButton: .cancel())
+                    }
             }
         }
     }
     
     func delete(at offsets: IndexSet) {
+        
+        let userPhoneNumber =  UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? ""
+        let userId =  UserDefaults.standard.value(forKey: "userId") as? String ?? ""
+        
         if let index = offsets.first {
-            if let phoneNumber = members.wrappedValue[index].phoneNumber {
-        print(offsets.first ?? 99999)
-        WebService.removeUser(groupId: groupId, phoneNumber: phoneNumber){ successful, error in
-            if !successful {
-                print("Leave group in ReadMembersForDetailView failed for groupId : \(groupId))")
-                if let error = error {
-                    switch error {
-                    case .serverError(let msg):
-                        errorString = msg
-                        showingAlert = true
-                    default:
-                        errorString = ""
+            if (adminId == userId) && (userPhoneNumber == members.wrappedValue[index].phoneNumber) {
+                showingAlert2 = true
+            } else {
+                if userPhoneNumber == members.wrappedValue[index].phoneNumber {
+                    WebService.leaveGroup(groupId: groupId){ successful, error in
+                        if !successful {
+                            if let error = error {
+                                switch error {
+                                case .serverError(let msg):
+                                    errorString = msg
+                                    showingAlert = true
+                                default:
+                                    errorString = ""
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    WebService.removeUser(groupId: groupId, phoneNumber: members.wrappedValue[index].phoneNumber ?? ""){ successful, error in
+                        if !successful {
+                            if let error = error {
+                                switch error {
+                                case .serverError(let msg):
+                                    errorString = msg
+                                    showingAlert = true
+                                default:
+                                    errorString = ""
+                                }
+                            }
+                        }
                     }
                 }
-            } 
-        }
             }
         }
     }
