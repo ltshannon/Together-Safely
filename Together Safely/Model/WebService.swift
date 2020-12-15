@@ -28,6 +28,7 @@ enum Endpoint {
     case riskScore
     case leaveGroup(groupId: String)
     case removeUser(groupId: String)
+    case addFCMToken
     
     var baseUrlString: String {
         //TODO: move this into its own ENUM at some point in order to switch between staging/dev/prod server environments
@@ -52,7 +53,8 @@ enum Endpoint {
              .location,
              .riskScore,
              .leaveGroup,
-             .removeUser:
+             .removeUser,
+             .addFCMToken:
             return .post
         case .deleteGroup:
             return .delete
@@ -96,6 +98,8 @@ enum Endpoint {
             return "groups/\(groupId)/leave"
         case .removeUser(groupId: let groupId):
             return "groups/\(groupId)/removeUser"
+        case .addFCMToken:
+            return "users/addFCMToken"
         }
     }
 }
@@ -173,17 +177,17 @@ class WebService {
         }
     }
     
-    static func inviteUserToGroup(groupId: String, phoneNumber: String, completion: @escaping (Bool) -> Void)  {
+    static func inviteUserToGroup(groupId: String, phoneNumber: String, completion: @escaping (Bool, NetworkingError?) -> Void)  {
         let requestBody = try? JSONSerialization.data(withJSONObject: ["newMember" : phoneNumber], options: [])
         networkRequest(.addUserToPod(groupId: groupId), responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
-            completion(error == nil)
+            completion(error == nil, error)
         }
     }
     
-    static func createInvite(phoneNumber: String, completion: @escaping (Bool) -> Void)  {
+    static func createInvite(phoneNumber: String, completion: @escaping (Bool, NetworkingError?) -> Void)  {
         let requestBody = try? JSONSerialization.data(withJSONObject: ["phoneNumber" : phoneNumber], options: [])
         networkRequest(.inviteUser, responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
-            completion(error == nil)
+            completion(error == nil, error)
         }
     }
     
@@ -206,10 +210,10 @@ class WebService {
         }
     }
     
-    static func createNewGroup(name: String, members: [String], successful: @escaping (Bool) -> Void)  {
+    static func createNewGroup(name: String, members: [String], successful: @escaping (Bool, NetworkingError?) -> Void)  {
         let requestBody = try? JSONSerialization.data(withJSONObject: ["name" : name, "members" : members], options: [])
         networkRequest(.createGroup, responseType: CreateNewGroupResponse.self, requestBody: requestBody) { (response, error) in
-            successful(error == nil)
+            successful(error == nil, error)
         }
     }
     
@@ -256,6 +260,14 @@ class WebService {
     static func removeUser(groupId: String, phoneNumber: String, completion: @escaping (Bool, NetworkingError?) -> Void)  {
         let requestBody = try? JSONSerialization.data(withJSONObject: ["userToRemove" : phoneNumber], options: [])
         networkRequest(.removeUser(groupId: groupId), responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
+            completion(error == nil, error)
+        }
+    }
+    
+    static func addFCMToken(token: String, completion: @escaping (Bool, NetworkingError?) -> Void)  {
+        let phoneNumber = UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? ""
+        let requestBody = try? JSONSerialization.data(withJSONObject: ["FCMToken" : token, "phoneNumber" : phoneNumber], options: [])
+        networkRequest(.addFCMToken, responseType: GenericMessageResponse.self, requestBody: requestBody) { (response, error) in
             completion(error == nil, error)
         }
     }

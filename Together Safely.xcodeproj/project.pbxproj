@@ -37,7 +37,6 @@
 		46AE7E5C2559C5DF000769C6 /* Main.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 46AE7E5A2559C5DF000769C6 /* Main.xcdatamodeld */; };
 		46C4AE6B256C37880016FAE7 /* ReadMembersForDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C4AE6A256C37880016FAE7 /* ReadMembersForDisplayView.swift */; };
 		46C790FB256C360100BCA8D3 /* ReadMembersForDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C790FA256C360100BCA8D3 /* ReadMembersForDetailView.swift */; };
-		46DE5E5024D64AE2005912CD /* CreatePodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E4F24D64AE2005912CD /* CreatePodsView.swift */; };
 		46DE5E5424D76EF2005912CD /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E5324D76EF2005912CD /* AddFriendView.swift */; };
 		46DE5E5624D7907D005912CD /* InviationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E5524D7907D005912CD /* InviationsView.swift */; };
 		46DE5E5A24D88F7C005912CD /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46DE5E5924D88F7C005912CD /* UserProfileView.swift */; };
@@ -91,7 +90,6 @@
 		46AE7E5B2559C5DF000769C6 /* Main.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Main.xcdatamodel; sourceTree = "<group>"; };
 		46C4AE6A256C37880016FAE7 /* ReadMembersForDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadMembersForDisplayView.swift; sourceTree = "<group>"; };
 		46C790FA256C360100BCA8D3 /* ReadMembersForDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadMembersForDetailView.swift; sourceTree = "<group>"; };
-		46DE5E4F24D64AE2005912CD /* CreatePodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePodsView.swift; sourceTree = "<group>"; };
 		46DE5E5324D76EF2005912CD /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
 		46DE5E5524D7907D005912CD /* InviationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviationsView.swift; sourceTree = "<group>"; };
 		46DE5E5924D88F7C005912CD /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
@@ -185,7 +183,6 @@
 				4635F3A324D5129E00A4A7E2 /* AllContactsView.swift */,
 				46DE5E5B24D9E226005912CD /* CreatePodView.swift */,
 				46DE5E5324D76EF2005912CD /* AddFriendView.swift */,
-				46DE5E4F24D64AE2005912CD /* CreatePodsView.swift */,
 				46DE5E5924D88F7C005912CD /* UserProfileView.swift */,
 				465BE90B24DB461B008DA1CD /* EditRiskProfile.swift */,
 				46806E5924F5C2A4000A177B /* EditRiskProfile2.swift */,
@@ -389,7 +386,6 @@
 				46DE5E5C24D9E226005912CD /* CreatePodView.swift in Sources */,
 				46EB271B253D299100A849AE /* RiskProfileView.swift in Sources */,
 				46252C5424C787F8005B592F /* MyselfView.swift in Sources */,
-				46DE5E5024D64AE2005912CD /* CreatePodsView.swift in Sources */,
 				46F7E64624CCEC1E004EAF24 /* LocationManager.swift in Sources */,
 				4635F3A424D5129E00A4A7E2 /* AllContactsView.swift in Sources */,
 				465BE90C24DB461B008DA1CD /* EditRiskProfile.swift in Sources */,
@@ -537,7 +533,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Together Safely/Together Safely.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 37;
 				DEVELOPMENT_ASSET_PATHS = "\"Together Safely/Preview Content\"";
 				DEVELOPMENT_TEAM = J4837STP57;
 				ENABLE_PREVIEWS = YES;
@@ -562,7 +558,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Together Safely/Together Safely.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 37;
 				DEVELOPMENT_ASSET_PATHS = "\"Together Safely/Preview Content\"";
 				DEVELOPMENT_TEAM = J4837STP57;
 				ENABLE_PREVIEWS = YES;

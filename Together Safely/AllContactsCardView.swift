@@ -21,6 +21,11 @@ struct AllContactsCardView: View {
     @Binding var name: String
     let groupId: String
     @State var showingAlert = false
+    @State var showingAlert2 = false
+    @State var showingAlert3 = false
+    @State var showingAlert4 = false
+    @State var showingAlert5 = false
+    @State private var errorString = ""
     @Environment(\.presentationMode) var presentation
     @State private var arrayIndexs: [Int] = []
     @State private var members:[String] = []
@@ -69,6 +74,9 @@ struct AllContactsCardView: View {
                     .fill(Color(.darkGray))
                     .frame(height: 2)
                     .padding(0)
+                    .alert(isPresented: $showingAlert2) {
+                        Alert(title: Text("Error sending invite"), message: Text(errorString), dismissButton: .default(Text("Ok")))
+                    }
                 List {
                     ForEach(Array(self.filteredItems.enumerated()), id: \.offset) { index, element in
                         VStack {
@@ -119,11 +127,20 @@ struct AllContactsCardView: View {
                                 if self.pageType == .addContacts {
                                     if self.filteredItems[index].type == .invitablePhoneNumber {
                                         Button(action: {
-                                            WebService.createInvite(phoneNumber: element.phoneNumber) { successful in
+                                            WebService.createInvite(phoneNumber: element.phoneNumber) { successful, error in
                                                 if !successful {
                                                     print("createInvite failed for: \(element.name)")
+                                                    if let error = error {
+                                                        switch error {
+                                                        case .serverError(let msg):
+                                                            errorString = msg
+                                                            showingAlert2 = true
+                                                        default:
+                                                            errorString = ""
+                                                        }
+                                                    }
                                                 }
-                                                self.presentation.wrappedValue.dismiss()
+//                                                self.presentation.wrappedValue.dismiss()
                                             }
                                         }) {
                                             Image("buttonInvite")
@@ -148,6 +165,9 @@ struct AllContactsCardView: View {
                                     .fill(Color("Colorgray"))
                                     .frame(height: 1)
                                     .padding(10)
+                                    .alert(isPresented: $showingAlert5) {
+                                        Alert(title: Text("Error, can not create pod"), message: Text("Pod must have at least one member"), dismissButton: .default(Text("Continue")))
+                                    }
                         }
 //                            .padding([.leading, .trailing], 15)
                     }
@@ -170,12 +190,29 @@ struct AllContactsCardView: View {
                         self.showingAlert = true
                         return
                     }
-                    WebService.createNewGroup(name: self.name, members: self.members) { successful in
+                    if self.members.count == 0 {
+                        self.showingAlert5 = true
+                        return
+                    }
+                    WebService.createNewGroup(name: self.name, members: self.members) { successful, error in
                         if !successful {
                             print("createNewGroup failed for: \(self.name)")
+                            if let error = error {
+                                switch error {
+                                case .serverError(let msg):
+                                    errorString = msg
+                                    showingAlert3 = true
+                                default:
+                                    errorString = ""
+                                }
+                            }
+                        } else {
+                            DispatchQueue.main.async {
+                                self.presentation.wrappedValue.dismiss()
+                            }
                         }
                     }
-                    self.presentation.wrappedValue.dismiss()
+//                    self.presentation.wrappedValue.dismiss()
                 }) {
                     HStack {
                         Text("Create")
@@ -186,6 +223,9 @@ struct AllContactsCardView: View {
                     .foregroundColor(.white)
                     .background(Color("Color4"))
                     .cornerRadius(8)
+                    .alert(isPresented: $showingAlert3) {
+                        Alert(title: Text("Error creating new group"), message: Text(errorString), dismissButton: .default(Text("Ok")))
+                    }
                 }
                 .alert(isPresented: $showingAlert) {
                     Alert(title: Text("Error"), message: Text("Pod name must have at least 1 character"), dismissButton: .default(Text("Continue")))
@@ -193,13 +233,27 @@ struct AllContactsCardView: View {
             } else if pageType == .addFriends {
                 Button(action: {
                     for member in self.members {
-                        WebService.inviteUserToGroup(groupId: self.groupId, phoneNumber: member) { successful in
+                        WebService.inviteUserToGroup(groupId: self.groupId, phoneNumber: member) { successful, error in
                             if !successful {
                                 print("inviteUserToGroup failed for: \(member)")
+                                if let error = error {
+                                    switch error {
+                                    case .serverError(let msg):
+                                        errorString = msg
+                                        showingAlert4 = true
+                                    default:
+                                        errorString = ""
+                                    }
+                                }
+                            }
+                            else {
+                                DispatchQueue.main.async {
+                                    self.presentation.wrappedValue.dismiss()
+                                }
                             }
                         }
                     }
-                    self.presentation.wrappedValue.dismiss()
+//                    self.presentation.wrappedValue.dismiss()
                 }) {
                     HStack {
                         Text("Add")
@@ -210,6 +264,9 @@ struct AllContactsCardView: View {
                     .foregroundColor(.white)
                     .background(Color("Color4"))
                     .cornerRadius(8)
+                }
+                .alert(isPresented: $showingAlert4) {
+                    Alert(title: Text("Error adding user"), message: Text(errorString), dismissButton: .default(Text("Ok")))
                 }
             }
         }
