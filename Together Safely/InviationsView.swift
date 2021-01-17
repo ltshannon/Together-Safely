@@ -9,13 +9,19 @@
 import SwiftUI
 
 struct InviationsView: View {
-    @EnvironmentObject var dataController: DataController
+    
     @State private var getImageForPhone: Data = Data()
+    @State private var getNameForPhone: String = ""
     
     @FetchRequest(
         entity: CDInvites.entity(),
         sortDescriptors: []
-    ) var items: FetchedResults<CDInvites>
+    ) var invites: FetchedResults<CDInvites>
+    
+    @FetchRequest(
+        entity: CDContactInfo.entity(),
+        sortDescriptors: []
+    ) var contactInfo: FetchedResults<CDContactInfo>
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -33,17 +39,17 @@ struct InviationsView: View {
                 .fill(Color(.darkGray))
                 .frame(height: 2)
                 .padding(0)
-            if !dataController.invites.isEmpty {
+            if invites.count != 0 {
                 ScrollView(.vertical, showsIndicators: false) {
 //                    ForEach(Array(dataController.invites.enumerated()), id: \.offset) { index, invite in
 //                    ForEach(dataController.invites, id: \.self) { invite in
-                    ForEach(items) { invite in
+                    ForEach(invites) { invite in
                         VStack {
                             HStack {
                             MemberProfileView(
-                                image: self.getImageForPhone.getImage(phoneName: invite.adminPhone ?? "", dict: self.dataController.contactInfo), riskScore: invite.riskScore)
+                                image: self.getImageForPhone.newGetImage(phoneName: invite.adminPhone ?? "", contacts: contactInfo), riskScore: invite.riskScore)
                             VStack(alignment: .leading) {
-                                Text(self.dataController.getNameForPhone(invite.adminPhone ?? "", dict: self.dataController.contactInfo))
+                                Text(self.getNameForPhone.getNameForPhone(invite.adminPhone ?? "", contacts: contactInfo))
                                     .foregroundColor(Color("Colorblack"))
                                     .font(Font.custom("Avenir Next Medium", size: 18))
                                 Text("invited you to:")

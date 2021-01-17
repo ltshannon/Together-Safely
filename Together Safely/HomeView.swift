@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @EnvironmentObject var dataController: DataController
+
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State var index = 0
     @State private var action: Int? = 0
@@ -17,6 +17,11 @@ struct HomeView: View {
         entity: CDUser.entity(),
         sortDescriptors: []
     ) var user: FetchedResults<CDUser>
+    
+    @FetchRequest(
+        entity: CDInvites.entity(),
+        sortDescriptors: []
+    ) var invites: FetchedResults<CDInvites>
     
     var body: some View {
         GeometryReader { metrics in
@@ -54,7 +59,7 @@ struct HomeView: View {
                                     Circle()
                                         .fill(Color("Colorred"))
                                         .frame(width: 18, height: 18)
-                                    Text("\(dataController.invites.count)")
+                                    Text("\(invites.count)")
                                         .font(.body)
                                         .fontWeight(.bold)
                                         .foregroundColor(.white)
@@ -88,7 +93,7 @@ struct HomeView: View {
                     Spacer()
                     DisplayPodsView()
                 } else {
-                    InviationsView().environmentObject(dataController)
+                    InviationsView()
                 }
             }
             NavigationLink(destination: UserProfileView(), tag: 1, selection: self.$action) {

@@ -213,7 +213,7 @@ extension Color {
         }
         return Color("Colorgray")
     }
-    
+/*
     func getRiskColor(riskScore: Double, dataController: DataController) -> Color {
         
         for riskRange in dataController.riskRanges {
@@ -230,7 +230,7 @@ extension Color {
         }
         return Color("Colorgray")
     }
-    
+*/
     func newGetColorFromString(str: String, colors: [[String:String]]) -> Color {
         
         for item in colors {
@@ -262,7 +262,7 @@ extension Color {
  
         return Color("Colorgray")
     }
-    
+/*
     func getColorFromString(str: String, dataController: DataController) -> Color {
         
         for item in dataController.riskColors {
@@ -274,7 +274,7 @@ extension Color {
         }
         return Color("Colorgray")
     }
-    
+*/
 }
 
 extension UIColor {
@@ -369,6 +369,17 @@ extension String {
         guard self.hasPrefix(prefix) else { return self }
         return String(self.dropFirst(prefix.count))
     }
+    
+    func getNameForPhone(_ phoneNumber: String, contacts: FetchedResults<CDContactInfo>) -> String {
+        
+        for item in contacts {
+            if item.phoneNumber == phoneNumber {
+                return item.name ?? phoneNumber
+            }
+        }
+        return phoneNumber
+    }
+    
 }
 
 extension Binding {

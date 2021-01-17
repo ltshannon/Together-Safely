@@ -34,9 +34,15 @@ struct DummyView: View {
             }
         }
             .background(Image("backgroudImage").resizable().edgesIgnoringSafeArea(.all))
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-            print("Moving back to the foreground!")
-//            self.locationFetcher.start()
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+                print("Moving back to the foreground!")
+                let userPhoneNumber =  UserDefaults.standard.value(forKey: "userPhoneNumber") as? String ?? ""
+                dataController.getContacts(byPhoneNumber: userPhoneNumber) { error in
+                    dataController.startListeners(phoneNumber: userPhoneNumber) { completion in
+                        print("Completed startListeners")
+                    }
+                }
+//                self.locationFetcher.start()
         }
     }
 }

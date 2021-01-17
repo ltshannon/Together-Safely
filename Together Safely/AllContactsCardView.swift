@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Contacts
+import CoreData
 
 enum PageType: Int {
     case addContacts
@@ -25,6 +26,8 @@ struct AllContactsCardView: View {
     @State var showingAlert3 = false
     @State var showingAlert4 = false
     @State var showingAlert5 = false
+    @State var showingAlert6 = false
+    @State private var showIndicator = false
     @State private var errorString = ""
     @Environment(\.presentationMode) var presentation
     @State private var arrayIndexs: [Int] = []
@@ -45,6 +48,11 @@ struct AllContactsCardView: View {
         sortDescriptors: []
     ) var itemsContacts: FetchedResults<CDContactInfo>
     
+    @FetchRequest(
+        entity: CDUser.entity(),
+        sortDescriptors: []
+    ) var user: FetchedResults<CDUser>
+    
     init(pageType: PageType, name: Binding<String>, groupId: String) {
         self.pageType = pageType
         self._name = name
@@ -52,12 +60,14 @@ struct AllContactsCardView: View {
     }
     
     var body: some View {
-
+        ZStack {
         VStack {
             TextField("Search", text: $filterString.onChange(applyFilter))
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.horizontal)
-
+                .alert(isPresented: $showingAlert6) {
+                    Alert(title: Text("Invite sent"), message: Text(errorString), dismissButton: .default(Text("Ok")))
+                }
             Spacer()
             VStack(alignment: .leading, spacing: 0) {
                 VStack {
@@ -127,7 +137,9 @@ struct AllContactsCardView: View {
                                 if self.pageType == .addContacts {
                                     if self.filteredItems[index].type == .invitablePhoneNumber {
                                         Button(action: {
+                                            showIndicator.toggle()
                                             WebService.createInvite(phoneNumber: element.phoneNumber) { successful, error in
+                                                showIndicator.toggle()
                                                 if !successful {
                                                     print("createInvite failed for: \(element.name)")
                                                     if let error = error {
@@ -139,6 +151,9 @@ struct AllContactsCardView: View {
                                                             errorString = ""
                                                         }
                                                     }
+                                                } else {
+                                                    changeContactType(phoneNumber: element.phoneNumber)
+                                                    showingAlert6 = true
                                                 }
 //                                                self.presentation.wrappedValue.dismiss()
                                             }
@@ -270,6 +285,54 @@ struct AllContactsCardView: View {
                 }
             }
         }
+        if self.showIndicator {
+            GeometryReader {geometry in
+                SpinnerView()
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+            }
+        }
+        }
+    }
+    
+    func changeContactType(phoneNumber: String) {
+        for (index, contact) in userContacts.enumerated() {
+            if contact.phoneNumber == phoneNumber {
+                let c = TogetherContactType(name: contact.name, type: .invitedPhoneNumber, phoneNumber: contact.phoneNumber , imageData: contact.imageData ?? nil, riskScore: contact.riskScore, riskString: contact.riskString ?? "")
+                userContacts.remove(at: index)
+                userContacts.append(c)
+                break
+            }
+        }
+        applyFilter()
+
+        let context = DataController.appDelegate.persistentContainer.viewContext
+/*
+        let contacts = CDContactInfo(context: context)
+        contacts.
+
+        let fetchRequest = FetchRequest<CDContactInfo>(
+                    entity: CDContactInfo.entity(),
+                    sortDescriptors: [],
+                    predicate: NSPredicate(format: "phoneNumber == %@", phoneNumber)
+                )
+        
+        print(fetchRequest.wrappedValue)
+*/
+        
+        let fetchRequest: NSFetchRequest<CDContactInfo> = CDContactInfo.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "phoneNumber == %@", phoneNumber)
+        if let result = try? context.fetch(fetchRequest) {
+            if result.count == 1 {
+                print("\(result[0].name ?? "") \(result[0].phoneNumber ?? "")")
+                result[0].type = 1
+                do {
+                    try context.save()
+                }
+                catch {
+                    print("error writing CDContactInfo: \(error.localizedDescription)")
+                }
+            }
+        }
     }
     
     func applyFilter() {
@@ -306,10 +369,17 @@ struct AllContactsCardView: View {
     
     func convertCDContactInfo() {
         
+        let cdUserPhone = user.first?.phoneNumber ?? ""
         userContacts.removeAll()
         
         for item in itemsContacts {
-            print("\(item.name!)")
+            var addFlag = false
+            if let name = item.name, let phoneNumber = item.phoneNumber {
+                print("\(name) \(phoneNumber)")
+                if cdUserPhone != phoneNumber {
+                    addFlag = true
+                }
+            }
             var type: TogetherContactTypes
             
             switch item.type {
@@ -322,10 +392,13 @@ struct AllContactsCardView: View {
             default:
                 type = .userPhoneNumber
             }
-            let c = TogetherContactType(name: item.name ?? "", type: type, phoneNumber: item.phoneNumber ?? "", imageData: item.imageData ?? nil, riskScore: item.riskScore, riskString: item.riskString ?? "")
             
-            userContacts.append(c)
-            print(c)
+            if addFlag {
+                let c = TogetherContactType(name: item.name ?? "", type: type, phoneNumber: item.phoneNumber ?? "", imageData: item.imageData ?? nil, riskScore: item.riskScore, riskString: item.riskString ?? "")
+                
+                userContacts.append(c)
+            }
+ 
         }
         
     }

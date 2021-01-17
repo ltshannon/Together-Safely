@@ -14,11 +14,7 @@ import Contacts
 
 class DataController: ObservableObject {
 
-    @Published var riskRanges: [[String:RiskHighLow]] = []
-    @Published var riskColors: [[String:String]] = []
-    @Published var userContacts: [TogetherContactType] = []
-    @Published var contactInfo: [[String:ContactInfo]] = []
-    @Published var invites: [Invite] = []
+//    @Published var contactInfo: [[String:ContactInfo]] = []
     @Published var user: User = User(snapshot: [:])
     @Published var userContantRiskAverageString = ""
     @Published var userContantRiskAverageValue = 0.0
@@ -27,6 +23,9 @@ class DataController: ObservableObject {
     private var userName: String = ""
     private var userImage: Data?
     private var allUsers: [User] = []
+    private var userContacts: [TogetherContactType] = []
+    private var riskRanges: [[String:RiskHighLow]] = []
+    private var riskColors: [[String:String]] = []
     let context = DataController.appDelegate.persistentContainer.viewContext
     private var database = Firestore.firestore()
     var isInitialized: Bool = false
@@ -128,10 +127,10 @@ class DataController: ObservableObject {
                 }
             }
 
-            self.contactInfo = cinfo
+//            self.contactInfo = cinfo
              
-            WebService.checkPhoneNumbers(phoneNumbers: phoneNumbers) { returnedNumbers in
-/*
+            WebService.checkPhoneNumbers(phoneNumbers: phoneNumbers) { [self] returnedNumbers in
+
                 for number in returnedNumbers.invitablePhoneNumbers {
                     print("invitablePhoneNumbers: \(number)")
                 }
@@ -141,9 +140,8 @@ class DataController: ObservableObject {
                 for number in returnedNumbers.userPhoneNumbers {
                     print("userPhoneNumbers: \(number)")
                 }
-*/
-                var userContacts: [TogetherContactType] = []
              
+                userContacts.removeAll()
                 for contact in contacts {
                         
                     let number = self.getMobileNumber(numbers: contact.phoneNumbers)
@@ -156,16 +154,12 @@ class DataController: ObservableObject {
                         } else {
                             c = TogetherContactType(name: contact.name, type: .userPhoneNumber, phoneNumber: number, imageData: contact.imageData, riskScore: nil, riskString: nil)
                         }
-                        userContacts.append(c)
+                        self.userContacts.append(c)
                     }
 
                 }
                 
                 userContacts.sort { return $0.type.sortOrder < $1.type.sortOrder }
-
-                DispatchQueue.main.async {
-                    self.userContacts = userContacts
-                }
                 
                 self.getRiskRanges{ error in
                     guard error == nil else {
@@ -194,6 +188,8 @@ class DataController: ObservableObject {
                         var userContactAverageRisk = 0.0
                         var userContactCount = 0.0
 
+                        self.deleteEntity(name: "CDContactInfo")
+                        
                         for (index, contact) in self.userContacts.enumerated() {
                             if contact.type == .userPhoneNumber {
                                 let score = self.getRiskScoreForUser(phoneNumber: self.userContacts[index].phoneNumber)
@@ -219,7 +215,7 @@ class DataController: ObservableObject {
                             item.riskScore = self.userContacts[index].riskScore ?? 0
                             item.riskString = self.userContacts[index].riskString ?? ""
                         }
-                        self.deleteEntity(name: "CDContactInfo")
+
                         do {
                             try self.context.save()
                         }
@@ -303,39 +299,41 @@ class DataController: ObservableObject {
                         print("User documentChanges: \(diff.document.data()) type: \(diff.type == .added ? "Add" : diff.type == .modified ? "Modified" :  diff.type == .removed ? "Removed" : "nothing")")
                         if (diff.type == .added || diff.type == .modified) {
                             print("Add or modified")
-                            self.invites.removeAll()
                             self.deleteEntity(name: "CDInvites")
                             let item = GroupInvites(snapshot: diff.document.data())
                             for invite in item.groupInvites {
                                 let docRef = database.collection("groups").document(invite)
                                 docRef.getDocument { (document, error) in
                                     if let document = document, document.exists {
-                                        let group = Groups(snapshot: document.data() ?? [:])
-                                        localDate = dateFormatter.string(from: Date())
-                                        print("Firebase data for invite for group: \(invite) : \(localDate)")
-                                        var invite:Invite = Invite(adminName: "", adminPhone: "", groupName: group.name, groupId: invite, riskScore: 99999)
-                                        for user in self.allUsers {
-                                            if user.id == group.adminId {
-                                                invite.riskScore = user.riskScore
-                                                invite.adminPhone = user.phoneNumber
-                                                invite.adminName = user.name
-                                                DispatchQueue.main.async {
-                                                    self.invites.append(invite)
+                                        let fetchRequest: NSFetchRequest<CDInvites> = CDInvites.fetchRequest()
+                                        fetchRequest.predicate = NSPredicate(format: "groupId == %@", invite)
+                                        if let result = try? context.fetch(fetchRequest) {
+                                            if result.count == 0 {
+                                                let group = Groups(snapshot: document.data() ?? [:])
+                                                localDate = dateFormatter.string(from: Date())
+                                                print("Firebase data for invite for group: \(invite) : \(localDate)")
+                                                var invite: Invite = Invite(adminName: "", adminPhone: "", groupName: group.name, groupId: invite, riskScore: 99999)
+                                                for user in self.allUsers {
+                                                    if user.id == group.adminId {
+                                                        invite.riskScore = user.riskScore
+                                                        invite.adminPhone = user.phoneNumber
+                                                        invite.adminName = user.name
+                                                        let i = CDInvites(context: context)
+                                                        i.adminName = invite.adminName
+                                                        i.adminPhone = invite.adminPhone
+                                                        i.groupId = invite.groupId
+                                                        i.groupName = invite.groupName
+                                                        i.riskScore = invite.riskScore
+                                                        do {
+                                                            try context.save()
+                                                        }
+                                                        catch {
+                                                            print("error writing invite: \(error.localizedDescription)")
+                                                        }
+                                                        break
+                                                    }
                                                 }
-                                                let i = CDInvites(context: context)
-                                                i.adminName = invite.adminName
-                                                i.adminPhone = invite.adminPhone
-                                                i.groupId = invite.groupId
-                                                i.groupName = invite.groupName
-                                                i.riskScore = invite.riskScore
-                                                break
                                             }
-                                        }
-                                        do {
-                                            try context.save()
-                                        }
-                                        catch {
-                                            print("error writing invite: \(error.localizedDescription)")
                                         }
                                     } else {
                                         print("Group document for group id: \(invite) not found")
@@ -620,10 +618,8 @@ class DataController: ObservableObject {
                     print("error writing riskColors: \(error.localizedDescription)")
                 }
                 
-                DispatchQueue.main.async {
-                    self.riskRanges = dictionary
-                    self.riskColors = colorDictionary
-                }
+                self.riskRanges = dictionary
+                self.riskColors = colorDictionary
                 completion(nil)
             }
         }
@@ -656,16 +652,6 @@ class DataController: ObservableObject {
         }
         return 0
         
-    }
-    
-    func getNameForPhone(_ phoneNumber: String, dict: [[String:ContactInfo]]) -> String {
-        
-        for d in dict {
-            if d[phoneNumber] != nil {
-                return(d[phoneNumber]!.name)
-            }
-        }
-        return phoneNumber
     }
     
     func getRiskQuestionGroups(_ completion: @escaping ([QuestionGroups]) -> Void) {
